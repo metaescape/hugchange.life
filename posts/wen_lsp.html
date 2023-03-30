@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2023-03-30 四 11:04 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>中文语言服务(language server)的畅想和基础实现</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="pipz">
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="../orgchange/themes/darkfloat/style.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
+/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+<script>
+  hljs.highlightAll();
+</script>
+<script src="../orgchange/themes/main.js"></script>
+</head>
+<body>
+<div class="container">
+<header class="top-header">
+  <span class="header__inner">
+    <a href="../index.html" style="text-decoration: none">
+      <div class="logo">
+        <div class="logo-holder-dark">
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            stroke="white"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="css-i6dzq1"
+          >
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+        </div>
+      </div>
+    </a>
+
+    <span class="header__right">
+      <div id="header_search">
+        <input type="text" placeholder="Hugchange.life" />
+      </div>
+    </span>
+  </span>
+</header>
+
+<a class="back_top" href="javascript:window.scrollTo(0,0);"
+  ><svg
+    t="1660722824713"
+    class="icon"
+    viewBox="0 0 1024 1024"
+    xmlns="http://www.w3.org/2000/svg"
+    p-id="1359"
+    width="64"
+    height="64"
+  >
+    <path
+      d="M484 93.668c-231.038.0-418.333 187.296-418.333 418.335C65.667 743.041 252.963 930.33 484 930.33c231.036.0 418.333-187.289 418.333-418.327C902.334 280.964 715.036 93.668 484 93.668zM372.207 811.881c-.412 8.174-4.906 12.669-13.493 13.493-6.545.0-11.863-.614-15.946-1.841-4.504-1.639-6.545-4.906-6.133-9.813 1.629-4.906 4.695-7.148 9.199-6.746 6.948 1.639 10.215.613 9.813-3.066v-96.902h-12.266c-4.504-.402-6.746-3.268-6.746-8.586.402-4.907 2.855-7.562 7.359-7.974h36.185c2.453.0 4.083 1.025 4.906 3.066 1.227-2.855 3.469-4.494 6.747-4.906h82.183c4.495.412 6.747 3.277 6.747 8.587-.412 5.318-2.865 8.184-7.36 8.586h-36.798l-2.453 11.652h23.919c10.215-.402 14.92 3.891 14.106 12.88v63.17c-.412 4.504-3.277 6.957-8.586 7.36-5.318-.403-8.184-2.856-8.586-7.36v-57.037c0-1.227-.613-1.84-1.84-1.84h-43.545c-.824.412-1.438 1.025-1.84 1.84v55.811c-.412 4.906-3.277 7.57-8.586 7.974-5.318-.403-8.184-3.067-8.586-7.974v-61.943c0-8.586 3.68-12.88 11.04-12.88h14.719l3.066-11.652h-25.759c-2.453.0-5.117-1.016-7.973-3.066-1.227 2.865-3.479 4.293-6.746 4.293h-6.747L372.207 811.881zm107.329 12.265c-3.277 4.907-7.571 5.722-12.879 2.454-2.865-1.227-7.571-3.891-14.106-7.974-6.133-3.277-10.838-5.52-14.106-6.746-6.133-2.855-8.586-6.334-7.359-10.426-1.227 2.051-3.68 4.504-7.36 7.359-.412.412-.824.824-1.227 1.227-9.41 7.762-20.239 13.896-32.505 18.399-5.73 1.629-9.813.201-12.266-4.294-1.639-4.906.0-8.586 4.906-11.039 18.802-7.762 30.253-15.534 34.345-23.306 4.494-7.359 6.746-21.054 6.746-41.091.403-5.722 3.067-8.788 7.973-9.2 5.309.412 8.174 3.479 8.586 9.2.814 20.852-1.639 36.798-7.36 47.837 4.083-4.906 9.401-5.107 15.946-.613 4.907 2.865 11.442 6.546 19.626 11.04 3.68 2.453 6.334 4.092 7.973 4.906C481.375 814.736 482.391 818.828 479.536 824.146zM556.198 822.307h-41.704c-7.772-.412-11.864-3.891-12.267-10.426v-34.345c-.412-8.989 3.68-13.282 12.267-12.88h42.931c7.763-.402 11.653 3.891 11.653 12.88v34.958C569.48 819.029 565.188 822.307 556.198 822.307zM614.462 817.4c-6.545.0-11.652-.824-15.332-2.453-4.092-2.051-5.318-5.309-3.68-9.813 1.629-4.906 5.107-6.747 10.426-5.52 11.04 2.453 15.735-1.841 14.106-12.88-.412-8.174-5.933-18.399-16.56-30.665-3.68-3.68-4.293-9.2-1.84-16.56 4.494-13.895 7.561-24.532 9.199-31.892h-16.559c-1.227.0-2.051.824-2.453 2.453v110.395c-.412 5.31-3.067 8.175-7.974 8.587-5.318-.412-8.184-3.277-8.586-8.587v-65.01c-1.227 1.639-2.865 2.453-4.906 2.453h-69.304c-4.504-.402-6.957-3.268-7.359-8.586.402-5.31 2.855-8.175 7.359-8.587h14.72c-.824-.814-3.68-5.721-8.586-14.719-2.051-5.31-.613-8.989 4.293-11.04h-7.36c-4.504-.402-6.957-3.268-7.359-8.586.402-5.309 2.855-8.174 7.359-8.586h22.079c-.824-1.227-1.227-2.453-1.227-3.681-1.227-4.082.613-7.359 5.52-9.813 5.721-2.041 9.401-1.016 11.04 3.066 1.227 3.68 2.654 7.158 4.293 10.427h20.239c4.494.412 6.947 3.277 7.359 8.586-.412 5.318-2.865 8.184-7.359 8.586h-47.225c2.855 1.639 6.334 7.36 10.426 17.173 1.227 4.092.814 6.957-1.227 8.586h13.493c.402-1.227 1.016-2.855 1.84-4.906 2.453-6.133 4.082-11.039 4.906-14.72 1.629-4.082 5.107-5.721 10.426-4.906 4.906 2.051 6.747 5.318 5.521 9.813-.824 2.051-1.639 4.504-2.454 7.359-1.227 3.277-2.252 5.932-3.066 7.973h11.04c2.453.0 4.082.613 4.906 1.84v-41.704c0-8.175 3.066-12.056 9.199-11.653h36.799c9.4.0 13.08 5.117 11.039 15.333.0.412-1.025 3.891-3.066 10.426-3.277 10.226-5.52 17.786-6.746 22.692-1.227 3.68-1.84 6.344-1.84 7.973.402 1.228 1.629 3.067 3.68 5.521 8.586 13.09 13.281 25.356 14.105 36.798C638.17 807.387 630.408 816.988 614.462 817.4zm32.434-351.085c-7.488 7.449-18.815 7.642-25.649.806-.538-.537-1.074-.922-1.536-1.535L502.752 348.858l-.192 280.106c0 9.139-8.601 16.549-19.198 16.549-10.598.0-18.738-7.41-18.738-16.549.0-.729-.115-1.306.0-2.034l-.192-278.072L347.513 465.586c-.422.652-.959.999-1.536 1.535-6.834 6.874-18.162 6.681-25.649-.806-7.488-7.488-8.025-19.122-1.152-25.995L467.12 292.03c2.112-3.263 5.26-5.913 9.369-7.333 2.074-.807 4.262-1.152 6.528-1.113.23.0.383-.116.614-.116.153.0.307.078.46.078 2.304-.078 4.57.307 6.72 1.152 3.994 1.421 7.142 4.07 9.254 7.219L648.048 440.32C654.92 447.155 654.383 458.827 646.896 466.315zM636.605 238.121H331.771c-9.407.0-17.049-7.564-17.049-16.857.0-9.292 7.642-16.856 17.049-16.856h304.835c9.445.0 17.048 7.564 17.048 16.856C653.653 230.557 646.013 238.121 636.605 238.121zM549.452 781.829H521.24c-1.227.0-2.051.824-2.453 2.453v19.013c.402 1.639 1.227 2.453 2.453 2.453h28.212c1.629-.402 2.453-1.227 2.453-2.453v-19.013C551.905 782.653 551.081 781.829 549.452 781.829z"
+      p-id="1360"
+      fill="#a9a9b340"
+    ></path>
+  </svg>
+</a>
+<main id="content">
+<header>
+<h1 class="title">中文语言服务(language server)的畅想和基础实现</h1>
+</header><header id="preamble" class="status">
+<span class="created">
+  <svg
+    width="24"
+    height="24"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="feather feather-calendar"
+  >
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+  2022-09-06 二 00:00
+</span>
+<span class="last-modify">
+  <svg
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    stroke="currentColor"
+    stroke-width="2"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="feather"
+  >
+    <path d="M12 20h9"></path>
+    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+  </svg>
+  2023-03-29 三 17:25
+</span>
+</header>
+<nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgc806e1e">前记</a></li>
+<li><a href="#org36bc8b3">language server protocol</a></li>
+<li><a href="#orge9203e6">锵锵三人行</a></li>
+<li><a href="#orgdaea7be">中文语言服务</a>
+<ul>
+<li><a href="#orgf17f151">再畅想一刻钟</a></li>
+<li><a href="#orgd23a298">拼音补全基本实现</a>
+<ul>
+<li><a href="#org4f831d3">lsp 服务仅仅是一个命令行</a></li>
+<li><a href="#orge69b6a2">pygls 的封装</a></li>
+<li><a href="#org4b00143">收到 hello world 请回答</a></li>
+<li><a href="#org2811d2e">加入 demo 输入法</a></li>
+<li><a href="#orgee8220f">输入 nihao 后发生什么？</a></li>
+<li><a href="#orgda57fae">替换成可用输入法</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org2dfe4ef">后记</a></li>
+</ul>
+</div>
+</nav>
+
+
+<section id="outline-container-orgc806e1e" class="outline-2">
+<h2 id="orgc806e1e">前记</h2>
+<div class="outline-text-2" id="text-orgc806e1e">
+<p>
+这周 <span class="timestamp-wrapper"><span class="timestamp">&lt;2022-09-06 二&gt; </span></span> emacs 升级到了 28, 于是想体验一下 <a href="https://github.com/manateelazycat/lsp-bridge">lsp-bridge</a>, 我对编程语言的 lsp 兴趣不大，例如日常用的 python 环境是 elpy + company, 功能齐全且稳定，静态的 jedi 补全速度很快，tag 解析也准，没有切换到 lsp 的欲望。但我对自然语言的 lsp 还是很感兴趣的，也就是中文的 language server. 
+</p>
+
+<p>
+准确来说，吸引我的是"语言服务" 这个名字，而不是内容，因为在真正开始实现之前我都还不知道 languageServerProtocol 具体是什么，只知道他会解析代码后返回比如高亮跳转等信息。
+</p>
+
+<p>
+我更多是直觉上认为，怎么能给一个解析编程语言的通信协议取这么"抽象"的高大上的名字？
+至少得叫做 programming language server protocol 吧？否则把中文英文等全世界几千种语言置于何地？
+更别说几十万种动物语，或者三体人的语言了。
+就好比你是学编程语言（PL）方向的学生，但简历上写自己是研究语言学的，虽然逻辑上没问题但似乎不着调。
+</p>
+
+<p>
+当然我更倾向于认为，协议制定者是想先从取名字上就占据制高点，当前只满足编程语言，以后谁想做点自然语言的解析也可以放到这个协议的框架里来。这不，我就来吃螃蟹了，并且我也仿造这思路写下本文，：)。
+</p>
+</div>
+</section>
+
+<section id="outline-container-org36bc8b3" class="outline-2">
+<h2 id="org36bc8b3">language server protocol</h2>
+<div class="outline-text-2" id="text-org36bc8b3">
+<p>
+本节我想用类比的方式来介绍一下什么是语言服务协议（LSP, language server protocol），因为具体的方式我也不会，要弄清还得看官方文档： <a href="https://microsoft.github.io/language-server-protocol/">Official page for Language Server Protocol</a>
+</p>
+
+<p>
+首先"协议" 一词本身就体现了需要两个以上的对象来达成某种共识，因此或许大部分协议都可以看作是 "通信协议"，
+而通信协议大体就是对一些附加信息的说明。
+</p>
+
+<p>
+比如减肥的承诺可以看作一种协议，你为自己定下目标，要求三月后要减少 10 斤，这类承诺看似只有一个对象参与，但其实是当前的自己和未来自己的协议，如果你没有按照自己的承诺减肥（减肥这件事本身就是在实现协议），三个月后没有看到减少 10 斤的自己，那么和过去自己的这部分单向通信就失败了，你会抛出懊恼的"异常"。
+</p>
+
+<p>
+以上例子可能也有点不着调了，还是回到最常见的例子 &#x2013; 寄快递，如果想要给某人寄快递，需要遵循所在地区和快递公司的邮寄规范，例如寄信人和收件人格式怎么写等等，邮寄协议就是对这些规范的说明。
+</p>
+
+<p>
+语言服务器（language server）是为了给软件开发提供智能辅助信息的，比如代码高亮，自动补全，根据变量找到变量定义。然而人们对 "智能" 的定义和认知一直是在演变的，这些所谓的智能都是一时的，
+早期能把语言里的关键词和变量用特殊颜色凸显出来或许就算是智能了，但现在的智能也许是要让机器自动帮忙写代码，甚至取代自己，这听上去有种悲情的浪漫。
+</p>
+
+<p>
+总之为了减轻理解上的负担，完全可以屏蔽所有细节，只把语言服务器看作是一个智能体，甚至是超级智能体，你在写代码的时候，这个智能体在一旁辅助，类似结队编程的队友或同事，区别在于程序员不是和语言服务器直接聊天沟通，两者之间还有一个第三者 &#x2013; 编辑器。
+</p>
+
+<p>
+我们把代码写到编辑器里，
+编辑器根据 lsp 协议把代码信息装在合适的信封里传给语言服务器，语言服务器根据协议解开信封，
+查看内容，然后心领神会，它知道了每个函数的具体实现和定义在项目的哪个文件哪一行（symbol definition/reference），接口文档（document），哪一行有语法错误（diagnostics），
+程序员接下来最有可能输入哪些字符（补全，completion），它把这些信息又根据 lsp 协议装在不同的信封里打包返回给编辑器，编辑器解开第一个信封，看到 23 行第 3 个字符有语法错误，于是把这个位置高亮起来，解开另一个信封，看到一串推荐的字符串，于是弹出自动补全列表供你选择，打开最后一个信封，赫然写着“有内鬼，中止交易”，于是自动断开与语言服务器的连接 &#x2026;
+</p>
+</div>
+</section>
+
+<section id="outline-container-orge9203e6" class="outline-2">
+<h2 id="orge9203e6">锵锵三人行</h2>
+<div class="outline-text-2" id="text-orge9203e6">
+<p>
+如果第三者是一般的 IDE 代码编辑器，例如 vscode, vim，可能我不会想到 "有内鬼" 的梗，因为大部分情况都是在编程环境下中规中矩地获得特定语言服务返回的信息。
+</p>
+
+<p>
+但当它是 emacs 时， 事情开始变得有趣了，因为当前场景就变成了 <code>语言服务</code> ， <code>emacs</code> 和 <code>坐在屏幕前的你</code> 这三个智能体的交互了，产生的剧情或许足够写一部新的《三体》系列。
+</p>
+
+<p>
+原因在于，LSP 只规定了传输信息的包装格式，至于在什么场景通信，传递什么信息，如何解释信息完全是自己安排，
+比如在补全信息里返回一堆无意义的随机字符串甚至二进制图片序列。
+</p>
+
+<p>
+另一方面，LSP 提供了许多对通用的编辑中哪些活动可以智能化的启发，现在让你想一下，对于写小说这个活动，
+有哪些步骤可以自动化？可能想到的有推荐词汇，某些表达的替换等，但如果去看一看 lsp 协议，很快就会有更多的联想和类比，比如有 <a href="https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#textDocument_linkedEditingRange">linkedEditingRange</a> 这种修改文档里变量的请求，放在自然语言里就是类似找共指的问题？
+</p>
+
+<p>
+想象这样一个场景，一位小说创作者写了 10 万字时，想要把主角张三的名字改成李四，还要把性别从男改成女（世界之大无奇不有），那么难道要肉眼把每个
+"张三"改成"李四"吗？ 当然不需要， Word 的 replace 功能就可以满足，但 10 万字小说里可不单只有"张三"才代表主角，还有他的各类昵称，
+比如"小张"，"阿三"(也许还有"小三", 但 当前的"小三"指的是张三还是张三的小三？，另外"阿三"是真正的张三还是张三的印度朋友的外号？)，更头疼的是，还有"他"这样的代词，需要转成“她”，因此如果能够把光标放在”张三”这个 symbol 上，
+执行 linked editing 命令，编辑器弹出指向"张三" 的所有名称，昵称和代词供作者替换，至少把范围从 10 万字 narrow 成一个选择清单，小说 refactor 自动辅助加持，这位奇怪的作者岂不是有福了？
+</p>
+
+
+<p>
+总之，我的个人感觉是 LSP 里每一条协议应该算是从万千程序员编程实践里提炼总结出来的东西，它对"代码编辑"这个活动做了比较系统的总结和规范。让你知道在编程活动中哪些东西应该由机器来计算，而不是由开发者。这可以给一般的编辑、作笔记活动提供启发。
+</p>
+
+<p>
+而 emacs 的灵活性使得几乎可以用它做"任何事情"，因此就可以（很保守地）想象以下场景：
+</p>
+
+<pre class="example" id="orgccd8ebe">
+语言服务在检测到写的代码没有那么"优雅" 时，可以给 emacs 发条消息播放一首音乐让你放松放松。
+</pre>
+
+<p>
+lsp-bridge 把补全前端（acm）和与 lsp 后端通信的框架都一起实现了，另外 wiki 和<a href="https://emacs-china.org/t/lsp-bridge/20786/2106">论坛</a>里的讨论也很详细，这意味着在前端到后端路径上出现任何问题可以马上找到方法解决，应该不会有太多的卡顿。
+</p>
+
+<p>
+因此当前万事俱备，就差一个 languge server 了，从想象上，前景是光明的😄。
+</p>
+</div>
+</section>
+
+<section id="outline-container-orgdaea7be" class="outline-2">
+<h2 id="orgdaea7be">中文语言服务</h2>
+<div class="outline-text-2" id="text-orgdaea7be">
+</div>
+<div id="outline-container-orgf17f151" class="outline-3">
+<h3 id="orgf17f151">再畅想一刻钟</h3>
+<div class="outline-text-3" id="text-orgf17f151">
+<p>
+以下是我想到的中文或汉语的语言服务可以提供的主要功能：
+</p>
+<ul class="org-ul">
+<li><p>
+输入拼音后自动补全汉语
+这样可以基于上下文做预测，而不是纯粹根据局部的使用频率来排序，
+另外也可以感受用补全来输入中文是什么体验，好处是不需要考虑切换输入法的问题。
+</p>
+
+<p>
+这部分直接对应 lsp 中补全的协议部分，前端接口是 lsp-bridge-popup-complete
+</p></li>
+
+<li>提供类似 emacs libpinyin 的功能，能够根据 pinyin 搜索和跳转，因为如果要实现拼音输入法， lsp 服务肯定要有中文到 pinyin 的映射表，也许可以通过 lsp-bridge-find-impl 来提供接口</li>
+
+<li>分词功能： 中文里识别出 symbol 并不那么直接，需要分词，分词后可以提供局部词汇高亮的功能，这样用 M-f,M-b 进行词级别的移动或删除就很清晰了，比如可以用 lsp-bridge-return-from-def 接口返回词的边界位置信息。</li>
+
+<li>中文的错别字高亮和纠正： lsp-bridge-list-diagnostics</li>
+
+<li>中英文翻译： lsp-bridge-lookup-documentation
+当然 document 接口还可以显示很多别的信息</li>
+
+<li>以上都是局部的解析， lsp 有对处理大型编程项目的接口，对应中文来说，
+最直接的例子就是对 org-roam 知识库做文档级别的解析，从算一算 page rank 到复杂的跨文档理解以及对可视化的支持等实际都或多或少可以找到相似的接口。
+比如在编程项目里进行 symbol 的 reference 查询，可以对应到某个概念做语义上相似度的匹配和跳转。这部分更复杂了，先不想那么多。</li>
+</ul>
+
+<p>
+以上除了第二个，每一项基本对应一个或多个研究课题，当然现成的解决方案也都是有的，但没有统一起来
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd23a298" class="outline-3">
+<h3 id="orgd23a298">拼音补全基本实现</h3>
+<div class="outline-text-3" id="text-orgd23a298">
+<p>
+本节介绍如何用 <a href="https://pygls.readthedocs.io/en/latest/">pygls</a> 快速实现一个 lsp 服务，并且加入最基本的拼音补全功能，这件事情总体上看比较复杂，
+又实现 lsp 服务又得实现输入法，但我当前的目的只是想把 emacs 到中文服务的通信搭建起来，而不是去实现一个 tabnine 类型的中文自动补全，因此找现有的拼音输入方案即可，甚至不需要输入法，直接写一个拼音到中文的查找表，
+做一个 mock 测试就行，因此实际最终要写的代码不到 30 行（我也只看了补全这一功能的写法，其他都没实现）。
+</p>
+</div>
+
+<div id="outline-container-org4f831d3" class="outline-4">
+<h4 id="org4f831d3">lsp 服务仅仅是一个命令行</h4>
+<div class="outline-text-4" id="text-org4f831d3">
+<p>
+首先 lsp 服务器只是一个命令行，执行这个命令行后，服务就开始守株待兔了，基本模型如下
+</p>
+<pre class="example" id="org1e38102">
+while 1:
+   if emacs/editor send message to me:
+      read the message
+      do something fancy and reply to emacs 
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orge69b6a2" class="outline-4">
+<h4 id="orge69b6a2">pygls 的封装</h4>
+<div class="outline-text-4" id="text-orge69b6a2">
+<p>
+pygls 把整个服务都封装好了，因此基本的服务运行代码比以上伪代码还简单
+</p>
+
+<p>
+首先 <code>pip install pygls pypinyin</code>;  pypinyin 提供的是汉字到拼音的转换
+</p>
+
+<div class="org-src-container">
+<pre><code class="python">from pygls.server import LanguageServer
+LanguageServer().start_io()
+</code></pre>
+</div>
+<p>
+如果这个脚本叫做 server.py, 那么执行 python server.py  就启动了一个等待服务，
+但因为没有对消息的处理机制，此时它对收到的的任何消息的态度都是：不要回答。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org4b00143" class="outline-4">
+<h4 id="org4b00143">收到 hello world 请回答</h4>
+<div class="outline-text-4" id="text-org4b00143">
+<p>
+以下加入对编辑器发来的补全请求的回应
+</p>
+<div class="org-src-container">
+<pre><code class="python">from pygls.capabilities import COMPLETION
+from pygls.lsp import CompletionItem, CompletionList, CompletionParams
+from pygls.server import LanguageServer
+
+server = LanguageServer()
+
+@server.feature(COMPLETION)
+def completions(params: CompletionParams):
+    """Returns completion items."""
+    return CompletionList(
+        is_incomplete=False,
+        items=[
+            CompletionItem(label='hello'),
+            CompletionItem(label='world'),
+        ])
+
+server.start_io()
+</code></pre>
+</div>
+
+<p>
+实际这里只引入了 5 行新代码，看上去更多主要是因为 return 写了很多行。
+关键就是用 <code>@server.feature(COMPLETION)</code> 对一个函数进行了装饰，函数当前取名为 completions, 但实际任何名字都行，装饰器把 completions 函数注册到了 lsp 服务中，它负责返回补全信息, 这些信息
+要用 CompletionItem 和 CompletionList 包装起来( 和寄快递需要特定的包装一样)。
+</p>
+
+<p>
+这样，如果从 lsp-bridge 端正常启动了这个服务，输入 hello 的任何前缀 (h,he,hel,hell)都会返回 hello 补全候选词。
+同样，输入 world 的任何前缀都会返回 world 作为补全。
+</p>
+
+<p>
+以上就是 LSP 服务的补全 hello world 程序了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2811d2e" class="outline-4">
+<h4 id="org2811d2e">加入 demo 输入法</h4>
+<div class="outline-text-4" id="text-org2811d2e">
+<div class="org-src-container">
+<pre><code class="python">from pygls.capabilities import COMPLETION
+from pygls.lsp import CompletionItem, CompletionList, CompletionParams
+from pygls.server import LanguageServer
+from pygls.lsp.types import Range, TextEdit
+
+server = LanguageServer()
+
+@server.feature(COMPLETION)
+def completions(params: CompletionParams):
+    prefix = get_current_prefix(params)
+    cands = shurufa(prefix)
+    pos = get_current_cursor_pos(params)
+    items = []
+    for cand in cands:
+        text = TextEdit(range=Range(start=pos, end=pos), new_text=cand)
+        item = CompletionItem(label=prefix)
+        item.text_edit=text
+        items.append(item)
+
+    return CompletionList(is_incomplete=False, items=items)
+
+server.start_io()
+</code></pre>
+</div>
+
+<p>
+这里基本逻辑就是，从 params 参数里获得 emacs （或任何其他有 LSP 前端的编辑器）中光标前的前缀字符串，例如 nihao，输入法根据前缀
+ 返回一个候选词列表，然后把这些候选词按协议规定包装好返回，中文候选词放在 TextEdit 段中，Range 表示插入词的替换范围（默认 start 和 end 都用 params 中默认传过来的当前光标所在位置），
+ 以上程序中所有包含大写字母的变量都可以在 LSP 服务官方说明里找到对应的协议接口。
+</p>
+
+<p>
+以下是一个用于测试的输入法实现，在这个输入法下，输入 nihao 候选菜单中会出现两个中文选项
+</p>
+<div class="org-src-container">
+<pre><code class="python">def shurufa(prefix):
+    if prefix == "haihao":
+        return ["你好", "逆号"]
+    return []
+</code></pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgee8220f" class="outline-4">
+<h4 id="orgee8220f">输入 nihao 后发生什么？</h4>
+<div class="outline-text-4" id="text-orgee8220f">
+<p>
+emacs 中有任何输入变化，lsp-bridge 都会把消息发给 LSP 服务，但只有输入 nihao 以后，LSP 服务才返回了真正有用的消息。之后 lsp-bridge 目录下的 <code>core/handler/completion.py</code> 中的 <code>process_response(self, response: dict)</code> 得到的第一个 item 信息如下：
+</p>
+
+<pre class="example" id="orgb33bff1">
+[{'key': '0,nihao', 'icon': '', 'label': 'nihao', 'deprecated': False, 'insertText': None, 'insertTextFormat': '', 'textEdit': [{'range': {'start': {'line': 477, 'character': 5}, 'end': {'line': 477, 'character': 5}}, 'newText': '你好'}], 'server': '文', 'additionalTextEdits': []},...]
+</pre>
+<p>
+可以看到，在 lsp 服务端包装的 TextEdit 对象，在 lsp-bridge 解析后就是一个 json 里的 new_text 入口
+</p>
+
+<p>
+lsp-bridge 的 python 进程继续把这份消息传递给 emacs ，emacs 把对象解析成嵌套的 plist,
+ 例如从 <code>lsp-bridge/acm/acm-backend-lsp.el</code> 的 <code>acm-backend-lsp-candidate-expand</code> 函数中，
+ 这份快递的名称叫做 candidate-info, 执行 (plist-get candidate-info :textEdit) 就可以看到以下信息
+</p>
+<pre class="example" id="orgfe303ab">
+(:range (:start (:line 477 :character 5) :end (:line 477 :character 5)) :newText 你好) 
+</pre>
+<p>
+当你花三分钟认真对比它和上文 python list 以及 LSP 服务里手写的 CompletionList 就会发现 它们的内容基本不会改变，只是在不断传递消息，并且根据不同语言改变消息的封装格式，最后传到 acm 显示在补全窗口中。
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgda57fae" class="outline-4">
+<h4 id="orgda57fae">替换成可用输入法</h4>
+<div class="outline-text-4" id="text-orgda57fae">
+<p>
+使用什么样的输入法不是本文的重点，只要提供与 <code>shurufa</code> 函数一样的接口，任何输入法都可以满足
+</p>
+
+<p>
+最终的实现可以参考 <a href="https://github.com/metaescape/Wen">metaescape/Wen</a>, 当前我用了 github 上公开的 <a href="https://github.com/whatbeg/GodTian_Pinyin">whatbeg/GodTian_Pinyin</a>，虽然看作者的介绍应该是一个课程项目级别的 demo 输入法，但实际已经可以满足最基本需求了，效果如下
+</p>
+
+<p align="center">
+  <img src="./imgs/wen_completion.gif">
+</p>
+
+<p>
+但使用中也发现一些不习惯的地方，最终希望的样子可能是：
+</p>
+<ul class="org-ul">
+<li>尽可能地准确，大部分情况下选择第一个就能获得</li>
+<li>能对长词有比较好的预测效果，充分利用上下文信息</li>
+<li>需要更好的交互方式，如果只用 tab 和 enter 进行会比较麻烦，可能还是要考虑把空格交互加入进来，例如如果当前第一个候选词是中文，空格代表选词？</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section id="outline-container-org2dfe4ef" class="outline-2">
+<h2 id="org2dfe4ef">后记</h2>
+<div class="outline-text-2" id="text-org2dfe4ef">
+<p>
+对自然语言的分析需求是无止尽的，即使同一种语言，不同的人群都会有不同的"方言"，医生有医生的术语，律师有律师的术语，即便是最复杂的模型也不可能满足所有语言理解上的需求，因此关于自然语言 LSP 会成什么样谁也无法预测，但想想还是可以的，本文也只从自己兴趣出发做一些尝试并提供微小经验，或许某个时刻能帮助到同样感兴趣的人，当然包括未来的自己。
+</p>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<span> © 2023</span><a href="https://github.com/metaescape" target="_blank"> mE </a> |
+<span>Powered by <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.0.50 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</span>
+</footer>
+
+</div>
+</body>
+</html>

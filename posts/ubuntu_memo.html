@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2023-03-30 四 11:04 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ubuntu 使用备忘</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="pipz">
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="../orgchange/themes/darkfloat/style.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
+/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+<script>
+  hljs.highlightAll();
+</script>
+<script src="../orgchange/themes/main.js"></script>
+</head>
+<body>
+<div class="container">
+<header class="top-header">
+  <span class="header__inner">
+    <a href="../index.html" style="text-decoration: none">
+      <div class="logo">
+        <div class="logo-holder-dark">
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            stroke="white"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="css-i6dzq1"
+          >
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+        </div>
+      </div>
+    </a>
+
+    <span class="header__right">
+      <div id="header_search">
+        <input type="text" placeholder="Hugchange.life" />
+      </div>
+    </span>
+  </span>
+</header>
+
+<a class="back_top" href="javascript:window.scrollTo(0,0);"
+  ><svg
+    t="1660722824713"
+    class="icon"
+    viewBox="0 0 1024 1024"
+    xmlns="http://www.w3.org/2000/svg"
+    p-id="1359"
+    width="64"
+    height="64"
+  >
+    <path
+      d="M484 93.668c-231.038.0-418.333 187.296-418.333 418.335C65.667 743.041 252.963 930.33 484 930.33c231.036.0 418.333-187.289 418.333-418.327C902.334 280.964 715.036 93.668 484 93.668zM372.207 811.881c-.412 8.174-4.906 12.669-13.493 13.493-6.545.0-11.863-.614-15.946-1.841-4.504-1.639-6.545-4.906-6.133-9.813 1.629-4.906 4.695-7.148 9.199-6.746 6.948 1.639 10.215.613 9.813-3.066v-96.902h-12.266c-4.504-.402-6.746-3.268-6.746-8.586.402-4.907 2.855-7.562 7.359-7.974h36.185c2.453.0 4.083 1.025 4.906 3.066 1.227-2.855 3.469-4.494 6.747-4.906h82.183c4.495.412 6.747 3.277 6.747 8.587-.412 5.318-2.865 8.184-7.36 8.586h-36.798l-2.453 11.652h23.919c10.215-.402 14.92 3.891 14.106 12.88v63.17c-.412 4.504-3.277 6.957-8.586 7.36-5.318-.403-8.184-2.856-8.586-7.36v-57.037c0-1.227-.613-1.84-1.84-1.84h-43.545c-.824.412-1.438 1.025-1.84 1.84v55.811c-.412 4.906-3.277 7.57-8.586 7.974-5.318-.403-8.184-3.067-8.586-7.974v-61.943c0-8.586 3.68-12.88 11.04-12.88h14.719l3.066-11.652h-25.759c-2.453.0-5.117-1.016-7.973-3.066-1.227 2.865-3.479 4.293-6.746 4.293h-6.747L372.207 811.881zm107.329 12.265c-3.277 4.907-7.571 5.722-12.879 2.454-2.865-1.227-7.571-3.891-14.106-7.974-6.133-3.277-10.838-5.52-14.106-6.746-6.133-2.855-8.586-6.334-7.359-10.426-1.227 2.051-3.68 4.504-7.36 7.359-.412.412-.824.824-1.227 1.227-9.41 7.762-20.239 13.896-32.505 18.399-5.73 1.629-9.813.201-12.266-4.294-1.639-4.906.0-8.586 4.906-11.039 18.802-7.762 30.253-15.534 34.345-23.306 4.494-7.359 6.746-21.054 6.746-41.091.403-5.722 3.067-8.788 7.973-9.2 5.309.412 8.174 3.479 8.586 9.2.814 20.852-1.639 36.798-7.36 47.837 4.083-4.906 9.401-5.107 15.946-.613 4.907 2.865 11.442 6.546 19.626 11.04 3.68 2.453 6.334 4.092 7.973 4.906C481.375 814.736 482.391 818.828 479.536 824.146zM556.198 822.307h-41.704c-7.772-.412-11.864-3.891-12.267-10.426v-34.345c-.412-8.989 3.68-13.282 12.267-12.88h42.931c7.763-.402 11.653 3.891 11.653 12.88v34.958C569.48 819.029 565.188 822.307 556.198 822.307zM614.462 817.4c-6.545.0-11.652-.824-15.332-2.453-4.092-2.051-5.318-5.309-3.68-9.813 1.629-4.906 5.107-6.747 10.426-5.52 11.04 2.453 15.735-1.841 14.106-12.88-.412-8.174-5.933-18.399-16.56-30.665-3.68-3.68-4.293-9.2-1.84-16.56 4.494-13.895 7.561-24.532 9.199-31.892h-16.559c-1.227.0-2.051.824-2.453 2.453v110.395c-.412 5.31-3.067 8.175-7.974 8.587-5.318-.412-8.184-3.277-8.586-8.587v-65.01c-1.227 1.639-2.865 2.453-4.906 2.453h-69.304c-4.504-.402-6.957-3.268-7.359-8.586.402-5.31 2.855-8.175 7.359-8.587h14.72c-.824-.814-3.68-5.721-8.586-14.719-2.051-5.31-.613-8.989 4.293-11.04h-7.36c-4.504-.402-6.957-3.268-7.359-8.586.402-5.309 2.855-8.174 7.359-8.586h22.079c-.824-1.227-1.227-2.453-1.227-3.681-1.227-4.082.613-7.359 5.52-9.813 5.721-2.041 9.401-1.016 11.04 3.066 1.227 3.68 2.654 7.158 4.293 10.427h20.239c4.494.412 6.947 3.277 7.359 8.586-.412 5.318-2.865 8.184-7.359 8.586h-47.225c2.855 1.639 6.334 7.36 10.426 17.173 1.227 4.092.814 6.957-1.227 8.586h13.493c.402-1.227 1.016-2.855 1.84-4.906 2.453-6.133 4.082-11.039 4.906-14.72 1.629-4.082 5.107-5.721 10.426-4.906 4.906 2.051 6.747 5.318 5.521 9.813-.824 2.051-1.639 4.504-2.454 7.359-1.227 3.277-2.252 5.932-3.066 7.973h11.04c2.453.0 4.082.613 4.906 1.84v-41.704c0-8.175 3.066-12.056 9.199-11.653h36.799c9.4.0 13.08 5.117 11.039 15.333.0.412-1.025 3.891-3.066 10.426-3.277 10.226-5.52 17.786-6.746 22.692-1.227 3.68-1.84 6.344-1.84 7.973.402 1.228 1.629 3.067 3.68 5.521 8.586 13.09 13.281 25.356 14.105 36.798C638.17 807.387 630.408 816.988 614.462 817.4zm32.434-351.085c-7.488 7.449-18.815 7.642-25.649.806-.538-.537-1.074-.922-1.536-1.535L502.752 348.858l-.192 280.106c0 9.139-8.601 16.549-19.198 16.549-10.598.0-18.738-7.41-18.738-16.549.0-.729-.115-1.306.0-2.034l-.192-278.072L347.513 465.586c-.422.652-.959.999-1.536 1.535-6.834 6.874-18.162 6.681-25.649-.806-7.488-7.488-8.025-19.122-1.152-25.995L467.12 292.03c2.112-3.263 5.26-5.913 9.369-7.333 2.074-.807 4.262-1.152 6.528-1.113.23.0.383-.116.614-.116.153.0.307.078.46.078 2.304-.078 4.57.307 6.72 1.152 3.994 1.421 7.142 4.07 9.254 7.219L648.048 440.32C654.92 447.155 654.383 458.827 646.896 466.315zM636.605 238.121H331.771c-9.407.0-17.049-7.564-17.049-16.857.0-9.292 7.642-16.856 17.049-16.856h304.835c9.445.0 17.048 7.564 17.048 16.856C653.653 230.557 646.013 238.121 636.605 238.121zM549.452 781.829H521.24c-1.227.0-2.051.824-2.453 2.453v19.013c.402 1.639 1.227 2.453 2.453 2.453h28.212c1.629-.402 2.453-1.227 2.453-2.453v-19.013C551.905 782.653 551.081 781.829 549.452 781.829z"
+      p-id="1360"
+      fill="#a9a9b340"
+    ></path>
+  </svg>
+</a>
+<main id="content">
+<header>
+<h1 class="title">ubuntu 使用备忘</h1>
+</header><header id="preamble" class="status">
+<span class="created">
+  <svg
+    width="24"
+    height="24"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="feather feather-calendar"
+  >
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+  2022-12-24 六 11:54
+</span>
+<span class="last-modify">
+  <svg
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    stroke="currentColor"
+    stroke-width="2"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="feather"
+  >
+    <path d="M12 20h9"></path>
+    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+  </svg>
+  2023-03-29 三 20:51
+</span>
+</header>
+<nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org25f67df">系统安装</a>
+<ul>
+<li><a href="#org9e76c4a">软件源问题</a></li>
+<li><a href="#orgd91f429">设置 GRUB</a>
+<ul>
+<li><a href="#orge16a824">引导windows</a></li>
+<li><a href="#org6c6b7fc">启动到非图形界面</a></li>
+</ul>
+</li>
+<li><a href="#org80e2cab">包管理软件</a></li>
+</ul>
+</li>
+<li><a href="#org7b09b06">软件安装</a>
+<ul>
+<li><a href="#org5cbd539">基础软件</a></li>
+<li><a href="#orgf87b971">rime 输入法</a></li>
+<li><a href="#orga078e98">vscode</a></li>
+<li><a href="#org94140a9">google chrome</a></li>
+<li><a href="#org3b6e497">emacs</a></li>
+<li><a href="#org29e0f35">typora</a></li>
+<li><a href="#org269760c">腾讯软件</a></li>
+<li><a href="#org45aefc2">远程访问</a>
+<ul>
+<li><a href="#org84a592d">samba 共享目录</a></li>
+<li><a href="#org9115352">远程访问 windows 桌面</a></li>
+<li><a href="#org1577187">校园网访问 EasyConnect</a></li>
+</ul>
+</li>
+<li><a href="#org56cf52f">nodejs</a></li>
+<li><a href="#org43cac0b">加密</a>
+<ul>
+<li><a href="#org7e489c8">对本地目录加密</a></li>
+<li><a href="#org87f21cb">对 git 远程仓库加密</a></li>
+</ul>
+</li>
+<li><a href="#org68a4525">需要手动下载的安装包</a></li>
+</ul>
+</li>
+<li><a href="#org7fb1fd7">命令行</a>
+<ul>
+<li><a href="#org3293c84">硬件信息查询</a>
+<ul>
+<li><a href="#org001e063">CPU 信息</a></li>
+<li><a href="#orge5b0689">网卡信息</a></li>
+</ul>
+</li>
+<li><a href="#orgb7d4e79">解压</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+<p>
+使用 ubuntu 过程中的经验记录，会不断更新，当前为 2022.2 月版
+</p>
+
+<section id="outline-container-org25f67df" class="outline-2">
+<h2 id="org25f67df">系统安装</h2>
+<div class="outline-text-2" id="text-org25f67df">
+<p>
+用 rufus 把官方下载的 ubuntu 镜像 iso 文件导入到 U 盘（u 盘内容会被清空），只要能从 u 盘启动后，安装过程选项
+几乎默认（不用使用网络）。
+</p>
+</div>
+
+<div id="outline-container-org9e76c4a" class="outline-3">
+<h3 id="org9e76c4a">软件源问题</h3>
+<div class="outline-text-3" id="text-org9e76c4a">
+<p>
+不需要修改成国内源，速度也正常
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd91f429" class="outline-3">
+<h3 id="orgd91f429">设置 GRUB</h3>
+<div class="outline-text-3" id="text-orgd91f429">
+</div>
+<div id="outline-container-orge16a824" class="outline-4">
+<h4 id="orge16a824">引导windows</h4>
+<div class="outline-text-4" id="text-orge16a824">
+<p>
+在硬盘的一个新分区安装 windows 之后，如果 ubuntu 启动时没有显示 windows 选项可以打开
+/etc/default/grub 添加以下参数，然后 update-grub,使得 ubuntu 的 grub 去检测其他盘上的引导区，再次重启应该就显示
+</p>
+<pre class="example" id="orgc132a2f">
+GRUB_DISABLE_OS_PROBER=false 
+</pre>
+</div>
+</div>
+
+<div id="outline-container-org6c6b7fc" class="outline-4">
+<h4 id="org6c6b7fc">启动到非图形界面</h4>
+<div class="outline-text-4" id="text-org6c6b7fc">
+<p>
+在 grub 中 linux &#x2026; ro quite 后添加 3 则系统启动到 level3
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org80e2cab" class="outline-3">
+<h3 id="org80e2cab">包管理软件</h3>
+<div class="outline-text-3" id="text-org80e2cab">
+<pre class="example" id="org9015643">
+apt list --installed | grep code
+</pre>
+
+<p>
+apt purge
+</p>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-org7b09b06" class="outline-2">
+<h2 id="org7b09b06">软件安装</h2>
+<div class="outline-text-2" id="text-org7b09b06">
+<p>
+原则：
+</p>
+<ul class="org-ul">
+<li>安装方式优先级：snapd &gt; Appimg &gt; apt &gt; 手动 deb 安装</li>
+<li>不要安装 deepin 源的软件，source list 混在一起很容易出问题（个人遇到两次把 lsb_release 从 ubuntu 自动改成 deepin 的问题，第一次重新安装软件就解决，第二次则重装系统）</li>
+</ul>
+</div>
+
+<div id="outline-container-org5cbd539" class="outline-3">
+<h3 id="org5cbd539">基础软件</h3>
+<div class="outline-text-3" id="text-org5cbd539">
+<p>
+以下是必要的基础软件列表，做成了安装脚本
+</p>
+<div class="org-src-container">
+<pre><code class="shell">build-essential
+net-tools  #ifconfig 等
+git
+curl
+tmux
+neovim
+i3
+wmctrl
+arandr
+compton
+feh
+rxvt-unicode
+# 22.04 取消了 gnome-screenshot 需要手动安装
+gnome-screenshot
+xcape
+xdotool
+ripgrep
+# rime for  emacs and system
+ibus-rime
+librime-dev
+</code></pre>
+</div>
+
+<ul class="org-ul">
+<li>gnome 桌面会对很多功能覆盖，包括对 xcape, xmodmap 的改键等，因此还是使用 i3, 这样重装系统后可以更精准地复现出自己定制的系统，保持个人使用的稳定性</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgf87b971" class="outline-3">
+<h3 id="orgf87b971">rime 输入法</h3>
+<div class="outline-text-3" id="text-orgf87b971">
+<pre class="example" id="org4aa27cd">
+sudo apt install ibus-rime
+</pre>
+
+<p>
+排故方式：
+</p>
+<div class="org-src-container">
+<pre><code class="python">ibus-daemon --xim -r --verbose
+</code></pre>
+</div>
+
+<p>
+启动：
+</p>
+<pre class="example" id="orgaabf8bc">
+ibus-daemon --xim -r -d
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-orga078e98" class="outline-3">
+<h3 id="orga078e98">vscode</h3>
+<div class="outline-text-3" id="text-orga078e98">
+<div class="org-src-container">
+<pre><code class="python">sudo snap install --classic code
+</code></pre>
+</div>
+<p>
+但是 snap 版本的无法支持中文，可以下载官方的 deb 安装或者手动添加源并更新，参考官网：
+<a href="https://code.visualstudio.com/docs/setup/linux">Running Visual Studio Code on Linux</a>
+</p>
+
+<p>
+安装命令如下
+</p>
+<pre class="example" id="org6f23326">
+sudo apt-get install wget gpg
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor &gt; packages.microsoft.gpg
+sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" &gt; /etc/apt/sources.list.d/vscode.list'
+rm -f packages.microsoft.gpg
+sudo apt install apt-transport-https
+sudo apt update
+sudo apt install code
+</pre>
+</div>
+</div>
+
+
+<div id="outline-container-org94140a9" class="outline-3">
+<h3 id="org94140a9">google chrome</h3>
+<div class="outline-text-3" id="text-org94140a9">
+<pre class="example" id="org1e4464a">
+sudo apt install ./xxx.deb #注意需要加./来区别apt源，chrome不在源中
+</pre>
+
+<p>
+查看版本：
+</p>
+<div class="org-src-container">
+<pre><code class="bash">&gt;_ apt list --installed | grep chrome
+</code></pre>
+</div>
+
+
+<p>
+更新时 apt update 然后 sudo apt install google-chrome-stable ，即可，原因是用以上方式安装时会将 chrome 的源自动加入 sources list：
+</p>
+
+<pre class="example" id="org8add94f">
+ &gt;_ cat /etc/apt/sources.list.d/google-chrome.list
+### THIS FILE IS AUTOMATICALLY CONFIGURED ###
+# You may comment out this entry, but any other modifications may be lost.
+deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+</pre>
+
+<p>
+安装浏览器 flash 插件驱动（也许不用）
+</p>
+<pre class="example" id="org0fe3348">
+sudo apt install adobe-flashplugin
+which ffmpeg || sudo apt install ffmpeg
+</pre>
+
+<p>
+另外，chrome 的插件的安装缓存是在 home 目录下，因此重装系统只要不破坏 home 的信息，插件是自动恢复的
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org3b6e497" class="outline-3">
+<h3 id="org3b6e497">emacs</h3>
+<div class="outline-text-3" id="text-org3b6e497">
+<p>
+emacs 可以用自己编译的版本，snapd 安装版本可能不支持动态链接，用不了 emacs-rime
+或者用 apt install emacs （但不是很新）
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org29e0f35" class="outline-3">
+<h3 id="org29e0f35">typora</h3>
+<div class="outline-text-3" id="text-org29e0f35">
+<p>
+snap install typora:
+</p>
+<ul class="org-ul">
+<li>如果有大量的密集的文本编辑就在 emacs 里，编辑完后在 typora 中预览格式、微调</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org269760c" class="outline-3">
+<h3 id="org269760c">腾讯软件</h3>
+<div class="outline-text-3" id="text-org269760c">
+<ul class="org-ul">
+<li>wemeet 和 qq 都有官方版，qq 可以下载 AppImg 版本，需要依赖以下 ibfuse2 库</li>
+</ul>
+<div class="org-src-container">
+<pre><code class="python">sudo apt install libfuse2
+</code></pre>
+</div>
+<ul class="org-ul">
+<li>等 wechat 出 linux 版本</li>
+</ul>
+</div>
+</div>
+
+
+
+<div id="outline-container-org45aefc2" class="outline-3">
+<h3 id="org45aefc2">远程访问</h3>
+<div class="outline-text-3" id="text-org45aefc2">
+</div>
+<div id="outline-container-org84a592d" class="outline-4">
+<h4 id="org84a592d">samba 共享目录</h4>
+<div class="outline-text-4" id="text-org84a592d">
+<p>
+apt install samba, 主要是需要配置
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org9115352" class="outline-4">
+<h4 id="org9115352">远程访问 windows 桌面</h4>
+<div class="outline-text-4" id="text-org9115352">
+<p>
+<code>sudo apt-get install rdesktop</code>
+</p>
+
+<p>
+<code>sudo apt-get install freerdp2-x11 freerdp2-shadow-x11</code>
+</p>
+
+<p>
+传文件到 windows, 以下命令是把 ubuntu 中的目录挂载到 windows 中
+</p>
+<pre class="example" id="orgc1bb6d0">
+rdesktop -u username ip.b.c.d -p my-password -r disk:LinuxPictures=/home/username/Pictures
+</pre>
+
+
+<blockquote>
+<p>
+FreeRDP和rdesktop都是用于连接和远程控制Windows桌面的开源软件。
+</p>
+
+<p>
+主要的区别在于它们的开发和设计目标、支持的协议版本和功能特性。
+</p>
+
+<p>
+FreeRDP是从RDPv4协议开始设计的，因此它支持更多的RDP协议版本，包括RDPv5、RDPv6和RDPv7等。FreeRDP的设计目标是提供一个高性能、跨平台的远程桌面客户端，它支持多种操作系统，包括Windows、Linux、Mac OS X和Android等。FreeRDP的功能特性包括：音频重定向、USB重定向、剪贴板重定向、打印机重定向、智能卡重定向等。
+</p>
+
+<p>
+rdesktop是一个较老的远程桌面客户端，它最初是为连接到Windows 2000服务器而设计的。rdesktop的主要目标是提供一个轻量级的远程桌面客户端，它的功能相对较少，但对于一些特殊需求和低配置的系统，它可能是一个更好的选择。rdesktop的特性包括：图形界面（GUI）、音频支持、剪贴板支持、与Windows Server 2008兼容、IPv6支持等
+</p>
+
+<p>
+&#x2013; chatgpt
+</p>
+</blockquote>
+<p>
+总的来说，如果 rdesktop 登录不上，用 freerdp2.  rdesktp 一般连比较旧的 windows 服务器。
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org1577187" class="outline-4">
+<h4 id="org1577187">校园网访问 EasyConnect</h4>
+<div class="outline-text-4" id="text-org1577187">
+<p>
+用于连校园网，通过火狐访问 <a href="https://sslvpn.xmu.edu.cn/portal/#!/down_client">https://sslvpn.xmu.edu.cn/portal/#!/down_client</a>
+或者 <a href="https://sslvpn3.scut.edu.cn/portal/#!/login">https://sslvpn3.scut.edu.cn/portal/#!/login</a> (google chrome 里找不到下载链接)
+</p>
+
+<p>
+下载  EasyConnect_x64_7_6_7_3.deb （或其他新版）并安装， sudo dpkg -i EasyConnect_x64_7_6_7_3.deb
+默认安装在 <code>/usr/share/sangfor/EasyConnect</code> 下
+</p>
+
+<ul class="org-ul">
+<li>动态链接库的问题：</li>
+</ul>
+<div class="org-src-container">
+<pre><code class="example">https://packages.ubuntu.com/bionic/libs/libpango-1.0-0
+https://packages.ubuntu.com/bionic/libpangocairo-1.0-0
+https://packages.ubuntu.com/bionic/libpangoft2-1.0-0
+</code></pre>
+</div>
+
+<p>
+从以上链接分别下载三个 pango 1.0.0.40 的库，使其降级，而为了不替换系统的这些 pango 库，需要将下载的 so 文件放到 EasyConnect 项目主目录下，这样动态链接库的解析优先是找当前目录，因此这里下载的库会有限被选择。
+</p>
+
+<p>
+首先将三个库安装到所在目录下，它会生成 usr 目录，将其中 usr/lib/x86_64-linux-gnu 目录拷贝到 EasyConnect 主目录下
+</p>
+
+<div class="org-src-container">
+<pre><code class="example">mkdir /data/installer/pango1.0
+cp ~/Downloads/libpango* /data/installer/pango1.0
+cd /data/installer/pango1.0
+dpkg -X libpango-1.0-0_1.40.14-1ubuntu0.1_amd64.deb ./
+dpkg -X libpangocairo-1.0-0_1.40.14-1ubuntu0.1_amd64.deb ./
+dpkg -X libpangoft2-1.0-0_1.40.14-1ubuntu0.1_amd64.deb ./
+sudo cp /data/installer/pango1.0/usr/lib/x86_64-linux-gnu/* /usr/share/sangfor/EasyConnect
+</code></pre>
+</div>
+
+<p>
+然后通过以下命令启动
+</p>
+<pre class="example" id="org74bd02c">
+/usr/share/sangfor/EasyConnect/EasyConnect
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org56cf52f" class="outline-3">
+<h3 id="org56cf52f">nodejs</h3>
+<div class="outline-text-3" id="text-org56cf52f">
+<p>
+<code>sudo apt install npm</code> 会自动安装 nodejs 等依赖，但这个版本很老
+</p>
+
+<p>
+去官网下载 tar.xz 文件
+</p>
+<div class="org-src-container">
+<pre><code class="shell">VERSION=v18.14.2
+DISTRO=linux-x64
+sudo mkdir -p /usr/local/lib/nodejs
+cd ~/Downloads
+sudo tar -xJvf node-$VERSION-$DISTRO.tar.xz -C /usr/local/lib/nodejs 
+</code></pre>
+</div>
+
+<p>
+添加以下边境变量到 ~/.bashrc 或其他 shell 的配置文件中，也可以写在 ~/.profile 里，所有 shell 都会继承
+</p>
+<div class="org-src-container">
+<pre><code class="shell"># Nodejs
+VERSION=v18.14.2
+DISTRO=linux-x64
+export PATH=/usr/local/lib/nodejs/node-$VERSION-$DISTRO/bin:$PATH
+</code></pre>
+</div>
+
+<p>
+然后跟更新 <code>. ~/.bashrc</code> 或 <code>. ~/.profile</code>
+</p>
+
+<p>
+测试：
+</p>
+<div class="org-src-container">
+<pre><code class="shell">node -v
+npm version
+npx -v
+</code></pre>
+</div>
+
+<p>
+安装 yarn （被 node 打包了）
+</p>
+<div class="org-src-container">
+<pre><code class="shell">corepack enable
+</code></pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-org43cac0b" class="outline-3">
+<h3 id="org43cac0b">加密</h3>
+<div class="outline-text-3" id="text-org43cac0b">
+</div>
+<div id="outline-container-org7e489c8" class="outline-4">
+<h4 id="org7e489c8">对本地目录加密</h4>
+<div class="outline-text-4" id="text-org7e489c8">
+<div class="org-src-container">
+<pre><code class="shell">sudo apt install ecryptfs-utils
+</code></pre>
+</div>
+
+<p>
+这是一个加密文件系统，因此用 mount 的方式来处理，mount 相当于对目录或文件加密，umount 则进行解密。
+mount 时候要 sudo, 同时需要加密的密码，这实际让人困惑，加密的时候要输入两次密码，解密的时候则不要（但由于要 umount, 因此需要 sudo 密码）
+</p>
+
+<p>
+标准挂载的例子是 <code>sudo mount /dev/sdb1 /mnt</code>, 意思是把设备 sdb1 挂到 /mnt 路径下，但对文件加密不需要移动到额外存储上，因此这里设计的命令是把目录挂在到自身路径上，以下是初次挂载命令，相当于初始化，需要：
+</p>
+<ul class="org-ul">
+<li>设置加密密码</li>
+<li>设置加密方式，用默认的  aes, 并且 32 位</li>
+<li>Plaintext passthrough: n (default), 不手动输入</li>
+<li>Filename encryption: n (default), 不对文件名加密</li>
+<li>输入两个 yes 使得签名加入到/root/.ecryptfs/sig-cache.txt 中</li>
+</ul>
+<p>
+Would you like to append sig [e07728d0a571f95b] to
+[/root/.ecryptfs/sig-cache.txt]
+</p>
+
+<p>
+以下进行解密
+</p>
+<div class="org-src-container">
+<pre><code class="shell">sudo mount -t ecryptfs ~/org/self/.deep ~/org/self/.deep
+</code></pre>
+</div>
+
+<p>
+以下进行解密
+</p>
+<div class="org-src-container">
+<pre><code class="shell">sudo umount ~/org/self/.deep
+</code></pre>
+</div>
+
+<p>
+接着用以下重新 mount
+</p>
+<div class="org-src-container">
+<pre><code class="shell">sudo mount -t ecryptfs ~/org/self/.deep ~/org/self/.deep \
+-o ecryptfs_cipher=aes,ecryptfs_key_bytes=32,ecryptfs_passthrough=no,\
+ecryptfs_enable_filename_crypto=no,\
+ecryptfs_sig=$(sudo cat /root/.ecryptfs/sig-cache.txt)
+</code></pre>
+</div>
+
+<p>
+这个命令很长，可以 bashrc 中
+</p>
+
+<p>
+参考
+<a href="https://askubuntu.com/questions/1281476/i-want-to-encrypt-folder">20.04 - I want to encrypt folder - Ask Ubuntu</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org87f21cb" class="outline-4">
+<h4 id="org87f21cb">对 git 远程仓库加密</h4>
+<div class="outline-text-4" id="text-org87f21cb">
+<p>
+参考： <a href="https://buddy.works/guides/git-crypt">git-crypt guide</a>
+</p>
+
+<div class="org-src-container">
+<pre><code class="shell">sudo apt install git-crypt gnupg
+</code></pre>
+</div>
+
+<p>
+初始化仓库：
+</p>
+<div class="org-src-container">
+<pre><code class="shell">git-crypt init
+</code></pre>
+</div>
+
+<p>
+然后添加 .gitattributes 文件，内容大致：
+</p>
+<pre class="example" id="orgf3ecd53">
+.gitattributes !filter !diff
+self/** filter=git-crypt diff=git-crypt
+</pre>
+<p>
+其原理和 .gitignore 类似，这是这里的意思是对与当前 repo 下的 self/ 目录下所有文件，在 push 前都进行加密。
+</p>
+
+
+<p>
+以下命令查看加密状态：
+</p>
+<div class="org-src-container">
+<pre><code class="shell">git-crypt status -e
+</code></pre>
+</div>
+
+<p>
+如果要在另外一台电脑上解密，则要提供一个密钥，用以下方式生成
+</p>
+<pre class="example" id="orgb9d6a9e">
+git-crypt export-key keyfile
+</pre>
+
+<p>
+把 keyfile 拷贝到另外一台电脑，然后执行以下命令解密：
+</p>
+<pre class="example" id="orgdd5d0ba">
+git-crypt unlock path/to/key
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org68a4525" class="outline-3">
+<h3 id="org68a4525">需要手动下载的安装包</h3>
+<div class="outline-text-3" id="text-org68a4525">
+<p>
+这些最好自己备份一份：
+</p>
+<ul class="org-ul">
+<li><a href="https://meeting.tencent.com/download?mfrom=OfficialIndex_TopBanner1_Download">下载中心-腾讯会议</a></li>
+<li>Crash</li>
+<li>google chrome</li>
+</ul>
+</div>
+</div>
+</section>
+
+
+<section id="outline-container-org7fb1fd7" class="outline-2">
+<h2 id="org7fb1fd7">命令行</h2>
+<div class="outline-text-2" id="text-org7fb1fd7">
+<p>
+cd, ls 这类比较常用的就不记录了，主要是一些不太常用，但需要的时候又很有用的命令
+</p>
+</div>
+
+<div id="outline-container-org3293c84" class="outline-3">
+<h3 id="org3293c84">硬件信息查询</h3>
+<div class="outline-text-3" id="text-org3293c84">
+</div>
+<div id="outline-container-org001e063" class="outline-4">
+<h4 id="org001e063">CPU 信息</h4>
+<div class="outline-text-4" id="text-org001e063">
+<div class="org-src-container">
+<pre><code class="shell">lscpu
+</code></pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orge5b0689" class="outline-4">
+<h4 id="orge5b0689">网卡信息</h4>
+<div class="outline-text-4" id="text-orge5b0689">
+<div class="org-src-container">
+<pre><code class="shell">lshw -class network 
+</code></pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb7d4e79" class="outline-3">
+<h3 id="orgb7d4e79">解压</h3>
+<div class="outline-text-3" id="text-orgb7d4e79">
+<p>
+对一些含有中文文件名的 zip 包解压：
+</p>
+<div class="org-src-container">
+<pre><code class="shell">unzip -l -O GB18030 xxx.zip
+</code></pre>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<span> © 2023</span><a href="https://github.com/metaescape" target="_blank"> mE </a> |
+<span>Powered by <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.0.50 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</span>
+</footer>
+
+</div>
+</body>
+</html>

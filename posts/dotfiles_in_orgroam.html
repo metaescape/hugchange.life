@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2023-03-30 四 11:04 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>org roam 风格的系统配置文件管理</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="pipz">
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="../orgchange/themes/darkfloat/style.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
+/>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+<script>
+  hljs.highlightAll();
+</script>
+<script src="../orgchange/themes/main.js"></script>
+</head>
+<body>
+<div class="container">
+<header class="top-header">
+  <span class="header__inner">
+    <a href="../index.html" style="text-decoration: none">
+      <div class="logo">
+        <div class="logo-holder-dark">
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            stroke="white"
+            stroke-width="2"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="css-i6dzq1"
+          >
+            <polyline points="4 17 10 11 4 5"></polyline>
+            <line x1="12" y1="19" x2="20" y2="19"></line>
+          </svg>
+        </div>
+      </div>
+    </a>
+
+    <span class="header__right">
+      <div id="header_search">
+        <input type="text" placeholder="Hugchange.life" />
+      </div>
+    </span>
+  </span>
+</header>
+
+<a class="back_top" href="javascript:window.scrollTo(0,0);"
+  ><svg
+    t="1660722824713"
+    class="icon"
+    viewBox="0 0 1024 1024"
+    xmlns="http://www.w3.org/2000/svg"
+    p-id="1359"
+    width="64"
+    height="64"
+  >
+    <path
+      d="M484 93.668c-231.038.0-418.333 187.296-418.333 418.335C65.667 743.041 252.963 930.33 484 930.33c231.036.0 418.333-187.289 418.333-418.327C902.334 280.964 715.036 93.668 484 93.668zM372.207 811.881c-.412 8.174-4.906 12.669-13.493 13.493-6.545.0-11.863-.614-15.946-1.841-4.504-1.639-6.545-4.906-6.133-9.813 1.629-4.906 4.695-7.148 9.199-6.746 6.948 1.639 10.215.613 9.813-3.066v-96.902h-12.266c-4.504-.402-6.746-3.268-6.746-8.586.402-4.907 2.855-7.562 7.359-7.974h36.185c2.453.0 4.083 1.025 4.906 3.066 1.227-2.855 3.469-4.494 6.747-4.906h82.183c4.495.412 6.747 3.277 6.747 8.587-.412 5.318-2.865 8.184-7.36 8.586h-36.798l-2.453 11.652h23.919c10.215-.402 14.92 3.891 14.106 12.88v63.17c-.412 4.504-3.277 6.957-8.586 7.36-5.318-.403-8.184-2.856-8.586-7.36v-57.037c0-1.227-.613-1.84-1.84-1.84h-43.545c-.824.412-1.438 1.025-1.84 1.84v55.811c-.412 4.906-3.277 7.57-8.586 7.974-5.318-.403-8.184-3.067-8.586-7.974v-61.943c0-8.586 3.68-12.88 11.04-12.88h14.719l3.066-11.652h-25.759c-2.453.0-5.117-1.016-7.973-3.066-1.227 2.865-3.479 4.293-6.746 4.293h-6.747L372.207 811.881zm107.329 12.265c-3.277 4.907-7.571 5.722-12.879 2.454-2.865-1.227-7.571-3.891-14.106-7.974-6.133-3.277-10.838-5.52-14.106-6.746-6.133-2.855-8.586-6.334-7.359-10.426-1.227 2.051-3.68 4.504-7.36 7.359-.412.412-.824.824-1.227 1.227-9.41 7.762-20.239 13.896-32.505 18.399-5.73 1.629-9.813.201-12.266-4.294-1.639-4.906.0-8.586 4.906-11.039 18.802-7.762 30.253-15.534 34.345-23.306 4.494-7.359 6.746-21.054 6.746-41.091.403-5.722 3.067-8.788 7.973-9.2 5.309.412 8.174 3.479 8.586 9.2.814 20.852-1.639 36.798-7.36 47.837 4.083-4.906 9.401-5.107 15.946-.613 4.907 2.865 11.442 6.546 19.626 11.04 3.68 2.453 6.334 4.092 7.973 4.906C481.375 814.736 482.391 818.828 479.536 824.146zM556.198 822.307h-41.704c-7.772-.412-11.864-3.891-12.267-10.426v-34.345c-.412-8.989 3.68-13.282 12.267-12.88h42.931c7.763-.402 11.653 3.891 11.653 12.88v34.958C569.48 819.029 565.188 822.307 556.198 822.307zM614.462 817.4c-6.545.0-11.652-.824-15.332-2.453-4.092-2.051-5.318-5.309-3.68-9.813 1.629-4.906 5.107-6.747 10.426-5.52 11.04 2.453 15.735-1.841 14.106-12.88-.412-8.174-5.933-18.399-16.56-30.665-3.68-3.68-4.293-9.2-1.84-16.56 4.494-13.895 7.561-24.532 9.199-31.892h-16.559c-1.227.0-2.051.824-2.453 2.453v110.395c-.412 5.31-3.067 8.175-7.974 8.587-5.318-.412-8.184-3.277-8.586-8.587v-65.01c-1.227 1.639-2.865 2.453-4.906 2.453h-69.304c-4.504-.402-6.957-3.268-7.359-8.586.402-5.31 2.855-8.175 7.359-8.587h14.72c-.824-.814-3.68-5.721-8.586-14.719-2.051-5.31-.613-8.989 4.293-11.04h-7.36c-4.504-.402-6.957-3.268-7.359-8.586.402-5.309 2.855-8.174 7.359-8.586h22.079c-.824-1.227-1.227-2.453-1.227-3.681-1.227-4.082.613-7.359 5.52-9.813 5.721-2.041 9.401-1.016 11.04 3.066 1.227 3.68 2.654 7.158 4.293 10.427h20.239c4.494.412 6.947 3.277 7.359 8.586-.412 5.318-2.865 8.184-7.359 8.586h-47.225c2.855 1.639 6.334 7.36 10.426 17.173 1.227 4.092.814 6.957-1.227 8.586h13.493c.402-1.227 1.016-2.855 1.84-4.906 2.453-6.133 4.082-11.039 4.906-14.72 1.629-4.082 5.107-5.721 10.426-4.906 4.906 2.051 6.747 5.318 5.521 9.813-.824 2.051-1.639 4.504-2.454 7.359-1.227 3.277-2.252 5.932-3.066 7.973h11.04c2.453.0 4.082.613 4.906 1.84v-41.704c0-8.175 3.066-12.056 9.199-11.653h36.799c9.4.0 13.08 5.117 11.039 15.333.0.412-1.025 3.891-3.066 10.426-3.277 10.226-5.52 17.786-6.746 22.692-1.227 3.68-1.84 6.344-1.84 7.973.402 1.228 1.629 3.067 3.68 5.521 8.586 13.09 13.281 25.356 14.105 36.798C638.17 807.387 630.408 816.988 614.462 817.4zm32.434-351.085c-7.488 7.449-18.815 7.642-25.649.806-.538-.537-1.074-.922-1.536-1.535L502.752 348.858l-.192 280.106c0 9.139-8.601 16.549-19.198 16.549-10.598.0-18.738-7.41-18.738-16.549.0-.729-.115-1.306.0-2.034l-.192-278.072L347.513 465.586c-.422.652-.959.999-1.536 1.535-6.834 6.874-18.162 6.681-25.649-.806-7.488-7.488-8.025-19.122-1.152-25.995L467.12 292.03c2.112-3.263 5.26-5.913 9.369-7.333 2.074-.807 4.262-1.152 6.528-1.113.23.0.383-.116.614-.116.153.0.307.078.46.078 2.304-.078 4.57.307 6.72 1.152 3.994 1.421 7.142 4.07 9.254 7.219L648.048 440.32C654.92 447.155 654.383 458.827 646.896 466.315zM636.605 238.121H331.771c-9.407.0-17.049-7.564-17.049-16.857.0-9.292 7.642-16.856 17.049-16.856h304.835c9.445.0 17.048 7.564 17.048 16.856C653.653 230.557 646.013 238.121 636.605 238.121zM549.452 781.829H521.24c-1.227.0-2.051.824-2.453 2.453v19.013c.402 1.639 1.227 2.453 2.453 2.453h28.212c1.629-.402 2.453-1.227 2.453-2.453v-19.013C551.905 782.653 551.081 781.829 549.452 781.829z"
+      p-id="1360"
+      fill="#a9a9b340"
+    ></path>
+  </svg>
+</a>
+<main id="content">
+<header>
+<h1 class="title">org roam 风格的系统配置文件管理</h1>
+</header><header id="preamble" class="status">
+<span class="created">
+  <svg
+    width="24"
+    height="24"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="feather feather-calendar"
+  >
+    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+    <line x1="16" y1="2" x2="16" y2="6"></line>
+    <line x1="8" y1="2" x2="8" y2="6"></line>
+    <line x1="3" y1="10" x2="21" y2="10"></line>
+  </svg>
+  2021-11-02 二 00:00
+</span>
+<span class="last-modify">
+  <svg
+    viewBox="0 0 24 24"
+    width="24"
+    height="24"
+    stroke="currentColor"
+    stroke-width="2"
+    fill="none"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="feather"
+  >
+    <path d="M12 20h9"></path>
+    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+  </svg>
+  2023-03-30 四 10:15
+</span>
+</header>
+<nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#orgb0d0cc5">Emacs 的常见配置方式</a>
+<ul>
+<li><a href="#org897e677">1. All in init.el</a></li>
+<li><a href="#org3eccd4b">2. 结构化 emacs.d/</a></li>
+<li><a href="#org494ced6">3. All in init.org</a></li>
+<li><a href="#orgef87657">还有哪些可能？</a></li>
+</ul>
+</li>
+<li><a href="#org4f87e97">跨文件 noweb 和 tangle</a></li>
+<li><a href="#org128d38d">Org 配置工程</a></li>
+<li><a href="#org12f8b46">把代码当作知识？</a>
+<ul>
+<li><a href="#orge27cc00">得与失</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+
+<figure id="orgde796ce">
+<img src="./imgs/make_init.gif" alt="make_init.gif">
+
+</figure>
+
+<p>
+本文分享一种利用 org-babel 在 emacs 中分布式地管理系统配置文件的方法，所谓分布式，
+就是说一份配置文件里的内容可以根据功能分散在不同的 org 文件中，再通过 org-babel 跨文件 tangle 的功能汇总到一个能够被加载的配置文件里。
+</p>
+
+<p>
+在这种方式下，可以把软件的配置和笔记记录在同一个 org 文件或 header 下，与 org-roam 融合。
+</p>
+
+<section id="outline-container-orgb0d0cc5" class="outline-2">
+<h2 id="orgb0d0cc5">Emacs 的常见配置方式</h2>
+<div class="outline-text-2" id="text-orgb0d0cc5">
+<p>
+假设当前只用 evil, org-mode, python-mode 三个功能，一般有以下几种组织配置文件的方式：
+</p>
+</div>
+
+<div id="outline-container-org897e677" class="outline-3">
+<h3 id="org897e677">1. All in init.el</h3>
+<div class="outline-text-3" id="text-org897e677">
+<p>
+将所有 elisp 全部写在 emacs.d/init.el 中， 这种方式适合包比较少的情况，如果配置代码多，维护起来比较吃力。
+</p>
+</div>
+</div>
+
+<div id="outline-container-org3eccd4b" class="outline-3">
+<h3 id="org3eccd4b">2. 结构化 emacs.d/</h3>
+<div class="outline-text-3" id="text-org3eccd4b">
+<p>
+在 emacs.d/ 下新建子目录，其中保存各个模块的单独配置，如 evil.el, org.el, python.el,
+而 init.el 只是单纯的 require 它们。
+</p>
+
+<p>
+大部分 emacs 的 starter kit 都是用这样的方式来结构化的，比如 <a href="https://github.com/seagle0128/.emacs.d">Centaur Emacs</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org494ced6" class="outline-3">
+<h3 id="org494ced6">3. All in init.org</h3>
+<div class="outline-text-3" id="text-org494ced6">
+<p>
+将所有配置都以文学编程的方式写在一个 org 文件中，例如 init.org
+</p>
+
+<p>
+根据导出时间不同，又可以大概分成两种模式：
+</p>
+
+<ul class="org-ul">
+<li><p>
+一是在 emacs 启动时去自动 tangle init.org, 生成 init.el 然后 emacs 再加载 init.el
+</p>
+
+<p>
+这种方式的缺点是 tangle 本身需要时间，使得 emacs 启动时间变得比较长
+</p></li>
+
+<li>二是手动执行 tangle 或者设置在文件保存时自动 tangle</li>
+</ul>
+
+<p>
+这种方式的好处是可以比较方便把配置发布成 blog 或者 github readme, 在 org 里能用文字进行注释，链接等等，可读性很好.
+比如 <a href="https://github.com/MatthewZMD/.emacs.d">M-EMACS</a> 以及令人惊叹的 <a href="https://tecosaur.github.io/emacs-config/config.html">tecosaur Doom Emacs Configuration</a> 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgef87657" class="outline-3">
+<h3 id="orgef87657">还有哪些可能？</h3>
+<div class="outline-text-3" id="text-orgef87657">
+<p>
+我个人使用过第一种和第三种方式，这都是 all-in-one 的风格，把所有配置都放在一个文件里。
+</p>
+
+<p>
+尽管第三种方式可以利用 org mode 把不同包放在不同层级的 header 下，
+一定程度上减缓因配置增长带来的混乱，但当 header 太多或层级过深时，无论阅读或者编辑都会变得更麻烦（个人习惯）。
+</p>
+
+<p>
+把代码和对代码的解释穿插着的 "文学编程" 范式又很对我的胃口，因此我跳过第二种方式，希望找到更加"结构化"的基于 org 的方法。此外，由于配置已经 org 化了，作为 org-roam 的使用者，把它与 org-roam 更好地融合也是一个比较自然的想法。
+</p>
+</div>
+</div>
+</section>
+
+<section id="outline-container-org4f87e97" class="outline-2">
+<h2 id="org4f87e97">跨文件 noweb 和 tangle</h2>
+<div class="outline-text-2" id="text-org4f87e97">
+<p>
+正如第一种方法使用久了自然就会开始考虑把 init.el 拆分，最终发展出第二种方式。
+</p>
+
+<p>
+同样的，当 <code>init.org</code> 过于臃肿时，就可以考虑把 <code>init.org</code> 拆分成如 <code>evil.org</code>, <code>python.org</code> 多个文件， <code>init.org</code> 只是去 "require/include/import" 包含特定 package 配置的 org 文件。
+</p>
+
+<p>
+可以在单个 org 文件里利用 org-babel 来把一个代码块的内容 "include" 到另外一个代码块
+</p>
+
+<p>
+如下：
+</p>
+
+<div class="org-src-container">
+<pre><code class="emacs-lisp" id="orge36c8fb">(setq org-abcd 1)
+</code></pre>
+</div>
+
+
+<div class="org-src-container">
+<pre><code class="emacs-lisp" id="orgab4f77d">&lt;&lt;abcd&gt;&gt;
+(prin1 org-abcd)
+</code></pre>
+</div>
+
+<pre class="example">
+1
+</pre>
+
+
+<p>
+在 org 文档里源代码是：
+</p>
+
+<div class="org-src-container">
+<pre><code class="org">#+name: abcd
+#+begin_src emacs-lisp
+(setq org-abcd 1)
+#+end_src
+
+
+#+name: print
+#+begin_src emacs-lisp :noweb yes
+&lt;&lt;abcd&gt;&gt;
+(prin1 org-abcd)
+#+end_src
+
+#+RESULTS:
+: 1
+</code></pre>
+</div>
+
+<p>
+以上名为 print 的代码块把名为 abcd 代码块里的内容引入，因此可以打印出 org-abcd 的值，注意第二个代码的 header 中需要声明 <code>:noweb yes</code>
+</p>
+
+<p>
+如果对 print 进行 tangle, 例如在其 header 中加上 <code>:tangle /tmp/print.el</code> 然后执行 <code>c-u org-babel-tangle</code>, 那么 <code>/tmp/print.el</code> 的结果中就会包含以下两行代码：
+</p>
+
+<div class="org-src-container">
+<pre><code class="emacs-lisp">(setq org-abcd 1)
+(prin1 org-abcd)
+</code></pre>
+</div>
+
+
+<p>
+假设 abcd 代码块是在另外一个文件中，例如 <code>/tmp/variable.org</code> ，那么就需要用跨文件 noweb 来调用,
+经尝试发现不能直接在 print 代码块里用 <code>&lt;&lt;/tmp/variable.org:abcd&gt;&gt;</code> 引用，
+参考 <a href="https://stackoverflow.com/questions/47058372/in-org-mode-how-to-call-code-block-to-evaluate-from-other-org-file">emacs - In Org-mode how to call code block to evaluate from other org file? - Stack Overflow</a>
+, 需要用 org block 进行一次包装后再调用，如下：
+</p>
+
+<div class="org-src-container">
+<pre><code class="org"># /tmp/variable.org 文件
+
+#+name: abcd
+#+begin_src emacs-lisp
+(setq org-abcd 1)
+#+end_src
+
+#+name: abcd-api
+#+begin_src org :noweb yes
+&lt;&lt;abcd&gt;&gt;
+#+end_src
+</code></pre>
+</div>
+
+<p>
+print 的写法是：
+</p>
+<div class="org-src-container">
+<pre><code class="org"># init.org 文件
+
+#+name: print
+#+begin_src emacs-lisp :noweb yes
+&lt;&lt;/tmp/variable.org:abcd-api()&gt;&gt;
+(prin1 org-abcd)
+#+end_src
+</code></pre>
+</div>
+
+<p>
+注意 <code>abcd-api()</code> 是函数调用的语法，执行以上代码就能正常打印出定义在 /tmp/variable.org 文件里名称为 abcd 的 src block 中的 org-abcd 变量（经过了 abcd-api 封装，可以把用 org 封装看作是类似 elisp 中的 provide 语法，对外提供 接口）。tangle 以上代码得到的结果与在上文里同一个文件中进行 tangle 的结果是一致的。
+</p>
+
+<p>
+用这个方法，就可以把配置放到对应的笔记中了，例如以下是我个人的 init.org 的部分配置，做简单说明：
+</p>
+<ul class="org-ul">
+<li>python 是从 elpy.org 里 include 的，elpy.org 里还有对 elpy 以及 python 开发环境知识的笔记（例如什么是 jedi, lsp, lint 等）</li>
+<li>racket 用的不多，配置也少，因此没有分到单独文件</li>
+<li>org-mode 由于配置比较多，拆分成了多个文件，例如 orgmode_workflow.org 里 org-basic-setting 是对 org 的基本设置（字体，icon 等）的接口, 此外 roam, rss, babel 都有不同的 roam 笔记，因此从不同的文件中 noweb 调用。</li>
+</ul>
+
+<div class="org-src-container">
+<pre><code class="org">* python 编程环境配置
+#+begin_src emacs-lisp :results none :noweb yes
+&lt;&lt;~/org/logical/elpy.org:setting()&gt;&gt;
+#+end_src
+
+* racket mode
+#+begin_src emacs-lisp :results none
+(use-package racket-mode)
+#+end_src
+
+* org-mode environment
+
+#+begin_src emacs-lisp :results none :noweb yes
+&lt;&lt;~/org/logical/orgmode_workflow.org:org-basic-setting()&gt;&gt;
+
+&lt;&lt;~/org/logical/orgmode_workflow.org:org-agenda-setting()&gt;&gt;
+
+&lt;&lt;~/org/logical/org_babel.org:setting()&gt;&gt;
+
+&lt;&lt;~/org/logical/org_roam_eco.org:setting()&gt;&gt;
+
+&lt;&lt;~/org/logical/rss.org:elfeed-org-setting()&gt;&gt;
+#+end_src
+</code></pre>
+</div>
+</div>
+</section>
+
+<section id="outline-container-org128d38d" class="outline-2">
+<h2 id="org128d38d">Org 配置工程</h2>
+<div class="outline-text-2" id="text-org128d38d">
+<p>
+这一节介绍一些我个人使用中遇到的"工程上"的问题以及解决方法。
+</p>
+
+<p>
+以上一节提到的 <code>init.org</code> 为例，如果在 <code>init.org</code> 里直接执行 <code>org-babel-tangle</code>, 由于 <code>init.org</code> 调用了  <code>org_roam_eco.org</code> , <code>elpy.org</code> 等, 而 <code>elpy.org</code> 可能继续又调用了 <code>python.org</code>, <code>lsp.org</code> , 那么 <code>org-babel</code> 为了从这些文件读取代码块，会把依赖路径上的所有文件都打开成 buffer, 使得 buffer list 一片混乱。
+</p>
+
+<p>
+解决方法是用外部脚本执行 tangle，核心代码如下：
+</p>
+<div class="org-src-container">
+<pre><code class="emacs-lisp">(org-babel-tangle-file "~/org/init.org" "~/emacs.d/init.el")
+</code></pre>
+</div>
+
+<p>
+另外，可以将以上方法推广到管理所有的配置文件，如 i3, tmux, bashrc, vimrc 等等，这样的话，需要为每一个配置文件都写一个类似的 tangle 脚本，为了控制这类复杂度，可以借用 makefile 来处理
+</p>
+
+<p>
+Makefile 文件放在 roam 的主目录下，例如 ~/org, 以下是部分内容
+</p>
+
+<div class="org-src-container">
+<pre><code class="conf">.SILENT:
+.SUFFIXES:
+.PHONY: clean
+
+wemacs:
+	emacs --batch -l ~/myconf/emacs/make_tangle.el --eval "(tangle-config-file \"init\")"
+	emacs
+
+tmux:
+	emacs --batch -l ~/myconf/emacs/make_tangle.el --eval "(tangle-config-file \"tmux\")"
+	tmux source-file ~/myconf/.tmux.conf
+
+hugchange:
+	emacs --batch -l ~/myconf/emacs/publish.el
+</code></pre>
+</div>
+
+<p>
+其中 ~/myconf/emacs/make_tangle.el 文件部分内容如下：
+</p>
+<div class="org-src-container">
+<pre><code class="emacs-lisp">(require 'package)
+(setq package-user-dir "~/.emacs.d/elpa")
+(package-initialize)
+(setq org-id-locations-file "~/.emacs.d/.org-id-locations")
+(setq org-confirm-babel-evaluate nil
+      org-src-preserve-indentation t)
+(org-babel-do-load-languages
+ 'org-babel-load-languages '((org . t) (shell . t))
+ )
+(require 'org)
+(require 'ob-tangle)
+(setq file-map '(("init" "~/org/init.org" "~/myconf/.emacs.d/init.el")
+                 ("tmux" "~/org/logical/tmux.org")))
+
+(defun tangle-config-file (name)
+  (let ((prog-mode-hook nil)) ;; Avoid running hooks when tangling.
+    (let ((args (cdr (assoc name file-map))))
+         (apply #'org-babel-tangle-file args))
+    (message (format "Tangled %s completed." name))))
+</code></pre>
+</div>
+
+<p>
+Makefile 中三个入口的功能说明：
+</p>
+<ul class="org-ul">
+<li><p>
+wemacs 是 emacs 配置的入口，只要在 <code>~/org</code> 下执行 make wemacs, 就会把 init.org 里的所有内容 tangle 到 <code>~/myconf/emacs.d/init.el</code> 下（ <code>~/.emacs.d</code> 再软链接到 <code>~/myconf/emacs.d</code> ），为了避免在 terminal 中手动执行 make 命令，可以安装 emacs helm-make 插件。
+</p>
+
+<p>
+本文开始的 gif 展示的就是调用 helm-make 后选择并导出 emacs 配置的过程，
+动画最后出现的图片重叠是因为此时启动了另外一个 emacs (makefile 里 wemacs 入口第二行)，导致当前 emacs 窗口变小了（<a href="./xwish.html">i3 自动平铺</a> ），这样可以马上检查刚修改后的 emacs 配置是否有 bug, 以便快速修复。
+</p>
+
+<p>
+我当前对 emacs 配置修改的工作流就是，用 org-roam-find 直接找到要修改的模块的 org 文件或 header ，修改后马上执行一次 helm-make.
+</p></li>
+
+<li><p>
+tmux 则把 <code>~/org/logical/tmux.org</code> 中明确写有 :tangle 目标的 src block 进行 tangle，并且马上执行 tmux reload 验证是否生效。例如 tmux.org 里以下 block 会被 tangle （ <code>~/.tmux.conf</code> 是 <code>~/myconf/.tmux.conf</code> 的软链接）
+</p>
+<div class="org-src-container">
+<pre><code class="org">#+begin_src conf :tangle ~/myconf/.tmux.conf :noweb yes 
+&lt;&lt;basic-setting&gt;&gt;
+&lt;&lt;window-pane&gt;&gt;
+&lt;&lt;style&gt;&gt;
+&lt;&lt;copy-mode&gt;&gt;
+&lt;&lt;plugins&gt;&gt;
+#+end_src
+</code></pre>
+</div></li>
+
+<li>hugchange 是本博客的发布命令，这里想说明的是，只要是与 org 有关的一次性的操作都可以考虑用 make 来管理，不单单是配置管理</li>
+</ul>
+</div>
+</section>
+
+<section id="outline-container-org12f8b46" class="outline-2">
+<h2 id="org12f8b46">把代码当作知识？</h2>
+<div class="outline-text-2" id="text-org12f8b46">
+<p>
+将 config 代码放到 org-roam 节点下的心理动机可能来源于对一切信息进行知识化的倾向，初衷和 org-roam 是一样的：对知识、想法进行卡片式记录以及双向链接或许可以在比较细的粒度层面建立和发掘知识之间的关系，只是这里把配置代码也看作知识或想法。
+</p>
+
+<p>
+emacs.d 中的所有配置虽然只属于 emacs 这一个软件, 在使用时，必须把它们放在 emacs 约定的配置加载目录下，但为了编写它们，可能涉及对整个系统各方面的理解和使用习惯，配置的知识层面不应该被它的使用方式束缚。从这个角度看，本文的方法像是通过 noweb 语法在 config 的理解与使用之间加上间接引用层，从而对这两个属性进行了解耦。
+</p>
+
+<p>
+比如 evil 的相关配置在内容上更接近 vim 而不是 emacs, 因此 evil.org 中不单记录了 evil 配置，也有指向 vim.org 的链接。这样在修改了 evil 的某个改键后，链接自然会提醒你是否要跳转到 vim 的结点中去修改 vimrc, 使得 emacs 和 vim 的按键保持同步。（evil 本身又可以继续拆分，例如 evil 中的 text object 实际是一种特殊的交互模式，它可以和鼠标右键，embark 等建立联系）
+</p>
+
+<p>
+又比如，emacs-rime 可以看作是 rime 的前端，后端是 librime 动态链接库, 因此我可以把 emacs-rime 的配置直接放在 rime.org 的子节点中，配置旁还可以添加 librime 或者 C 语言动态链接库的节点链接，这样对某个知识的理解可能会更加立体，当然也会增加负担，这取决于梳理知识所能投入的时间、方法和积极性等。
+</p>
+
+<p>
+"把代码也当作知识？" 或许可以从卡片式知识管理或者文学编程的讨论里找一点线索，
+但这不是个很快会有确切答案的问题，只能说，以我目前的使用经验来看，这种方式给我带来的清晰是多于混乱的。
+</p>
+</div>
+
+<div id="outline-container-orge27cc00" class="outline-3">
+<h3 id="orge27cc00">得与失</h3>
+<div class="outline-text-3" id="text-orge27cc00">
+<p>
+具体来说，这个方法带来的好处有：
+</p>
+<ol class="org-ol">
+<li>可以很好地与 org-roam 结合，配置不单单是面向 emacs 或 vim 等程序的，也是面向人的，在知识层面，可以借助 roam 发散式地看到更多功能之间的关系。</li>
+<li>可以在 init.org 中添加对各个子模块的说明，然后单独发布成 blog 分享，因此集合了方法三的优势</li>
+<li>通过 helm-make 获得了一个控制各类与 org 有关的配置 tangle 以及 blog 发布的入口，有一种统筹感</li>
+</ol>
+
+<p>
+代价：
+</p>
+<ol class="org-ol">
+<li>维护的成本，这属于知识管理的通用代价。</li>
+<li><p>
+emacs 本来是直接对 init.el 进行解释，但把配置代码放在 org 后，org 是无法直接被 emacs 解释的，这就相当于把 org 当作源代码，tangle/make 是编译构建的过程。因此每次修改某个 org 里的配置后，需要执行 tangle 再启动 emacs, tangle 大概要 2-3s。这类似从解释型语言换成编译型的代价。
+</p>
+
+<p>
+一种缓和方式： 如果只是尝试新的包或者实验新的功能，可以直接在 init.el 末尾添加配置，然后启动 emacs 验证，一旦发现新配置不适合自己，
+把修改内容删除或者重新执行一次 make 把 init.el 覆盖，这样就可以跳过 tangle 步骤，
+只有真的要长期使用再把代码移动到 org 中，然后再执行 tangle。
+</p>
+
+<p>
+在积累配置的早期，由于频繁增加代码并验证，tangle 的时间成本会很明显，可以先用 init.el 方式，待配置趋于稳定后整理阶段再考虑这种方法。
+</p></li>
+</ol>
+</div>
+</div>
+</section>
+</main>
+<footer id="postamble" class="status">
+<span> © 2023</span><a href="https://github.com/metaescape" target="_blank"> mE </a> |
+<span>Powered by <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.0.50 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</span>
+</footer>
+
+</div>
+</body>
+</html>
