@@ -1,63 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-03-30 四 11:04 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2023-05-10 三 22:58 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>中文语言服务(language server)的畅想和基础实现</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="pipz">
+<meta name="author" content="pipz" />
+<meta name="generator" content="Org Mode" />
 <link
   rel="stylesheet"
   type="text/css"
-  href="../orgchange/themes/darkfloat/style.css"
+  href="/orgchange/themes/darkfloat/style.css"
 />
 <link
+  title="dark"
   rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
+  href="/orgchange/themes/highlightjs/atom-one-dark.css"
 />
-
+<link
+  title="light"
+  rel="stylesheet"
+  href="/orgchange/themes/highlightjs/brown-paper.css"
+/>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 
 <script>
   hljs.highlightAll();
 </script>
-<script src="../orgchange/themes/main.js"></script>
+<script src="/orgchange/themes/main.js"></script>
 </head>
 <body>
 <div class="container">
 <header class="top-header">
-  <span class="header__inner">
-    <a href="../index.html" style="text-decoration: none">
-      <div class="logo">
-        <div class="logo-holder-dark">
-          <svg
-            viewBox="0 0 24 24"
-            width="20"
-            height="20"
-            stroke="white"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-          >
-            <polyline points="4 17 10 11 4 5"></polyline>
-            <line x1="12" y1="19" x2="20" y2="19"></line>
-          </svg>
+  <div class="header-inner">
+    <div class="header-left">
+      <a href="/" style="text-decoration: none">
+        <div class="logo">
+          <div class="logo-holder-dark">
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+            >
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
+    </div>
 
-    <span class="header__right">
-      <div id="header_search">
-        <input type="text" placeholder="Hugchange.life" />
+    <div class="header-right">
+      <ul class="header-items">
+        <li>
+          <a href="/categories/">分类</a>
+        </li>
+      </ul>
+      <div class="toggle-button">
+        <input type="checkbox" id="darkmode-toggle" />
+        <label for="darkmode-toggle"> </label>
       </div>
-    </span>
-  </span>
+    </div>
+  </div>
 </header>
 
-<a class="back_top" href="javascript:window.scrollTo(0,0);"
+<a class="back-top" href="javascript:window.scrollTo(0,0);"
   ><svg
     t="1660722824713"
     class="icon"
@@ -70,7 +83,6 @@
     <path
       d="M484 93.668c-231.038.0-418.333 187.296-418.333 418.335C65.667 743.041 252.963 930.33 484 930.33c231.036.0 418.333-187.289 418.333-418.327C902.334 280.964 715.036 93.668 484 93.668zM372.207 811.881c-.412 8.174-4.906 12.669-13.493 13.493-6.545.0-11.863-.614-15.946-1.841-4.504-1.639-6.545-4.906-6.133-9.813 1.629-4.906 4.695-7.148 9.199-6.746 6.948 1.639 10.215.613 9.813-3.066v-96.902h-12.266c-4.504-.402-6.746-3.268-6.746-8.586.402-4.907 2.855-7.562 7.359-7.974h36.185c2.453.0 4.083 1.025 4.906 3.066 1.227-2.855 3.469-4.494 6.747-4.906h82.183c4.495.412 6.747 3.277 6.747 8.587-.412 5.318-2.865 8.184-7.36 8.586h-36.798l-2.453 11.652h23.919c10.215-.402 14.92 3.891 14.106 12.88v63.17c-.412 4.504-3.277 6.957-8.586 7.36-5.318-.403-8.184-2.856-8.586-7.36v-57.037c0-1.227-.613-1.84-1.84-1.84h-43.545c-.824.412-1.438 1.025-1.84 1.84v55.811c-.412 4.906-3.277 7.57-8.586 7.974-5.318-.403-8.184-3.067-8.586-7.974v-61.943c0-8.586 3.68-12.88 11.04-12.88h14.719l3.066-11.652h-25.759c-2.453.0-5.117-1.016-7.973-3.066-1.227 2.865-3.479 4.293-6.746 4.293h-6.747L372.207 811.881zm107.329 12.265c-3.277 4.907-7.571 5.722-12.879 2.454-2.865-1.227-7.571-3.891-14.106-7.974-6.133-3.277-10.838-5.52-14.106-6.746-6.133-2.855-8.586-6.334-7.359-10.426-1.227 2.051-3.68 4.504-7.36 7.359-.412.412-.824.824-1.227 1.227-9.41 7.762-20.239 13.896-32.505 18.399-5.73 1.629-9.813.201-12.266-4.294-1.639-4.906.0-8.586 4.906-11.039 18.802-7.762 30.253-15.534 34.345-23.306 4.494-7.359 6.746-21.054 6.746-41.091.403-5.722 3.067-8.788 7.973-9.2 5.309.412 8.174 3.479 8.586 9.2.814 20.852-1.639 36.798-7.36 47.837 4.083-4.906 9.401-5.107 15.946-.613 4.907 2.865 11.442 6.546 19.626 11.04 3.68 2.453 6.334 4.092 7.973 4.906C481.375 814.736 482.391 818.828 479.536 824.146zM556.198 822.307h-41.704c-7.772-.412-11.864-3.891-12.267-10.426v-34.345c-.412-8.989 3.68-13.282 12.267-12.88h42.931c7.763-.402 11.653 3.891 11.653 12.88v34.958C569.48 819.029 565.188 822.307 556.198 822.307zM614.462 817.4c-6.545.0-11.652-.824-15.332-2.453-4.092-2.051-5.318-5.309-3.68-9.813 1.629-4.906 5.107-6.747 10.426-5.52 11.04 2.453 15.735-1.841 14.106-12.88-.412-8.174-5.933-18.399-16.56-30.665-3.68-3.68-4.293-9.2-1.84-16.56 4.494-13.895 7.561-24.532 9.199-31.892h-16.559c-1.227.0-2.051.824-2.453 2.453v110.395c-.412 5.31-3.067 8.175-7.974 8.587-5.318-.412-8.184-3.277-8.586-8.587v-65.01c-1.227 1.639-2.865 2.453-4.906 2.453h-69.304c-4.504-.402-6.957-3.268-7.359-8.586.402-5.31 2.855-8.175 7.359-8.587h14.72c-.824-.814-3.68-5.721-8.586-14.719-2.051-5.31-.613-8.989 4.293-11.04h-7.36c-4.504-.402-6.957-3.268-7.359-8.586.402-5.309 2.855-8.174 7.359-8.586h22.079c-.824-1.227-1.227-2.453-1.227-3.681-1.227-4.082.613-7.359 5.52-9.813 5.721-2.041 9.401-1.016 11.04 3.066 1.227 3.68 2.654 7.158 4.293 10.427h20.239c4.494.412 6.947 3.277 7.359 8.586-.412 5.318-2.865 8.184-7.359 8.586h-47.225c2.855 1.639 6.334 7.36 10.426 17.173 1.227 4.092.814 6.957-1.227 8.586h13.493c.402-1.227 1.016-2.855 1.84-4.906 2.453-6.133 4.082-11.039 4.906-14.72 1.629-4.082 5.107-5.721 10.426-4.906 4.906 2.051 6.747 5.318 5.521 9.813-.824 2.051-1.639 4.504-2.454 7.359-1.227 3.277-2.252 5.932-3.066 7.973h11.04c2.453.0 4.082.613 4.906 1.84v-41.704c0-8.175 3.066-12.056 9.199-11.653h36.799c9.4.0 13.08 5.117 11.039 15.333.0.412-1.025 3.891-3.066 10.426-3.277 10.226-5.52 17.786-6.746 22.692-1.227 3.68-1.84 6.344-1.84 7.973.402 1.228 1.629 3.067 3.68 5.521 8.586 13.09 13.281 25.356 14.105 36.798C638.17 807.387 630.408 816.988 614.462 817.4zm32.434-351.085c-7.488 7.449-18.815 7.642-25.649.806-.538-.537-1.074-.922-1.536-1.535L502.752 348.858l-.192 280.106c0 9.139-8.601 16.549-19.198 16.549-10.598.0-18.738-7.41-18.738-16.549.0-.729-.115-1.306.0-2.034l-.192-278.072L347.513 465.586c-.422.652-.959.999-1.536 1.535-6.834 6.874-18.162 6.681-25.649-.806-7.488-7.488-8.025-19.122-1.152-25.995L467.12 292.03c2.112-3.263 5.26-5.913 9.369-7.333 2.074-.807 4.262-1.152 6.528-1.113.23.0.383-.116.614-.116.153.0.307.078.46.078 2.304-.078 4.57.307 6.72 1.152 3.994 1.421 7.142 4.07 9.254 7.219L648.048 440.32C654.92 447.155 654.383 458.827 646.896 466.315zM636.605 238.121H331.771c-9.407.0-17.049-7.564-17.049-16.857.0-9.292 7.642-16.856 17.049-16.856h304.835c9.445.0 17.048 7.564 17.048 16.856C653.653 230.557 646.013 238.121 636.605 238.121zM549.452 781.829H521.24c-1.227.0-2.051.824-2.453 2.453v19.013c.402 1.639 1.227 2.453 2.453 2.453h28.212c1.629-.402 2.453-1.227 2.453-2.453v-19.013C551.905 782.653 551.081 781.829 549.452 781.829z"
       p-id="1360"
-      fill="#a9a9b340"
     ></path>
   </svg>
 </a>
@@ -116,37 +128,37 @@
   2023-03-29 三 17:25
 </span>
 </header>
-<nav id="table-of-contents">
+<nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgc806e1e">前记</a></li>
-<li><a href="#org36bc8b3">language server protocol</a></li>
-<li><a href="#orge9203e6">锵锵三人行</a></li>
-<li><a href="#orgdaea7be">中文语言服务</a>
+<li><a href="#orga687076">前记</a></li>
+<li><a href="#org82f60a6">language server protocol</a></li>
+<li><a href="#orgb8ed3b6">锵锵三人行</a></li>
+<li><a href="#orged5a81f">中文语言服务</a>
 <ul>
-<li><a href="#orgf17f151">再畅想一刻钟</a></li>
-<li><a href="#orgd23a298">拼音补全基本实现</a>
+<li><a href="#orgeed46e7">再畅想一刻钟</a></li>
+<li><a href="#orgc721b99">拼音补全基本实现</a>
 <ul>
-<li><a href="#org4f831d3">lsp 服务仅仅是一个命令行</a></li>
-<li><a href="#orge69b6a2">pygls 的封装</a></li>
-<li><a href="#org4b00143">收到 hello world 请回答</a></li>
-<li><a href="#org2811d2e">加入 demo 输入法</a></li>
-<li><a href="#orgee8220f">输入 nihao 后发生什么？</a></li>
-<li><a href="#orgda57fae">替换成可用输入法</a></li>
+<li><a href="#org1d88a87">lsp 服务仅仅是一个命令行</a></li>
+<li><a href="#org28ab73a">pygls 的封装</a></li>
+<li><a href="#orgee56bcd">收到 hello world 请回答</a></li>
+<li><a href="#org9b7fd1c">加入 demo 输入法</a></li>
+<li><a href="#org9b999a9">输入 nihao 后发生什么？</a></li>
+<li><a href="#org528dcb7">替换成可用输入法</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org2dfe4ef">后记</a></li>
+<li><a href="#orgf92b8a6">后记</a></li>
 </ul>
 </div>
 </nav>
 
 
-<section id="outline-container-orgc806e1e" class="outline-2">
-<h2 id="orgc806e1e">前记</h2>
-<div class="outline-text-2" id="text-orgc806e1e">
+<section id="outline-container-orga687076" class="outline-2">
+<h2 id="orga687076">前记</h2>
+<div class="outline-text-2" id="text-orga687076">
 <p>
 这周 <span class="timestamp-wrapper"><span class="timestamp">&lt;2022-09-06 二&gt; </span></span> emacs 升级到了 28, 于是想体验一下 <a href="https://github.com/manateelazycat/lsp-bridge">lsp-bridge</a>, 我对编程语言的 lsp 兴趣不大，例如日常用的 python 环境是 elpy + company, 功能齐全且稳定，静态的 jedi 补全速度很快，tag 解析也准，没有切换到 lsp 的欲望。但我对自然语言的 lsp 还是很感兴趣的，也就是中文的 language server. 
 </p>
@@ -168,9 +180,9 @@
 </div>
 </section>
 
-<section id="outline-container-org36bc8b3" class="outline-2">
-<h2 id="org36bc8b3">language server protocol</h2>
-<div class="outline-text-2" id="text-org36bc8b3">
+<section id="outline-container-org82f60a6" class="outline-2">
+<h2 id="org82f60a6">language server protocol</h2>
+<div class="outline-text-2" id="text-org82f60a6">
 <p>
 本节我想用类比的方式来介绍一下什么是语言服务协议（LSP, language server protocol），因为具体的方式我也不会，要弄清还得看官方文档： <a href="https://microsoft.github.io/language-server-protocol/">Official page for Language Server Protocol</a>
 </p>
@@ -206,9 +218,9 @@
 </div>
 </section>
 
-<section id="outline-container-orge9203e6" class="outline-2">
-<h2 id="orge9203e6">锵锵三人行</h2>
-<div class="outline-text-2" id="text-orge9203e6">
+<section id="outline-container-orgb8ed3b6" class="outline-2">
+<h2 id="orgb8ed3b6">锵锵三人行</h2>
+<div class="outline-text-2" id="text-orgb8ed3b6">
 <p>
 如果第三者是一般的 IDE 代码编辑器，例如 vscode, vim，可能我不会想到 "有内鬼" 的梗，因为大部分情况都是在编程环境下中规中矩地获得特定语言服务返回的信息。
 </p>
@@ -243,7 +255,7 @@
 而 emacs 的灵活性使得几乎可以用它做"任何事情"，因此就可以（很保守地）想象以下场景：
 </p>
 
-<pre class="example" id="orgccd8ebe">
+<pre class="example" id="orgd480ecd">
 语言服务在检测到写的代码没有那么"优雅" 时，可以给 emacs 发条消息播放一首音乐让你放松放松。
 </pre>
 
@@ -257,13 +269,13 @@ lsp-bridge 把补全前端（acm）和与 lsp 后端通信的框架都一起实�
 </div>
 </section>
 
-<section id="outline-container-orgdaea7be" class="outline-2">
-<h2 id="orgdaea7be">中文语言服务</h2>
-<div class="outline-text-2" id="text-orgdaea7be">
+<section id="outline-container-orged5a81f" class="outline-2">
+<h2 id="orged5a81f">中文语言服务</h2>
+<div class="outline-text-2" id="text-orged5a81f">
 </div>
-<div id="outline-container-orgf17f151" class="outline-3">
-<h3 id="orgf17f151">再畅想一刻钟</h3>
-<div class="outline-text-3" id="text-orgf17f151">
+<div id="outline-container-orgeed46e7" class="outline-3">
+<h3 id="orgeed46e7">再畅想一刻钟</h3>
+<div class="outline-text-3" id="text-orgeed46e7">
 <p>
 以下是我想到的中文或汉语的语言服务可以提供的主要功能：
 </p>
@@ -298,9 +310,9 @@ lsp-bridge 把补全前端（acm）和与 lsp 后端通信的框架都一起实�
 </div>
 </div>
 
-<div id="outline-container-orgd23a298" class="outline-3">
-<h3 id="orgd23a298">拼音补全基本实现</h3>
-<div class="outline-text-3" id="text-orgd23a298">
+<div id="outline-container-orgc721b99" class="outline-3">
+<h3 id="orgc721b99">拼音补全基本实现</h3>
+<div class="outline-text-3" id="text-orgc721b99">
 <p>
 本节介绍如何用 <a href="https://pygls.readthedocs.io/en/latest/">pygls</a> 快速实现一个 lsp 服务，并且加入最基本的拼音补全功能，这件事情总体上看比较复杂，
 又实现 lsp 服务又得实现输入法，但我当前的目的只是想把 emacs 到中文服务的通信搭建起来，而不是去实现一个 tabnine 类型的中文自动补全，因此找现有的拼音输入方案即可，甚至不需要输入法，直接写一个拼音到中文的查找表，
@@ -308,13 +320,13 @@ lsp-bridge 把补全前端（acm）和与 lsp 后端通信的框架都一起实�
 </p>
 </div>
 
-<div id="outline-container-org4f831d3" class="outline-4">
-<h4 id="org4f831d3">lsp 服务仅仅是一个命令行</h4>
-<div class="outline-text-4" id="text-org4f831d3">
+<div id="outline-container-org1d88a87" class="outline-4">
+<h4 id="org1d88a87">lsp 服务仅仅是一个命令行</h4>
+<div class="outline-text-4" id="text-org1d88a87">
 <p>
 首先 lsp 服务器只是一个命令行，执行这个命令行后，服务就开始守株待兔了，基本模型如下
 </p>
-<pre class="example" id="org1e38102">
+<pre class="example" id="org4878d4e">
 while 1:
    if emacs/editor send message to me:
       read the message
@@ -323,9 +335,9 @@ while 1:
 </div>
 </div>
 
-<div id="outline-container-orge69b6a2" class="outline-4">
-<h4 id="orge69b6a2">pygls 的封装</h4>
-<div class="outline-text-4" id="text-orge69b6a2">
+<div id="outline-container-org28ab73a" class="outline-4">
+<h4 id="org28ab73a">pygls 的封装</h4>
+<div class="outline-text-4" id="text-org28ab73a">
 <p>
 pygls 把整个服务都封装好了，因此基本的服务运行代码比以上伪代码还简单
 </p>
@@ -346,9 +358,9 @@ LanguageServer().start_io()
 </div>
 </div>
 
-<div id="outline-container-org4b00143" class="outline-4">
-<h4 id="org4b00143">收到 hello world 请回答</h4>
-<div class="outline-text-4" id="text-org4b00143">
+<div id="outline-container-orgee56bcd" class="outline-4">
+<h4 id="orgee56bcd">收到 hello world 请回答</h4>
+<div class="outline-text-4" id="text-orgee56bcd">
 <p>
 以下加入对编辑器发来的补全请求的回应
 </p>
@@ -390,9 +402,9 @@ server.start_io()
 </div>
 </div>
 
-<div id="outline-container-org2811d2e" class="outline-4">
-<h4 id="org2811d2e">加入 demo 输入法</h4>
-<div class="outline-text-4" id="text-org2811d2e">
+<div id="outline-container-org9b7fd1c" class="outline-4">
+<h4 id="org9b7fd1c">加入 demo 输入法</h4>
+<div class="outline-text-4" id="text-org9b7fd1c">
 <div class="org-src-container">
 <pre><code class="python">from pygls.capabilities import COMPLETION
 from pygls.lsp import CompletionItem, CompletionList, CompletionParams
@@ -438,14 +450,14 @@ server.start_io()
 </div>
 </div>
 
-<div id="outline-container-orgee8220f" class="outline-4">
-<h4 id="orgee8220f">输入 nihao 后发生什么？</h4>
-<div class="outline-text-4" id="text-orgee8220f">
+<div id="outline-container-org9b999a9" class="outline-4">
+<h4 id="org9b999a9">输入 nihao 后发生什么？</h4>
+<div class="outline-text-4" id="text-org9b999a9">
 <p>
 emacs 中有任何输入变化，lsp-bridge 都会把消息发给 LSP 服务，但只有输入 nihao 以后，LSP 服务才返回了真正有用的消息。之后 lsp-bridge 目录下的 <code>core/handler/completion.py</code> 中的 <code>process_response(self, response: dict)</code> 得到的第一个 item 信息如下：
 </p>
 
-<pre class="example" id="orgb33bff1">
+<pre class="example" id="orge0c42f8">
 [{'key': '0,nihao', 'icon': '', 'label': 'nihao', 'deprecated': False, 'insertText': None, 'insertTextFormat': '', 'textEdit': [{'range': {'start': {'line': 477, 'character': 5}, 'end': {'line': 477, 'character': 5}}, 'newText': '你好'}], 'server': '文', 'additionalTextEdits': []},...]
 </pre>
 <p>
@@ -457,7 +469,7 @@ lsp-bridge 的 python 进程继续把这份消息传递给 emacs ，emacs 把对
  例如从 <code>lsp-bridge/acm/acm-backend-lsp.el</code> 的 <code>acm-backend-lsp-candidate-expand</code> 函数中，
  这份快递的名称叫做 candidate-info, 执行 (plist-get candidate-info :textEdit) 就可以看到以下信息
 </p>
-<pre class="example" id="orgfe303ab">
+<pre class="example" id="org89732a1">
 (:range (:start (:line 477 :character 5) :end (:line 477 :character 5)) :newText 你好) 
 </pre>
 <p>
@@ -466,9 +478,9 @@ lsp-bridge 的 python 进程继续把这份消息传递给 emacs ，emacs 把对
 </div>
 </div>
 
-<div id="outline-container-orgda57fae" class="outline-4">
-<h4 id="orgda57fae">替换成可用输入法</h4>
-<div class="outline-text-4" id="text-orgda57fae">
+<div id="outline-container-org528dcb7" class="outline-4">
+<h4 id="org528dcb7">替换成可用输入法</h4>
+<div class="outline-text-4" id="text-org528dcb7">
 <p>
 使用什么样的输入法不是本文的重点，只要提供与 <code>shurufa</code> 函数一样的接口，任何输入法都可以满足
 </p>
@@ -494,18 +506,51 @@ lsp-bridge 的 python 进程继续把这份消息传递给 emacs ，emacs 把对
 </div>
 </section>
 
-<section id="outline-container-org2dfe4ef" class="outline-2">
-<h2 id="org2dfe4ef">后记</h2>
-<div class="outline-text-2" id="text-org2dfe4ef">
+<section id="outline-container-orgf92b8a6" class="outline-2">
+<h2 id="orgf92b8a6">后记</h2>
+<div class="outline-text-2" id="text-orgf92b8a6">
 <p>
 对自然语言的分析需求是无止尽的，即使同一种语言，不同的人群都会有不同的"方言"，医生有医生的术语，律师有律师的术语，即便是最复杂的模型也不可能满足所有语言理解上的需求，因此关于自然语言 LSP 会成什么样谁也无法预测，但想想还是可以的，本文也只从自己兴趣出发做一些尝试并提供微小经验，或许某个时刻能帮助到同样感兴趣的人，当然包括未来的自己。
 </p>
 </div>
 </section>
+<hr />
+<div class="categories"><a href="/categories/lsp.html" target="_blank">lsp</a><a href="/categories/emacs-org.html" target="_blank">emacs-org</a><a href="/categories/nlp.html" target="_blank">nlp</a></div>
+
+<nav class="paginav">
+  <a class="prev" href="/posts/ubuntu_memo.html">
+    <span>« </span>
+
+    <span>ubuntu 使用备忘</span>
+  </a>
+  <a class="next" href="/posts/dotfiles_in_orgroam.html">
+    <span>org roam 风格的系统 config 管理</span>
+
+    <span>»</span>
+  </a>
+</nav>
+<div class="comment">
+  <a href="https://github.com/metaescape/hugchange.life/issues/new" target="_blank" rel="noopener noreferrer me" title="Github">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+      ></path>
+    </svg>
+    前往本文 github issue
+  </a>
+</div>
 </main>
 <footer id="postamble" class="status">
 <span> © 2023</span><a href="https://github.com/metaescape" target="_blank"> mE </a> |
-<span>Powered by <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.0.50 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</span>
+<span>Powered by <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="https://orgmode.org">Org</a> mode 9.5.5)</span>
 </footer>
 
 </div>

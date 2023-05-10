@@ -1,63 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-03-30 四 11:04 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2023-05-10 三 22:58 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>ubuntu 使用备忘</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="pipz">
+<meta name="author" content="pipz" />
+<meta name="generator" content="Org Mode" />
 <link
   rel="stylesheet"
   type="text/css"
-  href="../orgchange/themes/darkfloat/style.css"
+  href="/orgchange/themes/darkfloat/style.css"
 />
 <link
+  title="dark"
   rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
+  href="/orgchange/themes/highlightjs/atom-one-dark.css"
 />
-
+<link
+  title="light"
+  rel="stylesheet"
+  href="/orgchange/themes/highlightjs/brown-paper.css"
+/>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 
 <script>
   hljs.highlightAll();
 </script>
-<script src="../orgchange/themes/main.js"></script>
+<script src="/orgchange/themes/main.js"></script>
 </head>
 <body>
 <div class="container">
 <header class="top-header">
-  <span class="header__inner">
-    <a href="../index.html" style="text-decoration: none">
-      <div class="logo">
-        <div class="logo-holder-dark">
-          <svg
-            viewBox="0 0 24 24"
-            width="20"
-            height="20"
-            stroke="white"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-          >
-            <polyline points="4 17 10 11 4 5"></polyline>
-            <line x1="12" y1="19" x2="20" y2="19"></line>
-          </svg>
+  <div class="header-inner">
+    <div class="header-left">
+      <a href="/" style="text-decoration: none">
+        <div class="logo">
+          <div class="logo-holder-dark">
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+            >
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
+    </div>
 
-    <span class="header__right">
-      <div id="header_search">
-        <input type="text" placeholder="Hugchange.life" />
+    <div class="header-right">
+      <ul class="header-items">
+        <li>
+          <a href="/categories/">分类</a>
+        </li>
+      </ul>
+      <div class="toggle-button">
+        <input type="checkbox" id="darkmode-toggle" />
+        <label for="darkmode-toggle"> </label>
       </div>
-    </span>
-  </span>
+    </div>
+  </div>
 </header>
 
-<a class="back_top" href="javascript:window.scrollTo(0,0);"
+<a class="back-top" href="javascript:window.scrollTo(0,0);"
   ><svg
     t="1660722824713"
     class="icon"
@@ -70,7 +83,6 @@
     <path
       d="M484 93.668c-231.038.0-418.333 187.296-418.333 418.335C65.667 743.041 252.963 930.33 484 930.33c231.036.0 418.333-187.289 418.333-418.327C902.334 280.964 715.036 93.668 484 93.668zM372.207 811.881c-.412 8.174-4.906 12.669-13.493 13.493-6.545.0-11.863-.614-15.946-1.841-4.504-1.639-6.545-4.906-6.133-9.813 1.629-4.906 4.695-7.148 9.199-6.746 6.948 1.639 10.215.613 9.813-3.066v-96.902h-12.266c-4.504-.402-6.746-3.268-6.746-8.586.402-4.907 2.855-7.562 7.359-7.974h36.185c2.453.0 4.083 1.025 4.906 3.066 1.227-2.855 3.469-4.494 6.747-4.906h82.183c4.495.412 6.747 3.277 6.747 8.587-.412 5.318-2.865 8.184-7.36 8.586h-36.798l-2.453 11.652h23.919c10.215-.402 14.92 3.891 14.106 12.88v63.17c-.412 4.504-3.277 6.957-8.586 7.36-5.318-.403-8.184-2.856-8.586-7.36v-57.037c0-1.227-.613-1.84-1.84-1.84h-43.545c-.824.412-1.438 1.025-1.84 1.84v55.811c-.412 4.906-3.277 7.57-8.586 7.974-5.318-.403-8.184-3.067-8.586-7.974v-61.943c0-8.586 3.68-12.88 11.04-12.88h14.719l3.066-11.652h-25.759c-2.453.0-5.117-1.016-7.973-3.066-1.227 2.865-3.479 4.293-6.746 4.293h-6.747L372.207 811.881zm107.329 12.265c-3.277 4.907-7.571 5.722-12.879 2.454-2.865-1.227-7.571-3.891-14.106-7.974-6.133-3.277-10.838-5.52-14.106-6.746-6.133-2.855-8.586-6.334-7.359-10.426-1.227 2.051-3.68 4.504-7.36 7.359-.412.412-.824.824-1.227 1.227-9.41 7.762-20.239 13.896-32.505 18.399-5.73 1.629-9.813.201-12.266-4.294-1.639-4.906.0-8.586 4.906-11.039 18.802-7.762 30.253-15.534 34.345-23.306 4.494-7.359 6.746-21.054 6.746-41.091.403-5.722 3.067-8.788 7.973-9.2 5.309.412 8.174 3.479 8.586 9.2.814 20.852-1.639 36.798-7.36 47.837 4.083-4.906 9.401-5.107 15.946-.613 4.907 2.865 11.442 6.546 19.626 11.04 3.68 2.453 6.334 4.092 7.973 4.906C481.375 814.736 482.391 818.828 479.536 824.146zM556.198 822.307h-41.704c-7.772-.412-11.864-3.891-12.267-10.426v-34.345c-.412-8.989 3.68-13.282 12.267-12.88h42.931c7.763-.402 11.653 3.891 11.653 12.88v34.958C569.48 819.029 565.188 822.307 556.198 822.307zM614.462 817.4c-6.545.0-11.652-.824-15.332-2.453-4.092-2.051-5.318-5.309-3.68-9.813 1.629-4.906 5.107-6.747 10.426-5.52 11.04 2.453 15.735-1.841 14.106-12.88-.412-8.174-5.933-18.399-16.56-30.665-3.68-3.68-4.293-9.2-1.84-16.56 4.494-13.895 7.561-24.532 9.199-31.892h-16.559c-1.227.0-2.051.824-2.453 2.453v110.395c-.412 5.31-3.067 8.175-7.974 8.587-5.318-.412-8.184-3.277-8.586-8.587v-65.01c-1.227 1.639-2.865 2.453-4.906 2.453h-69.304c-4.504-.402-6.957-3.268-7.359-8.586.402-5.31 2.855-8.175 7.359-8.587h14.72c-.824-.814-3.68-5.721-8.586-14.719-2.051-5.31-.613-8.989 4.293-11.04h-7.36c-4.504-.402-6.957-3.268-7.359-8.586.402-5.309 2.855-8.174 7.359-8.586h22.079c-.824-1.227-1.227-2.453-1.227-3.681-1.227-4.082.613-7.359 5.52-9.813 5.721-2.041 9.401-1.016 11.04 3.066 1.227 3.68 2.654 7.158 4.293 10.427h20.239c4.494.412 6.947 3.277 7.359 8.586-.412 5.318-2.865 8.184-7.359 8.586h-47.225c2.855 1.639 6.334 7.36 10.426 17.173 1.227 4.092.814 6.957-1.227 8.586h13.493c.402-1.227 1.016-2.855 1.84-4.906 2.453-6.133 4.082-11.039 4.906-14.72 1.629-4.082 5.107-5.721 10.426-4.906 4.906 2.051 6.747 5.318 5.521 9.813-.824 2.051-1.639 4.504-2.454 7.359-1.227 3.277-2.252 5.932-3.066 7.973h11.04c2.453.0 4.082.613 4.906 1.84v-41.704c0-8.175 3.066-12.056 9.199-11.653h36.799c9.4.0 13.08 5.117 11.039 15.333.0.412-1.025 3.891-3.066 10.426-3.277 10.226-5.52 17.786-6.746 22.692-1.227 3.68-1.84 6.344-1.84 7.973.402 1.228 1.629 3.067 3.68 5.521 8.586 13.09 13.281 25.356 14.105 36.798C638.17 807.387 630.408 816.988 614.462 817.4zm32.434-351.085c-7.488 7.449-18.815 7.642-25.649.806-.538-.537-1.074-.922-1.536-1.535L502.752 348.858l-.192 280.106c0 9.139-8.601 16.549-19.198 16.549-10.598.0-18.738-7.41-18.738-16.549.0-.729-.115-1.306.0-2.034l-.192-278.072L347.513 465.586c-.422.652-.959.999-1.536 1.535-6.834 6.874-18.162 6.681-25.649-.806-7.488-7.488-8.025-19.122-1.152-25.995L467.12 292.03c2.112-3.263 5.26-5.913 9.369-7.333 2.074-.807 4.262-1.152 6.528-1.113.23.0.383-.116.614-.116.153.0.307.078.46.078 2.304-.078 4.57.307 6.72 1.152 3.994 1.421 7.142 4.07 9.254 7.219L648.048 440.32C654.92 447.155 654.383 458.827 646.896 466.315zM636.605 238.121H331.771c-9.407.0-17.049-7.564-17.049-16.857.0-9.292 7.642-16.856 17.049-16.856h304.835c9.445.0 17.048 7.564 17.048 16.856C653.653 230.557 646.013 238.121 636.605 238.121zM549.452 781.829H521.24c-1.227.0-2.051.824-2.453 2.453v19.013c.402 1.639 1.227 2.453 2.453 2.453h28.212c1.629-.402 2.453-1.227 2.453-2.453v-19.013C551.905 782.653 551.081 781.829 549.452 781.829z"
       p-id="1360"
-      fill="#a9a9b340"
     ></path>
   </svg>
 </a>
@@ -113,60 +125,65 @@
     <path d="M12 20h9"></path>
     <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
   </svg>
-  2023-03-29 三 20:51
+  2023-05-06 六 18:55
 </span>
 </header>
-<nav id="table-of-contents">
+<nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org25f67df">系统安装</a>
+<li><a href="#orgeba2b75">系统安装</a>
 <ul>
-<li><a href="#org9e76c4a">软件源问题</a></li>
-<li><a href="#orgd91f429">设置 GRUB</a>
+<li><a href="#org050ebb5">软件源问题</a></li>
+<li><a href="#org71544da">设置 GRUB</a>
 <ul>
-<li><a href="#orge16a824">引导windows</a></li>
-<li><a href="#org6c6b7fc">启动到非图形界面</a></li>
+<li><a href="#org62f28d1">引导windows</a></li>
+<li><a href="#org8b76928">启动到非图形界面</a></li>
 </ul>
 </li>
-<li><a href="#org80e2cab">包管理软件</a></li>
+<li><a href="#org11750c6">包管理软件</a></li>
 </ul>
 </li>
-<li><a href="#org7b09b06">软件安装</a>
+<li><a href="#org32a7fe8">软件安装</a>
 <ul>
-<li><a href="#org5cbd539">基础软件</a></li>
-<li><a href="#orgf87b971">rime 输入法</a></li>
-<li><a href="#orga078e98">vscode</a></li>
-<li><a href="#org94140a9">google chrome</a></li>
-<li><a href="#org3b6e497">emacs</a></li>
-<li><a href="#org29e0f35">typora</a></li>
-<li><a href="#org269760c">腾讯软件</a></li>
-<li><a href="#org45aefc2">远程访问</a>
+<li><a href="#orgee87f2d">基础软件</a></li>
+<li><a href="#orga0c66a8">rime 输入法</a></li>
+<li><a href="#orgb5c9da1">vscode</a></li>
+<li><a href="#org4adfde4">google chrome</a></li>
+<li><a href="#org8fd05c3">emacs</a></li>
+<li><a href="#orgb8eb950">typora</a></li>
+<li><a href="#org71bce45">腾讯软件</a></li>
+<li><a href="#orgbcf0443">远程访问</a>
 <ul>
-<li><a href="#org84a592d">samba 共享目录</a></li>
-<li><a href="#org9115352">远程访问 windows 桌面</a></li>
-<li><a href="#org1577187">校园网访问 EasyConnect</a></li>
+<li><a href="#org158d057">samba 共享目录</a></li>
+<li><a href="#org0197ea4">远程访问 windows 桌面</a></li>
+<li><a href="#org4d5ed6b">校园网访问 EasyConnect</a></li>
 </ul>
 </li>
-<li><a href="#org56cf52f">nodejs</a></li>
-<li><a href="#org43cac0b">加密</a>
+<li><a href="#org51a42b1">nodejs</a></li>
+<li><a href="#org89fccb7">加密</a>
 <ul>
-<li><a href="#org7e489c8">对本地目录加密</a></li>
-<li><a href="#org87f21cb">对 git 远程仓库加密</a></li>
+<li><a href="#org862de2d">对本地目录加密</a></li>
+<li><a href="#orgcaed53d">对 git 远程仓库加密</a></li>
 </ul>
 </li>
-<li><a href="#org68a4525">需要手动下载的安装包</a></li>
+<li><a href="#orgdfe5c00">需要手动下载的安装包</a></li>
 </ul>
 </li>
-<li><a href="#org7fb1fd7">命令行</a>
+<li><a href="#org21ca7a0">命令行</a>
 <ul>
-<li><a href="#org3293c84">硬件信息查询</a>
+<li><a href="#org69ee0cf">硬件信息查询</a>
 <ul>
-<li><a href="#org001e063">CPU 信息</a></li>
-<li><a href="#orge5b0689">网卡信息</a></li>
+<li><a href="#org3b442dd">CPU 信息</a></li>
+<li><a href="#orgab10713">网卡信息</a></li>
 </ul>
 </li>
-<li><a href="#orgb7d4e79">解压</a></li>
+<li><a href="#org8d46a8c">解压</a></li>
+</ul>
+</li>
+<li><a href="#orgb8dabea">案例</a>
+<ul>
+<li><a href="#org79d6bc8">两台 ubuntu 用同一根网线直连</a></li>
 </ul>
 </li>
 </ul>
@@ -176,69 +193,71 @@
 使用 ubuntu 过程中的经验记录，会不断更新，当前为 2022.2 月版
 </p>
 
-<section id="outline-container-org25f67df" class="outline-2">
-<h2 id="org25f67df">系统安装</h2>
-<div class="outline-text-2" id="text-org25f67df">
+<section id="outline-container-orgeba2b75" class="outline-2">
+<h2 id="orgeba2b75">系统安装</h2>
+<div class="outline-text-2" id="text-orgeba2b75">
 <p>
 用 rufus 把官方下载的 ubuntu 镜像 iso 文件导入到 U 盘（u 盘内容会被清空），只要能从 u 盘启动后，安装过程选项
 几乎默认（不用使用网络）。
 </p>
 </div>
 
-<div id="outline-container-org9e76c4a" class="outline-3">
-<h3 id="org9e76c4a">软件源问题</h3>
-<div class="outline-text-3" id="text-org9e76c4a">
+<div id="outline-container-org050ebb5" class="outline-3">
+<h3 id="org050ebb5">软件源问题</h3>
+<div class="outline-text-3" id="text-org050ebb5">
 <p>
-不需要修改成国内源，速度也正常
+不需要修改成国内源，速度也正常。但还是建议使用国内源
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd91f429" class="outline-3">
-<h3 id="orgd91f429">设置 GRUB</h3>
-<div class="outline-text-3" id="text-orgd91f429">
+<div id="outline-container-org71544da" class="outline-3">
+<h3 id="org71544da">设置 GRUB</h3>
+<div class="outline-text-3" id="text-org71544da">
 </div>
-<div id="outline-container-orge16a824" class="outline-4">
-<h4 id="orge16a824">引导windows</h4>
-<div class="outline-text-4" id="text-orge16a824">
+<div id="outline-container-org62f28d1" class="outline-4">
+<h4 id="org62f28d1">引导windows</h4>
+<div class="outline-text-4" id="text-org62f28d1">
 <p>
 在硬盘的一个新分区安装 windows 之后，如果 ubuntu 启动时没有显示 windows 选项可以打开
 /etc/default/grub 添加以下参数，然后 update-grub,使得 ubuntu 的 grub 去检测其他盘上的引导区，再次重启应该就显示
 </p>
-<pre class="example" id="orgc132a2f">
-GRUB_DISABLE_OS_PROBER=false 
-</pre>
+<div class="org-src-container">
+<pre><code class="bash">GRUB_DISABLE_OS_PROBER=false 
+</code></pre>
+</div>
 </div>
 </div>
 
-<div id="outline-container-org6c6b7fc" class="outline-4">
-<h4 id="org6c6b7fc">启动到非图形界面</h4>
-<div class="outline-text-4" id="text-org6c6b7fc">
+<div id="outline-container-org8b76928" class="outline-4">
+<h4 id="org8b76928">启动到非图形界面</h4>
+<div class="outline-text-4" id="text-org8b76928">
 <p>
-在 grub 中 linux &#x2026; ro quite 后添加 3 则系统启动到 level3
+在 grub 中 <code>linux ... ro quite</code> 后添加 3 则系统启动到 level3, 也就是命令行界面
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org80e2cab" class="outline-3">
-<h3 id="org80e2cab">包管理软件</h3>
-<div class="outline-text-3" id="text-org80e2cab">
-<pre class="example" id="org9015643">
-apt list --installed | grep code
-</pre>
+<div id="outline-container-org11750c6" class="outline-3">
+<h3 id="org11750c6">包管理软件</h3>
+<div class="outline-text-3" id="text-org11750c6">
+<div class="org-src-container">
+<pre><code class="bash">apt list --installed | grep code
+</code></pre>
+</div>
 
 <p>
-apt purge
+卸载 <code>apt purge</code>
 </p>
 </div>
 </div>
 </section>
 
 
-<section id="outline-container-org7b09b06" class="outline-2">
-<h2 id="org7b09b06">软件安装</h2>
-<div class="outline-text-2" id="text-org7b09b06">
+<section id="outline-container-org32a7fe8" class="outline-2">
+<h2 id="org32a7fe8">软件安装</h2>
+<div class="outline-text-2" id="text-org32a7fe8">
 <p>
 原则：
 </p>
@@ -248,14 +267,14 @@ apt purge
 </ul>
 </div>
 
-<div id="outline-container-org5cbd539" class="outline-3">
-<h3 id="org5cbd539">基础软件</h3>
-<div class="outline-text-3" id="text-org5cbd539">
+<div id="outline-container-orgee87f2d" class="outline-3">
+<h3 id="orgee87f2d">基础软件</h3>
+<div class="outline-text-3" id="text-orgee87f2d">
 <p>
 以下是必要的基础软件列表，做成了安装脚本
 </p>
 <div class="org-src-container">
-<pre><code class="shell">build-essential
+<pre><code class="bash">build-essential
 net-tools  #ifconfig 等
 git
 curl
@@ -275,6 +294,8 @@ ripgrep
 # rime for  emacs and system
 ibus-rime
 librime-dev
+# ssh-ping 等工具
+ssh-tools
 </code></pre>
 </div>
 
@@ -285,48 +306,51 @@ librime-dev
 </div>
 
 
-<div id="outline-container-orgf87b971" class="outline-3">
-<h3 id="orgf87b971">rime 输入法</h3>
-<div class="outline-text-3" id="text-orgf87b971">
-<pre class="example" id="org4aa27cd">
-sudo apt install ibus-rime
-</pre>
+<div id="outline-container-orga0c66a8" class="outline-3">
+<h3 id="orga0c66a8">rime 输入法</h3>
+<div class="outline-text-3" id="text-orga0c66a8">
+<div class="org-src-container">
+<pre><code class="bash">sudo apt install ibus-rime
+</code></pre>
+</div>
+
 
 <p>
 排故方式：
 </p>
 <div class="org-src-container">
-<pre><code class="python">ibus-daemon --xim -r --verbose
+<pre><code class="bash">ibus-daemon --xim -r --verbose
 </code></pre>
 </div>
 
 <p>
 启动：
 </p>
-<pre class="example" id="orgaabf8bc">
-ibus-daemon --xim -r -d
-</pre>
-</div>
-</div>
-
-
-<div id="outline-container-orga078e98" class="outline-3">
-<h3 id="orga078e98">vscode</h3>
-<div class="outline-text-3" id="text-orga078e98">
 <div class="org-src-container">
-<pre><code class="python">sudo snap install --classic code
+<pre><code class="bash">ibus-daemon --xim -r -d
+</code></pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgb5c9da1" class="outline-3">
+<h3 id="orgb5c9da1">vscode</h3>
+<div class="outline-text-3" id="text-orgb5c9da1">
+<div class="org-src-container">
+<pre><code class="bash">sudo snap install --classic code
 </code></pre>
 </div>
 <p>
-但是 snap 版本的无法支持中文，可以下载官方的 deb 安装或者手动添加源并更新，参考官网：
+但是 snap 版本（2023.2）无法支持中文，可以下载官方的 deb 安装或者手动添加源并更新，参考官网：
 <a href="https://code.visualstudio.com/docs/setup/linux">Running Visual Studio Code on Linux</a>
 </p>
 
 <p>
-安装命令如下
+官方安装命令如下
 </p>
-<pre class="example" id="org6f23326">
-sudo apt-get install wget gpg
+<div class="org-src-container">
+<pre><code class="bash">sudo apt-get install wget gpg
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor &gt; packages.microsoft.gpg
 sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
 sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" &gt; /etc/apt/sources.list.d/vscode.list'
@@ -334,17 +358,20 @@ rm -f packages.microsoft.gpg
 sudo apt install apt-transport-https
 sudo apt update
 sudo apt install code
-</pre>
+</code></pre>
+</div>
 </div>
 </div>
 
 
-<div id="outline-container-org94140a9" class="outline-3">
-<h3 id="org94140a9">google chrome</h3>
-<div class="outline-text-3" id="text-org94140a9">
-<pre class="example" id="org1e4464a">
-sudo apt install ./xxx.deb #注意需要加./来区别apt源，chrome不在源中
-</pre>
+<div id="outline-container-org4adfde4" class="outline-3">
+<h3 id="org4adfde4">google chrome</h3>
+<div class="outline-text-3" id="text-org4adfde4">
+<div class="org-src-container">
+<pre><code class="bash">sudo apt install ./xxx.deb #注意需要加./来区别apt源，chrome不在源中
+</code></pre>
+</div>
+
 
 <p>
 查看版本：
@@ -359,20 +386,22 @@ sudo apt install ./xxx.deb #注意需要加./来区别apt源，chrome不在源�
 更新时 apt update 然后 sudo apt install google-chrome-stable ，即可，原因是用以上方式安装时会将 chrome 的源自动加入 sources list：
 </p>
 
-<pre class="example" id="org8add94f">
- &gt;_ cat /etc/apt/sources.list.d/google-chrome.list
+<div class="org-src-container">
+<pre><code class="bash"> &gt;_ cat /etc/apt/sources.list.d/google-chrome.list
 ### THIS FILE IS AUTOMATICALLY CONFIGURED ###
 # You may comment out this entry, but any other modifications may be lost.
 deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
-</pre>
+</code></pre>
+</div>
 
 <p>
 安装浏览器 flash 插件驱动（也许不用）
 </p>
-<pre class="example" id="org0fe3348">
-sudo apt install adobe-flashplugin
+<div class="org-src-container">
+<pre><code class="bash">sudo apt install adobe-flashplugin
 which ffmpeg || sudo apt install ffmpeg
-</pre>
+</code></pre>
+</div>
 
 <p>
 另外，chrome 的插件的安装缓存是在 home 目录下，因此重装系统只要不破坏 home 的信息，插件是自动恢复的
@@ -381,9 +410,9 @@ which ffmpeg || sudo apt install ffmpeg
 </div>
 
 
-<div id="outline-container-org3b6e497" class="outline-3">
-<h3 id="org3b6e497">emacs</h3>
-<div class="outline-text-3" id="text-org3b6e497">
+<div id="outline-container-org8fd05c3" class="outline-3">
+<h3 id="org8fd05c3">emacs</h3>
+<div class="outline-text-3" id="text-org8fd05c3">
 <p>
 emacs 可以用自己编译的版本，snapd 安装版本可能不支持动态链接，用不了 emacs-rime
 或者用 apt install emacs （但不是很新）
@@ -392,26 +421,28 @@ emacs 可以用自己编译的版本，snapd 安装版本可能不支持动态�
 </div>
 
 
-<div id="outline-container-org29e0f35" class="outline-3">
-<h3 id="org29e0f35">typora</h3>
-<div class="outline-text-3" id="text-org29e0f35">
-<p>
-snap install typora:
-</p>
+<div id="outline-container-orgb8eb950" class="outline-3">
+<h3 id="orgb8eb950">typora</h3>
+<div class="outline-text-3" id="text-orgb8eb950">
+<div class="org-src-container">
+<pre><code class="bash">~snap install typora~
+</code></pre>
+</div>
+
 <ul class="org-ul">
 <li>如果有大量的密集的文本编辑就在 emacs 里，编辑完后在 typora 中预览格式、微调</li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org269760c" class="outline-3">
-<h3 id="org269760c">腾讯软件</h3>
-<div class="outline-text-3" id="text-org269760c">
+<div id="outline-container-org71bce45" class="outline-3">
+<h3 id="org71bce45">腾讯软件</h3>
+<div class="outline-text-3" id="text-org71bce45">
 <ul class="org-ul">
 <li>wemeet 和 qq 都有官方版，qq 可以下载 AppImg 版本，需要依赖以下 ibfuse2 库</li>
 </ul>
 <div class="org-src-container">
-<pre><code class="python">sudo apt install libfuse2
+<pre><code class="bash">sudo apt install libfuse2
 </code></pre>
 </div>
 <ul class="org-ul">
@@ -420,25 +451,23 @@ snap install typora:
 </div>
 </div>
 
-
-
-<div id="outline-container-org45aefc2" class="outline-3">
-<h3 id="org45aefc2">远程访问</h3>
-<div class="outline-text-3" id="text-org45aefc2">
+<div id="outline-container-orgbcf0443" class="outline-3">
+<h3 id="orgbcf0443">远程访问</h3>
+<div class="outline-text-3" id="text-orgbcf0443">
 </div>
-<div id="outline-container-org84a592d" class="outline-4">
-<h4 id="org84a592d">samba 共享目录</h4>
-<div class="outline-text-4" id="text-org84a592d">
+<div id="outline-container-org158d057" class="outline-4">
+<h4 id="org158d057">samba 共享目录</h4>
+<div class="outline-text-4" id="text-org158d057">
 <p>
-apt install samba, 主要是需要配置
+<code>apt install samba</code> 主要是需要配置
 </p>
 </div>
 </div>
 
 
-<div id="outline-container-org9115352" class="outline-4">
-<h4 id="org9115352">远程访问 windows 桌面</h4>
-<div class="outline-text-4" id="text-org9115352">
+<div id="outline-container-org0197ea4" class="outline-4">
+<h4 id="org0197ea4">远程访问 windows 桌面</h4>
+<div class="outline-text-4" id="text-org0197ea4">
 <p>
 <code>sudo apt-get install rdesktop</code>
 </p>
@@ -450,10 +479,10 @@ apt install samba, 主要是需要配置
 <p>
 传文件到 windows, 以下命令是把 ubuntu 中的目录挂载到 windows 中
 </p>
-<pre class="example" id="orgc1bb6d0">
-rdesktop -u username ip.b.c.d -p my-password -r disk:LinuxPictures=/home/username/Pictures
-</pre>
-
+<div class="org-src-container">
+<pre><code class="bash">rdesktop -u username ip.b.c.d -p my-password -r disk:LinuxPictures=/home/username/Pictures
+</code></pre>
+</div>
 
 <blockquote>
 <p>
@@ -483,9 +512,9 @@ rdesktop是一个较老的远程桌面客户端，它最初是为连接到Window
 </div>
 
 
-<div id="outline-container-org1577187" class="outline-4">
-<h4 id="org1577187">校园网访问 EasyConnect</h4>
-<div class="outline-text-4" id="text-org1577187">
+<div id="outline-container-org4d5ed6b" class="outline-4">
+<h4 id="org4d5ed6b">校园网访问 EasyConnect</h4>
+<div class="outline-text-4" id="text-org4d5ed6b">
 <p>
 用于连校园网，通过火狐访问 <a href="https://sslvpn.xmu.edu.cn/portal/#!/down_client">https://sslvpn.xmu.edu.cn/portal/#!/down_client</a>
 或者 <a href="https://sslvpn3.scut.edu.cn/portal/#!/login">https://sslvpn3.scut.edu.cn/portal/#!/login</a> (google chrome 里找不到下载链接)
@@ -515,7 +544,7 @@ https://packages.ubuntu.com/bionic/libpangoft2-1.0-0
 </p>
 
 <div class="org-src-container">
-<pre><code class="example">mkdir /data/installer/pango1.0
+<pre><code class="bash">mkdir /data/installer/pango1.0
 cp ~/Downloads/libpango* /data/installer/pango1.0
 cd /data/installer/pango1.0
 dpkg -X libpango-1.0-0_1.40.14-1ubuntu0.1_amd64.deb ./
@@ -528,7 +557,7 @@ sudo cp /data/installer/pango1.0/usr/lib/x86_64-linux-gnu/* /usr/share/sangfor/E
 <p>
 然后通过以下命令启动
 </p>
-<pre class="example" id="org74bd02c">
+<pre class="example" id="org023fd8d">
 /usr/share/sangfor/EasyConnect/EasyConnect
 </pre>
 </div>
@@ -536,9 +565,9 @@ sudo cp /data/installer/pango1.0/usr/lib/x86_64-linux-gnu/* /usr/share/sangfor/E
 </div>
 
 
-<div id="outline-container-org56cf52f" class="outline-3">
-<h3 id="org56cf52f">nodejs</h3>
-<div class="outline-text-3" id="text-org56cf52f">
+<div id="outline-container-org51a42b1" class="outline-3">
+<h3 id="org51a42b1">nodejs</h3>
+<div class="outline-text-3" id="text-org51a42b1">
 <p>
 <code>sudo apt install npm</code> 会自动安装 nodejs 等依赖，但这个版本很老
 </p>
@@ -590,15 +619,13 @@ npx -v
 </div>
 </div>
 
-
-
-<div id="outline-container-org43cac0b" class="outline-3">
-<h3 id="org43cac0b">加密</h3>
-<div class="outline-text-3" id="text-org43cac0b">
+<div id="outline-container-org89fccb7" class="outline-3">
+<h3 id="org89fccb7">加密</h3>
+<div class="outline-text-3" id="text-org89fccb7">
 </div>
-<div id="outline-container-org7e489c8" class="outline-4">
-<h4 id="org7e489c8">对本地目录加密</h4>
-<div class="outline-text-4" id="text-org7e489c8">
+<div id="outline-container-org862de2d" class="outline-4">
+<h4 id="org862de2d">对本地目录加密</h4>
+<div class="outline-text-4" id="text-org862de2d">
 <div class="org-src-container">
 <pre><code class="shell">sudo apt install ecryptfs-utils
 </code></pre>
@@ -662,15 +689,15 @@ ecryptfs_sig=$(sudo cat /root/.ecryptfs/sig-cache.txt)
 </div>
 </div>
 
-<div id="outline-container-org87f21cb" class="outline-4">
-<h4 id="org87f21cb">对 git 远程仓库加密</h4>
-<div class="outline-text-4" id="text-org87f21cb">
+<div id="outline-container-orgcaed53d" class="outline-4">
+<h4 id="orgcaed53d">对 git 远程仓库加密</h4>
+<div class="outline-text-4" id="text-orgcaed53d">
 <p>
 参考： <a href="https://buddy.works/guides/git-crypt">git-crypt guide</a>
 </p>
 
 <div class="org-src-container">
-<pre><code class="shell">sudo apt install git-crypt gnupg
+<pre><code class="bash">sudo apt install git-crypt gnupg
 </code></pre>
 </div>
 
@@ -678,14 +705,14 @@ ecryptfs_sig=$(sudo cat /root/.ecryptfs/sig-cache.txt)
 初始化仓库：
 </p>
 <div class="org-src-container">
-<pre><code class="shell">git-crypt init
+<pre><code class="bash">git-crypt init
 </code></pre>
 </div>
 
 <p>
 然后添加 .gitattributes 文件，内容大致：
 </p>
-<pre class="example" id="orgf3ecd53">
+<pre class="example" id="org9e84a7a">
 .gitattributes !filter !diff
 self/** filter=git-crypt diff=git-crypt
 </pre>
@@ -698,31 +725,32 @@ self/** filter=git-crypt diff=git-crypt
 以下命令查看加密状态：
 </p>
 <div class="org-src-container">
-<pre><code class="shell">git-crypt status -e
+<pre><code class="bash">git-crypt status -e
 </code></pre>
 </div>
 
 <p>
 如果要在另外一台电脑上解密，则要提供一个密钥，用以下方式生成
 </p>
-<pre class="example" id="orgb9d6a9e">
-git-crypt export-key keyfile
-</pre>
+<div class="org-src-container">
+<pre><code class="bash">git-crypt export-key keyfile
+</code></pre>
+</div>
 
 <p>
 把 keyfile 拷贝到另外一台电脑，然后执行以下命令解密：
 </p>
-<pre class="example" id="orgdd5d0ba">
-git-crypt unlock path/to/key
-</pre>
+<div class="org-src-container">
+<pre><code class="bash">git-crypt unlock path/to/key
+</code></pre>
+</div>
 </div>
 </div>
 </div>
 
-
-<div id="outline-container-org68a4525" class="outline-3">
-<h3 id="org68a4525">需要手动下载的安装包</h3>
-<div class="outline-text-3" id="text-org68a4525">
+<div id="outline-container-orgdfe5c00" class="outline-3">
+<h3 id="orgdfe5c00">需要手动下载的安装包</h3>
+<div class="outline-text-3" id="text-orgdfe5c00">
 <p>
 这些最好自己备份一份：
 </p>
@@ -736,56 +764,189 @@ git-crypt unlock path/to/key
 </section>
 
 
-<section id="outline-container-org7fb1fd7" class="outline-2">
-<h2 id="org7fb1fd7">命令行</h2>
-<div class="outline-text-2" id="text-org7fb1fd7">
+<section id="outline-container-org21ca7a0" class="outline-2">
+<h2 id="org21ca7a0">命令行</h2>
+<div class="outline-text-2" id="text-org21ca7a0">
 <p>
 cd, ls 这类比较常用的就不记录了，主要是一些不太常用，但需要的时候又很有用的命令
 </p>
 </div>
 
-<div id="outline-container-org3293c84" class="outline-3">
-<h3 id="org3293c84">硬件信息查询</h3>
-<div class="outline-text-3" id="text-org3293c84">
+<div id="outline-container-org69ee0cf" class="outline-3">
+<h3 id="org69ee0cf">硬件信息查询</h3>
+<div class="outline-text-3" id="text-org69ee0cf">
 </div>
-<div id="outline-container-org001e063" class="outline-4">
-<h4 id="org001e063">CPU 信息</h4>
-<div class="outline-text-4" id="text-org001e063">
+<div id="outline-container-org3b442dd" class="outline-4">
+<h4 id="org3b442dd">CPU 信息</h4>
+<div class="outline-text-4" id="text-org3b442dd">
 <div class="org-src-container">
-<pre><code class="shell">lscpu
+<pre><code class="bash">lscpu
 </code></pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orge5b0689" class="outline-4">
-<h4 id="orge5b0689">网卡信息</h4>
-<div class="outline-text-4" id="text-orge5b0689">
+<div id="outline-container-orgab10713" class="outline-4">
+<h4 id="orgab10713">网卡信息</h4>
+<div class="outline-text-4" id="text-orgab10713">
 <div class="org-src-container">
-<pre><code class="shell">lshw -class network 
+<pre><code class="bash">lshw -class network 
 </code></pre>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgb7d4e79" class="outline-3">
-<h3 id="orgb7d4e79">解压</h3>
-<div class="outline-text-3" id="text-orgb7d4e79">
+<div id="outline-container-org8d46a8c" class="outline-3">
+<h3 id="org8d46a8c">解压</h3>
+<div class="outline-text-3" id="text-org8d46a8c">
 <p>
 对一些含有中文文件名的 zip 包解压：
 </p>
 <div class="org-src-container">
-<pre><code class="shell">unzip -l -O GB18030 xxx.zip
+<pre><code class="bash">unzip -l -O GB18030 xxx.zip
 </code></pre>
 </div>
 </div>
 </div>
 </section>
+
+
+<section id="outline-container-orgb8dabea" class="outline-2">
+<h2 id="orgb8dabea">案例</h2>
+<div class="outline-text-2" id="text-orgb8dabea">
+</div>
+<div id="outline-container-org79d6bc8" class="outline-3">
+<h3 id="org79d6bc8">两台 ubuntu 用同一根网线直连</h3>
+<div class="outline-text-3" id="text-org79d6bc8">
+<p>
+A, B 两台机器都是 ubuntu ， A 是笔记本，有自己的无线网卡，也有额外的局域网网口，B 是台式机只有网线接口。
+想要达到的目的是， B 可以通过 A 的无限网口来连接网络。
+</p>
+
+<p>
+操作步骤：
+</p>
+<ul class="org-ul">
+<li>用网线直连 A 和 B 网口，在 A, B 的网络设置里对进入网络设置，在已经连网线的端口上添加一个有线网络配置：</li>
+<li>在有线连接的详细信息页面中，选择“IPV4设置”栏目，在地址中选择“手动”。</li>
+<li>然后分配一个静态 IP 地址。例如，A 设置 IP 地址为“192.168.168.1”，子网掩码为“255.255.255.0”。 B 地址为“192.168.168.2”，子网掩码为“255.255.255.0” 网关设置成 A  的地址 192.168.168.1；</li>
+<li>点击“应用”按钮，然后关闭设置窗口。</li>
+<li><p>
+在 A B 都执行 ifconfig, 看是否显示类似如下信息，以下是在 A 上的部分结果，说明 eno1 网口静态地址设置成功
+</p>
+<pre class="example" id="orgcafe401">
+eno1: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.168.1  netmask 255.255.255.0  broadcast 192.168.168.255
+</pre>
+<p>
+注意不要把静态 ip 设置成 A 电脑里 wifi 网口下相同网段的 ip, 例如如果 A 是连接在路由器，一般路由的局域网地址就是 192.168.31.xx 这个时候如果把有线网口也设置成 192.168.31.x 或者 192.168.0.x 网段的 ip, 会出现冲突（0 表示广播？），导致莫名奇妙的问题。只要区分开 mask 后的网段且避开 0 即可，例如以上用 192.168.168.x
+</p>
+
+<p>
+同时可以在 A 执行 ping 192.168.168.2 来检查连通，或者在 B 执行 ping 192.168.168.1
+</p></li>
+</ul>
+
+<p>
+接着，通过网络地址转换（NAT）来共享 A 上的Wi-Fi 网络。以下是一些步骤来实现这个目标：
+在电脑A上执行以下命令，启动 IPv4 数据包转发功能：
+</p>
+<div class="org-src-container">
+<pre><code class="bash">sudo sysctl -w net.ipv4.ip_forward=1
+</code></pre>
+</div>
+
+<p>
+这个命令将系统内核的参数 "net.ipv4.ip_forward "设置为1，表示启用IP数据包转发功能。这对于作为路由器或网关的Linux主机非常有用，因为它允许主机在不同网络之间转发IP数据包，从而实现网络通信。
+</p>
+
+<p>
+在 B 上的有限网口的网络设置里（前几步中设置过静态地址的页面）继续添加一个 DNS 服务器（可以使用 A 电脑所连接的 DNS服务器 IP 地址，在 A 中执行以下命令可以看到）。
+</p>
+
+<div class="org-src-container">
+<pre><code class="bash">nmcli dev show | grep 'IP4.DNS'
+</code></pre>
+</div>
+
+<pre class="example">
+IP4.DNS[1]:                             192.168.31.1
+</pre>
+
+
+<p>
+在电脑B上，添加一个新的默认路由，以便将所有流量路由到标准网关，这里的标准网关指的是电脑A的 IP 地址:
+</p>
+
+<div class="org-src-container">
+<pre><code class="bash">sudo ip route add default via 192.168.168.1 # 最后是 A 的有线网口地址
+</code></pre>
+</div>
+
+<p>
+确定电脑A的 Wi-Fi 网卡名称，使用以下命令查询：
+</p>
+<div class="org-src-container">
+<pre><code class="bash">iwconfig
+</code></pre>
+</div>
+
+<p>
+结果显示 A 电脑上的 wifi 网口名是 <code>wlp1s0</code> ， 用 <code>ip a</code> 或者 <code>ifconfig</code> 都可以获得
+</p>
+
+<p>
+在电脑A上运行以下命令，创建一个新的 iptables 规则，允许连接者通过电脑 A 访问互联网，并将 Wi-Fi 网卡名称替换为上一步查询到的名称。
+</p>
+<div class="org-src-container">
+<pre><code class="bash">sudo iptables -t nat -A POSTROUTING -o wlp1s0 -j MASQUERADE
+</code></pre>
+</div>
+
+<p>
+在完成上述步骤后，B电脑就可以使用 A电脑的 Wi-Fi 来访问互联网了。
+</p>
+</div>
+</div>
+</section>
+<hr />
+<div class="categories"></div>
+
+<nav class="paginav">
+  <a class="prev" href="#">
+    <span>« </span>
+
+    <span></span>
+  </a>
+  <a class="next" href="/posts/wen_lsp.html">
+    <span>中文语言服务的畅想和基础实现</span>
+
+    <span>»</span>
+  </a>
+</nav>
+<div class="comment">
+  <a href="https://github.com/metaescape/hugchange.life/issues/new" target="_blank" rel="noopener noreferrer me" title="Github">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+      ></path>
+    </svg>
+    前往本文 github issue
+  </a>
+</div>
 </main>
 <footer id="postamble" class="status">
 <span> © 2023</span><a href="https://github.com/metaescape" target="_blank"> mE </a> |
-<span>Powered by <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.0.50 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</span>
+<span>Powered by <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="https://orgmode.org">Org</a> mode 9.5.5)</span>
 </footer>
 
 </div>

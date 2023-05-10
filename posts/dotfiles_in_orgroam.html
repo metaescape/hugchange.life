@@ -1,63 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-03-30 四 11:04 -->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 2023-05-10 三 22:58 -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>org roam 风格的系统配置文件管理</title>
-<meta name="generator" content="Org mode">
-<meta name="author" content="pipz">
+<meta name="author" content="pipz" />
+<meta name="generator" content="Org Mode" />
 <link
   rel="stylesheet"
   type="text/css"
-  href="../orgchange/themes/darkfloat/style.css"
+  href="/orgchange/themes/darkfloat/style.css"
 />
 <link
+  title="dark"
   rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
+  href="/orgchange/themes/highlightjs/atom-one-dark.css"
 />
-
+<link
+  title="light"
+  rel="stylesheet"
+  href="/orgchange/themes/highlightjs/brown-paper.css"
+/>
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
 
 <script>
   hljs.highlightAll();
 </script>
-<script src="../orgchange/themes/main.js"></script>
+<script src="/orgchange/themes/main.js"></script>
 </head>
 <body>
 <div class="container">
 <header class="top-header">
-  <span class="header__inner">
-    <a href="../index.html" style="text-decoration: none">
-      <div class="logo">
-        <div class="logo-holder-dark">
-          <svg
-            viewBox="0 0 24 24"
-            width="20"
-            height="20"
-            stroke="white"
-            stroke-width="2"
-            fill="none"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="css-i6dzq1"
-          >
-            <polyline points="4 17 10 11 4 5"></polyline>
-            <line x1="12" y1="19" x2="20" y2="19"></line>
-          </svg>
+  <div class="header-inner">
+    <div class="header-left">
+      <a href="/" style="text-decoration: none">
+        <div class="logo">
+          <div class="logo-holder-dark">
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              stroke-width="2"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="css-i6dzq1"
+            >
+              <polyline points="4 17 10 11 4 5"></polyline>
+              <line x1="12" y1="19" x2="20" y2="19"></line>
+            </svg>
+          </div>
         </div>
-      </div>
-    </a>
+      </a>
+    </div>
 
-    <span class="header__right">
-      <div id="header_search">
-        <input type="text" placeholder="Hugchange.life" />
+    <div class="header-right">
+      <ul class="header-items">
+        <li>
+          <a href="/categories/">分类</a>
+        </li>
+      </ul>
+      <div class="toggle-button">
+        <input type="checkbox" id="darkmode-toggle" />
+        <label for="darkmode-toggle"> </label>
       </div>
-    </span>
-  </span>
+    </div>
+  </div>
 </header>
 
-<a class="back_top" href="javascript:window.scrollTo(0,0);"
+<a class="back-top" href="javascript:window.scrollTo(0,0);"
   ><svg
     t="1660722824713"
     class="icon"
@@ -70,7 +83,6 @@
     <path
       d="M484 93.668c-231.038.0-418.333 187.296-418.333 418.335C65.667 743.041 252.963 930.33 484 930.33c231.036.0 418.333-187.289 418.333-418.327C902.334 280.964 715.036 93.668 484 93.668zM372.207 811.881c-.412 8.174-4.906 12.669-13.493 13.493-6.545.0-11.863-.614-15.946-1.841-4.504-1.639-6.545-4.906-6.133-9.813 1.629-4.906 4.695-7.148 9.199-6.746 6.948 1.639 10.215.613 9.813-3.066v-96.902h-12.266c-4.504-.402-6.746-3.268-6.746-8.586.402-4.907 2.855-7.562 7.359-7.974h36.185c2.453.0 4.083 1.025 4.906 3.066 1.227-2.855 3.469-4.494 6.747-4.906h82.183c4.495.412 6.747 3.277 6.747 8.587-.412 5.318-2.865 8.184-7.36 8.586h-36.798l-2.453 11.652h23.919c10.215-.402 14.92 3.891 14.106 12.88v63.17c-.412 4.504-3.277 6.957-8.586 7.36-5.318-.403-8.184-2.856-8.586-7.36v-57.037c0-1.227-.613-1.84-1.84-1.84h-43.545c-.824.412-1.438 1.025-1.84 1.84v55.811c-.412 4.906-3.277 7.57-8.586 7.974-5.318-.403-8.184-3.067-8.586-7.974v-61.943c0-8.586 3.68-12.88 11.04-12.88h14.719l3.066-11.652h-25.759c-2.453.0-5.117-1.016-7.973-3.066-1.227 2.865-3.479 4.293-6.746 4.293h-6.747L372.207 811.881zm107.329 12.265c-3.277 4.907-7.571 5.722-12.879 2.454-2.865-1.227-7.571-3.891-14.106-7.974-6.133-3.277-10.838-5.52-14.106-6.746-6.133-2.855-8.586-6.334-7.359-10.426-1.227 2.051-3.68 4.504-7.36 7.359-.412.412-.824.824-1.227 1.227-9.41 7.762-20.239 13.896-32.505 18.399-5.73 1.629-9.813.201-12.266-4.294-1.639-4.906.0-8.586 4.906-11.039 18.802-7.762 30.253-15.534 34.345-23.306 4.494-7.359 6.746-21.054 6.746-41.091.403-5.722 3.067-8.788 7.973-9.2 5.309.412 8.174 3.479 8.586 9.2.814 20.852-1.639 36.798-7.36 47.837 4.083-4.906 9.401-5.107 15.946-.613 4.907 2.865 11.442 6.546 19.626 11.04 3.68 2.453 6.334 4.092 7.973 4.906C481.375 814.736 482.391 818.828 479.536 824.146zM556.198 822.307h-41.704c-7.772-.412-11.864-3.891-12.267-10.426v-34.345c-.412-8.989 3.68-13.282 12.267-12.88h42.931c7.763-.402 11.653 3.891 11.653 12.88v34.958C569.48 819.029 565.188 822.307 556.198 822.307zM614.462 817.4c-6.545.0-11.652-.824-15.332-2.453-4.092-2.051-5.318-5.309-3.68-9.813 1.629-4.906 5.107-6.747 10.426-5.52 11.04 2.453 15.735-1.841 14.106-12.88-.412-8.174-5.933-18.399-16.56-30.665-3.68-3.68-4.293-9.2-1.84-16.56 4.494-13.895 7.561-24.532 9.199-31.892h-16.559c-1.227.0-2.051.824-2.453 2.453v110.395c-.412 5.31-3.067 8.175-7.974 8.587-5.318-.412-8.184-3.277-8.586-8.587v-65.01c-1.227 1.639-2.865 2.453-4.906 2.453h-69.304c-4.504-.402-6.957-3.268-7.359-8.586.402-5.31 2.855-8.175 7.359-8.587h14.72c-.824-.814-3.68-5.721-8.586-14.719-2.051-5.31-.613-8.989 4.293-11.04h-7.36c-4.504-.402-6.957-3.268-7.359-8.586.402-5.309 2.855-8.174 7.359-8.586h22.079c-.824-1.227-1.227-2.453-1.227-3.681-1.227-4.082.613-7.359 5.52-9.813 5.721-2.041 9.401-1.016 11.04 3.066 1.227 3.68 2.654 7.158 4.293 10.427h20.239c4.494.412 6.947 3.277 7.359 8.586-.412 5.318-2.865 8.184-7.359 8.586h-47.225c2.855 1.639 6.334 7.36 10.426 17.173 1.227 4.092.814 6.957-1.227 8.586h13.493c.402-1.227 1.016-2.855 1.84-4.906 2.453-6.133 4.082-11.039 4.906-14.72 1.629-4.082 5.107-5.721 10.426-4.906 4.906 2.051 6.747 5.318 5.521 9.813-.824 2.051-1.639 4.504-2.454 7.359-1.227 3.277-2.252 5.932-3.066 7.973h11.04c2.453.0 4.082.613 4.906 1.84v-41.704c0-8.175 3.066-12.056 9.199-11.653h36.799c9.4.0 13.08 5.117 11.039 15.333.0.412-1.025 3.891-3.066 10.426-3.277 10.226-5.52 17.786-6.746 22.692-1.227 3.68-1.84 6.344-1.84 7.973.402 1.228 1.629 3.067 3.68 5.521 8.586 13.09 13.281 25.356 14.105 36.798C638.17 807.387 630.408 816.988 614.462 817.4zm32.434-351.085c-7.488 7.449-18.815 7.642-25.649.806-.538-.537-1.074-.922-1.536-1.535L502.752 348.858l-.192 280.106c0 9.139-8.601 16.549-19.198 16.549-10.598.0-18.738-7.41-18.738-16.549.0-.729-.115-1.306.0-2.034l-.192-278.072L347.513 465.586c-.422.652-.959.999-1.536 1.535-6.834 6.874-18.162 6.681-25.649-.806-7.488-7.488-8.025-19.122-1.152-25.995L467.12 292.03c2.112-3.263 5.26-5.913 9.369-7.333 2.074-.807 4.262-1.152 6.528-1.113.23.0.383-.116.614-.116.153.0.307.078.46.078 2.304-.078 4.57.307 6.72 1.152 3.994 1.421 7.142 4.07 9.254 7.219L648.048 440.32C654.92 447.155 654.383 458.827 646.896 466.315zM636.605 238.121H331.771c-9.407.0-17.049-7.564-17.049-16.857.0-9.292 7.642-16.856 17.049-16.856h304.835c9.445.0 17.048 7.564 17.048 16.856C653.653 230.557 646.013 238.121 636.605 238.121zM549.452 781.829H521.24c-1.227.0-2.051.824-2.453 2.453v19.013c.402 1.639 1.227 2.453 2.453 2.453h28.212c1.629-.402 2.453-1.227 2.453-2.453v-19.013C551.905 782.653 551.081 781.829 549.452 781.829z"
       p-id="1360"
-      fill="#a9a9b340"
     ></path>
   </svg>
 </a>
@@ -116,30 +128,30 @@
   2023-03-30 四 10:15
 </span>
 </header>
-<nav id="table-of-contents">
+<nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgb0d0cc5">Emacs 的常见配置方式</a>
+<li><a href="#org6b34860">Emacs 的常见配置方式</a>
 <ul>
-<li><a href="#org897e677">1. All in init.el</a></li>
-<li><a href="#org3eccd4b">2. 结构化 emacs.d/</a></li>
-<li><a href="#org494ced6">3. All in init.org</a></li>
-<li><a href="#orgef87657">还有哪些可能？</a></li>
+<li><a href="#org7cdac72">1. All in init.el</a></li>
+<li><a href="#org631f07c">2. 结构化 emacs.d/</a></li>
+<li><a href="#org308d765">3. All in init.org</a></li>
+<li><a href="#org7ac5c06">还有哪些可能？</a></li>
 </ul>
 </li>
-<li><a href="#org4f87e97">跨文件 noweb 和 tangle</a></li>
-<li><a href="#org128d38d">Org 配置工程</a></li>
-<li><a href="#org12f8b46">把代码当作知识？</a>
+<li><a href="#orgdfccdb8">跨文件 noweb 和 tangle</a></li>
+<li><a href="#org40cd895">Org 配置工程</a></li>
+<li><a href="#org51cf5b5">把代码当作知识？</a>
 <ul>
-<li><a href="#orge27cc00">得与失</a></li>
+<li><a href="#org758be0a">得与失</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </nav>
 
-<figure id="orgde796ce">
+<figure id="orge3fb03c">
 <img src="./imgs/make_init.gif" alt="make_init.gif">
 
 </figure>
@@ -153,26 +165,26 @@
 在这种方式下，可以把软件的配置和笔记记录在同一个 org 文件或 header 下，与 org-roam 融合。
 </p>
 
-<section id="outline-container-orgb0d0cc5" class="outline-2">
-<h2 id="orgb0d0cc5">Emacs 的常见配置方式</h2>
-<div class="outline-text-2" id="text-orgb0d0cc5">
+<section id="outline-container-org6b34860" class="outline-2">
+<h2 id="org6b34860">Emacs 的常见配置方式</h2>
+<div class="outline-text-2" id="text-org6b34860">
 <p>
 假设当前只用 evil, org-mode, python-mode 三个功能，一般有以下几种组织配置文件的方式：
 </p>
 </div>
 
-<div id="outline-container-org897e677" class="outline-3">
-<h3 id="org897e677">1. All in init.el</h3>
-<div class="outline-text-3" id="text-org897e677">
+<div id="outline-container-org7cdac72" class="outline-3">
+<h3 id="org7cdac72">1. All in init.el</h3>
+<div class="outline-text-3" id="text-org7cdac72">
 <p>
 将所有 elisp 全部写在 emacs.d/init.el 中， 这种方式适合包比较少的情况，如果配置代码多，维护起来比较吃力。
 </p>
 </div>
 </div>
 
-<div id="outline-container-org3eccd4b" class="outline-3">
-<h3 id="org3eccd4b">2. 结构化 emacs.d/</h3>
-<div class="outline-text-3" id="text-org3eccd4b">
+<div id="outline-container-org631f07c" class="outline-3">
+<h3 id="org631f07c">2. 结构化 emacs.d/</h3>
+<div class="outline-text-3" id="text-org631f07c">
 <p>
 在 emacs.d/ 下新建子目录，其中保存各个模块的单独配置，如 evil.el, org.el, python.el,
 而 init.el 只是单纯的 require 它们。
@@ -184,9 +196,9 @@
 </div>
 </div>
 
-<div id="outline-container-org494ced6" class="outline-3">
-<h3 id="org494ced6">3. All in init.org</h3>
-<div class="outline-text-3" id="text-org494ced6">
+<div id="outline-container-org308d765" class="outline-3">
+<h3 id="org308d765">3. All in init.org</h3>
+<div class="outline-text-3" id="text-org308d765">
 <p>
 将所有配置都以文学编程的方式写在一个 org 文件中，例如 init.org
 </p>
@@ -214,9 +226,9 @@
 </div>
 </div>
 
-<div id="outline-container-orgef87657" class="outline-3">
-<h3 id="orgef87657">还有哪些可能？</h3>
-<div class="outline-text-3" id="text-orgef87657">
+<div id="outline-container-org7ac5c06" class="outline-3">
+<h3 id="org7ac5c06">还有哪些可能？</h3>
+<div class="outline-text-3" id="text-org7ac5c06">
 <p>
 我个人使用过第一种和第三种方式，这都是 all-in-one 的风格，把所有配置都放在一个文件里。
 </p>
@@ -233,9 +245,9 @@
 </div>
 </section>
 
-<section id="outline-container-org4f87e97" class="outline-2">
-<h2 id="org4f87e97">跨文件 noweb 和 tangle</h2>
-<div class="outline-text-2" id="text-org4f87e97">
+<section id="outline-container-orgdfccdb8" class="outline-2">
+<h2 id="orgdfccdb8">跨文件 noweb 和 tangle</h2>
+<div class="outline-text-2" id="text-orgdfccdb8">
 <p>
 正如第一种方法使用久了自然就会开始考虑把 init.el 拆分，最终发展出第二种方式。
 </p>
@@ -253,13 +265,13 @@
 </p>
 
 <div class="org-src-container">
-<pre><code class="emacs-lisp" id="orge36c8fb">(setq org-abcd 1)
+<pre><code class="emacs-lisp" id="org4ac3d66">(setq org-abcd 1)
 </code></pre>
 </div>
 
 
 <div class="org-src-container">
-<pre><code class="emacs-lisp" id="orgab4f77d">&lt;&lt;abcd&gt;&gt;
+<pre><code class="emacs-lisp" id="org2be890f">&lt;&lt;abcd&gt;&gt;
 (prin1 org-abcd)
 </code></pre>
 </div>
@@ -384,9 +396,9 @@ print 的写法是：
 </div>
 </section>
 
-<section id="outline-container-org128d38d" class="outline-2">
-<h2 id="org128d38d">Org 配置工程</h2>
-<div class="outline-text-2" id="text-org128d38d">
+<section id="outline-container-org40cd895" class="outline-2">
+<h2 id="org40cd895">Org 配置工程</h2>
+<div class="outline-text-2" id="text-org40cd895">
 <p>
 这一节介绍一些我个人使用中遇到的"工程上"的问题以及解决方法。
 </p>
@@ -491,9 +503,9 @@ tmux 则把 <code>~/org/logical/tmux.org</code> 中明确写有 :tangle 目标�
 </div>
 </section>
 
-<section id="outline-container-org12f8b46" class="outline-2">
-<h2 id="org12f8b46">把代码当作知识？</h2>
-<div class="outline-text-2" id="text-org12f8b46">
+<section id="outline-container-org51cf5b5" class="outline-2">
+<h2 id="org51cf5b5">把代码当作知识？</h2>
+<div class="outline-text-2" id="text-org51cf5b5">
 <p>
 将 config 代码放到 org-roam 节点下的心理动机可能来源于对一切信息进行知识化的倾向，初衷和 org-roam 是一样的：对知识、想法进行卡片式记录以及双向链接或许可以在比较细的粒度层面建立和发掘知识之间的关系，只是这里把配置代码也看作知识或想法。
 </p>
@@ -516,9 +528,9 @@ emacs.d 中的所有配置虽然只属于 emacs 这一个软件, 在使用时，
 </p>
 </div>
 
-<div id="outline-container-orge27cc00" class="outline-3">
-<h3 id="orge27cc00">得与失</h3>
-<div class="outline-text-3" id="text-orge27cc00">
+<div id="outline-container-org758be0a" class="outline-3">
+<h3 id="org758be0a">得与失</h3>
+<div class="outline-text-3" id="text-org758be0a">
 <p>
 具体来说，这个方法带来的好处有：
 </p>
@@ -550,10 +562,43 @@ emacs 本来是直接对 init.el 进行解释，但把配置代码放在 org 后
 </div>
 </div>
 </section>
+<hr />
+<div class="categories"></div>
+
+<nav class="paginav">
+  <a class="prev" href="/posts/wen_lsp.html">
+    <span>« </span>
+
+    <span>中文语言服务的畅想和基础实现</span>
+  </a>
+  <a class="next" href="/posts/xwish.html">
+    <span>用 FZF 作为窗口切换工具</span>
+
+    <span>»</span>
+  </a>
+</nav>
+<div class="comment">
+  <a href="https://github.com/metaescape/hugchange.life/issues/new" target="_blank" rel="noopener noreferrer me" title="Github">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path
+        d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+      ></path>
+    </svg>
+    前往本文 github issue
+  </a>
+</div>
 </main>
 <footer id="postamble" class="status">
 <span> © 2023</span><a href="https://github.com/metaescape" target="_blank"> mE </a> |
-<span>Powered by <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.0.50 (<a href="https://orgmode.org">Org</a> mode 9.4.4)</span>
+<span>Powered by <a href="https://www.gnu.org/software/emacs/">Emacs</a> 28.2 (<a href="https://orgmode.org">Org</a> mode 9.5.5)</span>
 </footer>
 
 </div>
