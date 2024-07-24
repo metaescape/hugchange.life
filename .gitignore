@@ -1,3 +1,6 @@
 .ob-jupyter/
 imgs/
 img/
+*.png
+.orgchange.draft
+.vscode/*
