@@ -1,0 +1,2173 @@
+<!DOCTYPE html>
+<html lang="zh">
+  
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>orgchange: 文学编程式 org 文件静态网页生成器</title>
+    <link
+  id="code-theme-css"
+  rel="stylesheet"
+  href="/orgchange/themes/static/dark.css"
+/>
+
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="/orgchange/themes/darkfloat/style.css"
+/>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="/orgchange/themes/static/paren.css"
+/>
+
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/static/favicon.svg" type="image/svg+xml" />
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+<script>
+  hljs.highlightAll();
+</script> -->
+<script src="/orgchange/themes/static/main.js"></script> <script id="need-mathjax"></script>
+  </head>
+  
+  <body>
+    <script>
+      setTheme(localStorage.getItem("theme"));
+    </script>
+    <div class="container">
+      
+<nav id="global-toc">
+  <div id="global-toc-container">
+    <div id="global-toc-content">
+      <ul>
+        
+<ul>
+</ul>
+<li> <a href="/posts/orgchange.html">orgchange: 文学编程式 org 文件静态网页生成器</a></li><ul>
+<li><a href="#org0000003">设计理念</a></li>
+<li><a href="#org0000006">特色功能</a></li>
+<li><a href="#org000000b">快速开始</a></li>
+<li><a href="#org000000e">导出选项</a>
+<ul>
+<li><a href="#org0000011">emacs lisp 设置选项</a></li>
+<li><a href="#org0000015">python 设置选项</a></li>
+</ul>
+</li>
+<li><a href="#org000001c">常见问题</a></li>
+<li><a href="#org0000020">导出流程</a>
+<ul>
+<li><a href="#org0000024">1. index org 读取</a></li>
+<li><a href="#org0000027">2. 调用 emacs 命令将 org 导出成 html</a>
+<ul>
+<li><a href="#org000002a">general.el 的说明</a></li>
+</ul>
+</li>
+<li><a href="#org000002d">3. jinja2 渲染阶段</a>
+<ul>
+<li><a href="#org0000030">区分 draft 和正式发布文章</a></li>
+<li><a href="#org0000033">提取各文章 meta 信息</a></li>
+<li><a href="#org0000036">对需要更新的文章进行 soup 修剪</a></li>
+<li><a href="#org0000039">生成全局目录</a></li>
+<li><a href="#org000003c">搜集相邻文章信息并用 jinja2 渲染</a></li>
+</ul>
+</li>
+<li><a href="#org000003f">4. 生成 index/category 等页面</a>
+<ul>
+<li><a href="#org0000042">给 jinja2 模板提供的变量</a></li>
+<li><a href="#org0000045">about/meta 页面</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org0000078">部分功能实现原理</a>
+<ul>
+<li><a href="#org0000048">黑白主题切换的实现</a></li>
+<li><a href="#org000004c">整个背景里纹理效果</a></li>
+<li><a href="#org0000050">mathjax 的处理</a></li>
+<li><a href="#org0000053">文章内自定义 script 处理</a></li>
+<li><a href="#org0000056">org src block 的语法高亮</a></li>
+<li><a href="#org0000059">代码块拷贝按钮</a></li>
+<li><a href="#org000005e">如何把 org 代码块中的 #+name 显示出来？</a></li>
+<li><a href="#org0000062">如何导出 org-ref 和 org-cite 文献列表？</a></li>
+<li><a href="#org0000065">multipage 各个页面的 title 是怎么生成的？</a>
+<ul>
+<li><a href="#org0000068">对 html 文件名的修改</a></li>
+<li><a href="#org000006b">对各个文件的 title 的修改</a></li>
+<li><a href="#org000006e">对各个文件的 subtitle 的修改</a></li>
+</ul>
+</li>
+<li><a href="#org0000072">如何使得每个标题的 id 是确定且是可点击的</a></li>
+<li><a href="#org0000075">如何实现彩虹括号</a></li>
+</ul>
+</li>
+<li><a href="#org0000084">其他说明</a>
+<ul>
+<li><a href="#org000007b">关于 org 导出 html 的参考资料</a></li>
+<li><a href="#org000007e">关于 jinja2 模板的理解</a></li>
+<li><a href="#org0000081">关于 Pelican 和未来开发</a></li>
+</ul>
+</li>
+</ul>
+      </ul>
+    </div>
+    <p id="global-toc-fringe"><span>目</span><span>录</span></p>
+  </div>
+</nav>
+
+      <header class="top-header">
+        <div class="header-inner">
+          <div class="header-left">
+            <a href="/" class="logo">
+              <span>Change</span>
+              <div class="liquid"></div>
+            </a>
+          </div>
+
+          <div class="header-right">
+            <ul class="header-items">
+              <li>
+                <a href="/categories/" id="header-category">分类</a>
+              </li>
+            </ul>
+            <div class="toggle-button">
+              <input type="checkbox" id="theme-toggle" />
+              <label for="theme-toggle"> </label>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <a class="back-top" href="javascript:window.scrollTo(0,0);"
+        ><svg
+          t="1660722824713"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="1359"
+          width="64"
+          height="64"
+        >
+          <path
+            d="M484 93.668c-231.038.0-418.333 187.296-418.333 418.335C65.667 743.041 252.963 930.33 484 930.33c231.036.0 418.333-187.289 418.333-418.327C902.334 280.964 715.036 93.668 484 93.668zM372.207 811.881c-.412 8.174-4.906 12.669-13.493 13.493-6.545.0-11.863-.614-15.946-1.841-4.504-1.639-6.545-4.906-6.133-9.813 1.629-4.906 4.695-7.148 9.199-6.746 6.948 1.639 10.215.613 9.813-3.066v-96.902h-12.266c-4.504-.402-6.746-3.268-6.746-8.586.402-4.907 2.855-7.562 7.359-7.974h36.185c2.453.0 4.083 1.025 4.906 3.066 1.227-2.855 3.469-4.494 6.747-4.906h82.183c4.495.412 6.747 3.277 6.747 8.587-.412 5.318-2.865 8.184-7.36 8.586h-36.798l-2.453 11.652h23.919c10.215-.402 14.92 3.891 14.106 12.88v63.17c-.412 4.504-3.277 6.957-8.586 7.36-5.318-.403-8.184-2.856-8.586-7.36v-57.037c0-1.227-.613-1.84-1.84-1.84h-43.545c-.824.412-1.438 1.025-1.84 1.84v55.811c-.412 4.906-3.277 7.57-8.586 7.974-5.318-.403-8.184-3.067-8.586-7.974v-61.943c0-8.586 3.68-12.88 11.04-12.88h14.719l3.066-11.652h-25.759c-2.453.0-5.117-1.016-7.973-3.066-1.227 2.865-3.479 4.293-6.746 4.293h-6.747L372.207 811.881zm107.329 12.265c-3.277 4.907-7.571 5.722-12.879 2.454-2.865-1.227-7.571-3.891-14.106-7.974-6.133-3.277-10.838-5.52-14.106-6.746-6.133-2.855-8.586-6.334-7.359-10.426-1.227 2.051-3.68 4.504-7.36 7.359-.412.412-.824.824-1.227 1.227-9.41 7.762-20.239 13.896-32.505 18.399-5.73 1.629-9.813.201-12.266-4.294-1.639-4.906.0-8.586 4.906-11.039 18.802-7.762 30.253-15.534 34.345-23.306 4.494-7.359 6.746-21.054 6.746-41.091.403-5.722 3.067-8.788 7.973-9.2 5.309.412 8.174 3.479 8.586 9.2.814 20.852-1.639 36.798-7.36 47.837 4.083-4.906 9.401-5.107 15.946-.613 4.907 2.865 11.442 6.546 19.626 11.04 3.68 2.453 6.334 4.092 7.973 4.906C481.375 814.736 482.391 818.828 479.536 824.146zM556.198 822.307h-41.704c-7.772-.412-11.864-3.891-12.267-10.426v-34.345c-.412-8.989 3.68-13.282 12.267-12.88h42.931c7.763-.402 11.653 3.891 11.653 12.88v34.958C569.48 819.029 565.188 822.307 556.198 822.307zM614.462 817.4c-6.545.0-11.652-.824-15.332-2.453-4.092-2.051-5.318-5.309-3.68-9.813 1.629-4.906 5.107-6.747 10.426-5.52 11.04 2.453 15.735-1.841 14.106-12.88-.412-8.174-5.933-18.399-16.56-30.665-3.68-3.68-4.293-9.2-1.84-16.56 4.494-13.895 7.561-24.532 9.199-31.892h-16.559c-1.227.0-2.051.824-2.453 2.453v110.395c-.412 5.31-3.067 8.175-7.974 8.587-5.318-.412-8.184-3.277-8.586-8.587v-65.01c-1.227 1.639-2.865 2.453-4.906 2.453h-69.304c-4.504-.402-6.957-3.268-7.359-8.586.402-5.31 2.855-8.175 7.359-8.587h14.72c-.824-.814-3.68-5.721-8.586-14.719-2.051-5.31-.613-8.989 4.293-11.04h-7.36c-4.504-.402-6.957-3.268-7.359-8.586.402-5.309 2.855-8.174 7.359-8.586h22.079c-.824-1.227-1.227-2.453-1.227-3.681-1.227-4.082.613-7.359 5.52-9.813 5.721-2.041 9.401-1.016 11.04 3.066 1.227 3.68 2.654 7.158 4.293 10.427h20.239c4.494.412 6.947 3.277 7.359 8.586-.412 5.318-2.865 8.184-7.359 8.586h-47.225c2.855 1.639 6.334 7.36 10.426 17.173 1.227 4.092.814 6.957-1.227 8.586h13.493c.402-1.227 1.016-2.855 1.84-4.906 2.453-6.133 4.082-11.039 4.906-14.72 1.629-4.082 5.107-5.721 10.426-4.906 4.906 2.051 6.747 5.318 5.521 9.813-.824 2.051-1.639 4.504-2.454 7.359-1.227 3.277-2.252 5.932-3.066 7.973h11.04c2.453.0 4.082.613 4.906 1.84v-41.704c0-8.175 3.066-12.056 9.199-11.653h36.799c9.4.0 13.08 5.117 11.039 15.333.0.412-1.025 3.891-3.066 10.426-3.277 10.226-5.52 17.786-6.746 22.692-1.227 3.68-1.84 6.344-1.84 7.973.402 1.228 1.629 3.067 3.68 5.521 8.586 13.09 13.281 25.356 14.105 36.798C638.17 807.387 630.408 816.988 614.462 817.4zm32.434-351.085c-7.488 7.449-18.815 7.642-25.649.806-.538-.537-1.074-.922-1.536-1.535L502.752 348.858l-.192 280.106c0 9.139-8.601 16.549-19.198 16.549-10.598.0-18.738-7.41-18.738-16.549.0-.729-.115-1.306.0-2.034l-.192-278.072L347.513 465.586c-.422.652-.959.999-1.536 1.535-6.834 6.874-18.162 6.681-25.649-.806-7.488-7.488-8.025-19.122-1.152-25.995L467.12 292.03c2.112-3.263 5.26-5.913 9.369-7.333 2.074-.807 4.262-1.152 6.528-1.113.23.0.383-.116.614-.116.153.0.307.078.46.078 2.304-.078 4.57.307 6.72 1.152 3.994 1.421 7.142 4.07 9.254 7.219L648.048 440.32C654.92 447.155 654.383 458.827 646.896 466.315zM636.605 238.121H331.771c-9.407.0-17.049-7.564-17.049-16.857.0-9.292 7.642-16.856 17.049-16.856h304.835c9.445.0 17.048 7.564 17.048 16.856C653.653 230.557 646.013 238.121 636.605 238.121zM549.452 781.829H521.24c-1.227.0-2.051.824-2.453 2.453v19.013c.402 1.639 1.227 2.453 2.453 2.453h28.212c1.629-.402 2.453-1.227 2.453-2.453v-19.013C551.905 782.653 551.081 781.829 549.452 781.829z"
+            p-id="1360"
+          ></path>
+        </svg>
+      </a>
+      
+
+<main id="content">
+  <div class="content-inner">
+    <header class="header-titles">
+<h1 class="title">orgchange: 文学编程式 org mode 静态网页生成器</h1>
+</header>
+    <header class="status" id="preamble">
+      <span class="created">
+        <svg
+          width="24"
+          height="24"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather feather-calendar"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span id="created-timestamp"> 2023-08-19 六 22:07 </span>
+      </span>
+      <span class="last-modify">
+        <svg
+          viewBox="0 0 24 24"
+          width="24"
+          height="24"
+          stroke="currentColor"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="feather"
+        >
+          <path d="M12 20h9"></path>
+          <path
+            d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+          ></path>
+        </svg>
+        <span id="last-modify-timestamp"> 2024-07-24 三 21:58 </span>
+      </span>
+    </header>
+    <div id="org-main">
+<nav id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#org0000003">设计理念</a></li>
+<li><a href="#org0000006">特色功能</a></li>
+<li><a href="#org000000b">快速开始</a></li>
+<li><a href="#org000000e">导出选项</a>
+<ul>
+<li><a href="#org0000011">emacs lisp 设置选项</a></li>
+<li><a href="#org0000015">python 设置选项</a></li>
+</ul>
+</li>
+<li><a href="#org000001c">常见问题</a></li>
+<li><a href="#org0000020">导出流程</a>
+<ul>
+<li><a href="#org0000024">1. index org 读取</a></li>
+<li><a href="#org0000027">2. 调用 emacs 命令将 org 导出成 html</a>
+<ul>
+<li><a href="#org000002a">general.el 的说明</a></li>
+</ul>
+</li>
+<li><a href="#org000002d">3. jinja2 渲染阶段</a>
+<ul>
+<li><a href="#org0000030">区分 draft 和正式发布文章</a></li>
+<li><a href="#org0000033">提取各文章 meta 信息</a></li>
+<li><a href="#org0000036">对需要更新的文章进行 soup 修剪</a></li>
+<li><a href="#org0000039">生成全局目录</a></li>
+<li><a href="#org000003c">搜集相邻文章信息并用 jinja2 渲染</a></li>
+</ul>
+</li>
+<li><a href="#org000003f">4. 生成 index/category 等页面</a>
+<ul>
+<li><a href="#org0000042">给 jinja2 模板提供的变量</a></li>
+<li><a href="#org0000045">about/meta 页面</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#org0000078">部分功能实现原理</a>
+<ul>
+<li><a href="#org0000048">黑白主题切换的实现</a></li>
+<li><a href="#org000004c">整个背景里纹理效果</a></li>
+<li><a href="#org0000050">mathjax 的处理</a></li>
+<li><a href="#org0000053">文章内自定义 script 处理</a></li>
+<li><a href="#org0000056">org src block 的语法高亮</a></li>
+<li><a href="#org0000059">代码块拷贝按钮</a></li>
+<li><a href="#org000005e">如何把 org 代码块中的 #+name 显示出来？</a></li>
+<li><a href="#org0000062">如何导出 org-ref 和 org-cite 文献列表？</a></li>
+<li><a href="#org0000065">multipage 各个页面的 title 是怎么生成的？</a>
+<ul>
+<li><a href="#org0000068">对 html 文件名的修改</a></li>
+<li><a href="#org000006b">对各个文件的 title 的修改</a></li>
+<li><a href="#org000006e">对各个文件的 subtitle 的修改</a></li>
+</ul>
+</li>
+<li><a href="#org0000072">如何使得每个标题的 id 是确定且是可点击的</a></li>
+<li><a href="#org0000075">如何实现彩虹括号</a></li>
+</ul>
+</li>
+<li><a href="#org0000084">其他说明</a>
+<ul>
+<li><a href="#org000007b">关于 org 导出 html 的参考资料</a></li>
+<li><a href="#org000007e">关于 jinja2 模板的理解</a></li>
+<li><a href="#org0000081">关于 Pelican 和未来开发</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+<pre class="example">
+💡本文 "导出流程" 一节及以后仍属于个人随记状态，许多地方只是用于备忘
+</pre>
+<details id="org0000001">
+<summary id="org0000000">
+<p>
+修改历史
+</p>
+</summary>
+<ul class="org-ul">
+<li><span class="timestamp-wrapper"><span class="timestamp">[2024-03-29 五 21:08] </span></span> "快速开始"和"导出选项"两节中增加了更多说明，纠正了不少错别字。
+添加 "常见问题" 一节</li>
+<li><span class="timestamp-wrapper"><span class="timestamp">[2024-01-31 三 22:24] </span></span> 添加 org-ref 和 org-cite 引用导出原理说明</li>
+<li><span class="timestamp-wrapper"><span class="timestamp">[2023-12-23 六 11:44] </span></span> 添加 “各功能实现原理” 一节</li>
+</ul>
+</details>
+<p>
+本文介绍一种将所有配置都写在 org 文件中的 org mode 静态网页生成器： <a href="https://github.com/metaescape/orgchange">orgchange</a>，这也是生成本 blog 的工具。
+</p>
+<figure id="org0000002">
+<img align="center" alt="orgchange_overview.svg" class="org-svg" src="imgs/orgchange_overview.svg" width="600"/>
+</figure>
+<section class="outline-2" id="outline-container-org0000003">
+<h2 id="org0000003"><a href="#org0000003">设计理念</a></h2>
+<div class="outline-text-2" id="text-org0000003">
+<ul class="org-ul">
+<li><p>
+blog 相关配置应独立于个人 emacs 配置
+</p>
+<p>
+下载和安装 orgchange 后，blog 发布需要的所有工具和依赖都应该被 orgchange 目录包含，不依赖自己的 emacs 配置。因为 blog 的个性化部分不在 emacs 配置上体现，而是在文章内容的打磨和网站样式的设计上。
+</p></li>
+<li><p>
+html 导出选项不应该主要限制在要发布的 org 文章里。
+</p>
+<p>
+emacs org export 默认情况下会读取文件内的 <code>#+</code> 开头的选项，例如 <code>#+OPTIONS: ^:nil p:t</code> ，这使得用户可以对每一篇 blog 进行定制，但它带来的问题是，export 选项连同文章内容都写在同一个文件中，有时候这些配置会变得很长，比如 ox-hugo 也采用了这种方式，其官方的一个 <a href="https://github.com/kaushalmodi/ox-hugo/blob/main/test/site/content-org/writing-hugo-blog-in-org-file-export.org">展示文件</a> 中，光设置博客导出的元信息就有有十几行，如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="org"><span></span><span class="c1">#+hugo_base_dir: ../</span>
+<span class="c1">#+hugo_section: ./</span>
+
+<span class="c1">#+hugo_weight: 2001</span>
+<span class="c1">#+hugo_auto_set_lastmod: t</span>
+
+<span class="c1">#+title: Writing Hugo blog in Org (File Export)</span>
+
+<span class="c1">#+date: 2017-09-10</span>
+<span class="c1">#+author: Kaushal Modi</span>
+
+<span class="c1">#+hugo_tags: hugo org</span>
+<span class="c1">#+hugo_categories: emacs</span>
+<span class="c1">#+hugo_menu: :menu "main" :weight 2001</span>
+<span class="c1">#+hugo_custom_front_matter: :foo bar :baz zoo :alpha 1 :beta "two words" :gamma 10</span>
+
+<span class="c1">#+hugo_draft: true</span>
+</pre></div>
+
+</div>
+<p>
+可以用 setup file 把这些 <code>#+</code> 选项放在额外的一个文件中封装起来，但这又给每一个 org 文件引入了单独的配置文件，增加了管理复杂度。
+</p>
+<p>
+我个人倾向于只在 org 中保留最核心的元信息，如 <code>#+title</code> 、 <code>#+date</code> 以及影响 emacs 交互的控制选项，如便于 org-roam 搜索的 <code>#+filetags</code> 、便于创建链接和跳转的 <code>#+LINK:</code> 等，除此之外尽可能只记录文章内容。
+</p>
+<p>
+关于各个网页发布的配置，如哪些文件需要发布、如何发布的信息，应该统一放在一个文件中，orgchange 利用 org mode 的层次结构（就如同编程语言中类继承的层次结构），把每个待发布文件的配置都写在该 blog 链接所对应的 org section 中。
+</p></li>
+<li><p>
+文学编程式的配置方法。
+</p>
+<p>
+orgchange 允许用户把自己对网站所有的期望都寄托于一个 org 文件中，而具体的参数选项则写在该文件的 python/elisp 代码块里，由于 org mode 的层次结构，我们可以对每一篇导出的文章做针对性设置，也可以对整个网页做全局的设置。
+</p>
+<p>
+可以参考 <a href="https://raw.githubusercontent.com/metaescape/orgchange/main/example/index.org">index org 的纯文本格式</a> 和 <a href="https://github.com/metaescape/orgchange/blob/main/example/index.org">index org 的预览</a> 了解更具体的写法：
+</p></li>
+<li><p>
+更现代的网页设计方式和默认导出选项
+</p>
+<p>
+样式的设计应该遵循更现代的 html5/css/js 编写和开发方式，而不是在 emacs 里用字符串拼接的方式嵌入 html 代码。
+orgchange 把对网站的设计全部转到了 jinja2 模版和 css/js 编写上，如果用 flask 或者 django 编写过网页或对 jinja2 有所了解，可以立刻开始设计自己的网站主题。
+</p></li>
+<li><p>
+blog 的发布目录独立于 org 文件目录，并且不对 org 文件的组织有固定要求。
+</p>
+<p>
+原生的 org-publish 只能指定某个目录作为网页发布目录，导出该目录下的 org 文件（可以使用 #+include 语句来间接导出其他目录下文件）。orgchange 则可以将系统里任意一篇 org 文件导入到指定的 web 目录下。
+</p></li>
+</ul>
+</div>
+</section>
+<section class="outline-2" id="outline-container-org0000006">
+<h2 id="org0000006"><a href="#org0000006">特色功能</a></h2>
+<div class="outline-text-2" id="text-org0000006">
+<ul class="org-ul">
+<li>支持在 index org 的各个文章标题 section 内的 <code>python</code> 和 <code>emacs-lisp</code> 代码块中设置导出属性
+<ul class="org-ul">
+<li>例如 <code>draft=True</code> 表示只导出但不发布在 index.html 里</li>
+<li><code>link_replace</code> 可以指定替换 html 中本地文件链接的规则</li>
+<li>通过  <code>bib_info</code> 指定 bib 文件，用于导出参考文献。在 python block 里添加 bib_info 变量后，Org Mode 文件导出为 HTML 时，orgchange 会自动在文件的开头查找标题，并在标题下方添加 BibLaTeX 导出选项，使得导出的 HTML 页面中会自动显示参考文献列表。支持 org-ref 和 org-cite 格式的参考文献 csl 格式导出，内置 acl 和 ieee 两种 csl 样式</li>
+<li>在 python block 中为为每篇文章单独设置 categories（不同于 org 的 filetag）变量，从而自动生成 categories 页面。</li>
+</ul></li>
+<li>代码高亮：基于 pygments 进行代码高亮
+<ul class="org-ul">
+<li>专为 lisp 系列语言提供 rainbow 括号高亮以及动态的括号内背景颜色高亮</li>
+</ul></li>
+<li>支持单个文件按一级标题导出成多个 html, 每个 html 共享整个 org 文件的全局目录（类似 readthedocs 的全局目录）。</li>
+<li>支持将多个 org 文件的目录进行打包，使得这些文章共享同一个全局目录，也与 readthedocs 类似。</li>
+<li>如果有 mermaid src_bock, 导出的 html 中自动添加 mermaid js cdn 链接</li>
+<li>支持在需要导出的 org 文件里添加一个 <code>* self-apply</code> 一节， 该小节内所有的 python 代码块会被执行，代码中的 soup 对象代表文章本身。这意味着你可以在 org 文章里直接插入一个 python 代码块，在其中用 beautifulSoup 代码直接修剪或装饰当前页面的 html 结构树，因此可以对每篇文章导出结构进行高度定制。</li>
+</ul>
+</div>
+</section>
+<section class="outline-2" id="outline-container-org000000b">
+<h2 id="org000000b"><a href="#org000000b">快速开始</a></h2>
+<div class="outline-text-2" id="text-org000000b">
+<p>
+首先安装 emacs （推荐 27 版本及以上） 和 python 依赖：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="bash"><span></span>pip<span class="w"> </span>install<span class="w"> </span>orgparse<span class="w"> </span>jinja2<span class="w"> </span>bs4<span class="w"> </span>pygments
+</pre></div>
+
+</div>
+<p>
+下载 orgchange 仓库到网站主目录下，比如 <code>~/mysite</code>
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="bash"><span></span>mkdir<span class="w"> </span>~/mysite<span class="p">;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/mysite
+git<span class="w"> </span>clone<span class="w"> </span>git@github.com:metaescape/orgchange.git
+</pre></div>
+
+</div>
+<p>
+编写一个 org 文件，如 <code>~/org/mysite.org</code>, 内容参考如下（推荐将其内容复制到新的 org 文件中，阅读并根据说明修改其中的内容，后文将该文件称为 index_org），将其中的二级标题里的链接改成本地自己想要发布的 org 文件的路径，同时将 <code>org_prefixes</code> 改成 org 文件共同的前缀
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="org"><span></span><span class="o">*</span> <span class="n">my</span> <span class="n">website</span> <span class="p">:</span><span class="n">post</span><span class="p">:</span>
+
+<span class="n">在</span> <span class="n">org</span> <span class="n">文件中添加一个一级标题并打上名为</span> <span class="o">=</span><span class="n">post</span><span class="o">=</span> <span class="n">的标签</span><span class="p">,</span>
+<span class="n">未来所有需要发布的网页以及发布选项都在此标题下编写</span> <span class="o">.</span>
+
+<span class="n">以下</span> <span class="n">python</span> <span class="n">块是网站发布全局选项</span>
+<span class="c1">#+begin_src python</span>
+<span class="n">publish_folder</span> <span class="o">=</span> <span class="s2">"~/mysite"</span>
+<span class="n">org_prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"~/org/"</span><span class="p">,</span> <span class="s2">"~/myblog/"</span><span class="p">]</span>
+<span class="c1"># 可以指定不同 index 模版</span>
+<span class="n">index_template</span> <span class="o">=</span> <span class="s2">"~/mysite/orgchange/themes/darkfloat/index.html"</span>
+<span class="c1">#+end_src</span>
+
+<span class="n">publish_folder</span> <span class="n">是网页的主目录</span><span class="err">，</span><span class="n">org</span> <span class="n">导出的</span> <span class="n">html</span> <span class="n">结果文件会放在该目录下</span><span class="o">.</span>
+<span class="n">org_prefixes</span> <span class="n">用于过滤原始</span> <span class="n">org</span> <span class="n">路径中的前缀部分</span><span class="err">，</span><span class="n">比如想要把</span> <span class="o">~/</span><span class="n">org</span><span class="o">/</span><span class="n">posts</span><span class="o">/</span><span class="n">myblog</span><span class="o">.</span><span class="n">org</span> <span class="n">发布到</span>
+<span class="o">~/</span><span class="n">mysite</span><span class="o">/</span><span class="n">posts</span><span class="o">/</span><span class="n">myblog</span><span class="o">.</span><span class="n">html</span><span class="p">,</span> <span class="n">那么只需要在</span> <span class="n">org_prefixes</span> <span class="n">列表中加入</span> <span class="s2">"~/org"</span><span class="p">,</span> <span class="n">orgchange</span>
+<span class="n">会根据该前缀识别出</span> <span class="o">~/</span><span class="n">org</span><span class="o">/</span><span class="n">posts</span><span class="o">/</span><span class="n">myblog</span><span class="o">.</span><span class="n">org</span> <span class="n">的局部路径</span> <span class="o">--</span> <span class="s2">"posts/myblog.org"</span><span class="p">,</span> <span class="n">将其和</span>
+<span class="n">publis_folder</span> <span class="n">拼接得到</span> <span class="s2">"~/mysite/posts/myblog.org"</span><span class="p">,</span> <span class="n">替换后缀</span> <span class="o">=.</span><span class="n">org</span><span class="o">=</span> <span class="n">成</span> <span class="o">=.</span><span class="n">html</span><span class="o">=</span> <span class="n">作为发布目标路径</span>
+<span class="n">index_template</span> <span class="n">是网站主页的导出模板</span><span class="err">，</span><span class="n">它放在主题目录</span> <span class="n">theme</span><span class="o">/</span><span class="n">darkloat</span> <span class="n">下</span><span class="err">，</span><span class="n">该变量也决定了整个网页的主题</span>
+
+<span class="n">可以在</span> <span class="n">org_prefixes</span> <span class="n">中添加多个过滤前缀</span><span class="err">，</span><span class="n">因为有可能另外一篇</span> <span class="n">org</span> <span class="n">文件是在</span> <span class="s2">"/path/to/blog/a.org"</span><span class="p">,</span>
+<span class="n">而你想要将其导出到</span> <span class="s2">"~/mysite/blog"</span><span class="p">,</span> <span class="n">那么可以在</span> <span class="n">org_prefixes</span> <span class="n">里继续添加</span> <span class="s2">"/path/to/"</span>
+
+<span class="n">index_template</span> <span class="n">是网站主页的导出模板</span><span class="err">，</span><span class="n">它放在主题目录</span> <span class="n">theme</span><span class="o">/</span><span class="n">darkloat</span> <span class="n">下</span>
+
+<span class="n">以下</span> <span class="n">elisp</span> <span class="n">块是</span> <span class="n">ox</span><span class="o">-</span><span class="n">export</span> <span class="n">的全局选项</span>
+<span class="c1">#+begin_src emacs-lisp :results none :eval no</span>
+<span class="p">(</span><span class="n">setq</span> <span class="n">org</span><span class="o">-</span><span class="n">export</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">section</span><span class="o">-</span><span class="n">numbers</span> <span class="n">nil</span><span class="p">)</span>
+<span class="c1">#+end_src</span>
+
+<span class="o">**</span> <span class="p">[[</span><span class="o">~/</span><span class="n">org</span><span class="o">/</span><span class="n">post</span><span class="o">/</span><span class="n">my_first_blog</span><span class="o">.</span><span class="n">org</span><span class="p">][</span><span class="n">第一篇文章</span><span class="p">]]</span>
+<span class="n">将以上链接改成自己想要发布的本地</span> <span class="n">org</span> <span class="n">文件</span><span class="p">,</span> <span class="n">这篇文章将会发布到</span>
+<span class="o">~/</span><span class="n">mysite</span><span class="o">/</span><span class="n">post</span><span class="o">/</span><span class="n">my_first_blog</span><span class="o">.</span><span class="n">html</span>
+
+<span class="n">以下</span> <span class="n">python</span> <span class="n">块是当前文章发布的局部选项</span>
+<span class="c1">#+begin_src python</span>
+<span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"test"</span><span class="p">]</span>
+<span class="c1">#+end_src</span>
+
+<span class="n">categories</span> <span class="n">表示当前文章的类别</span><span class="p">(</span><span class="n">或者叫作</span> <span class="n">tag</span><span class="p">),</span> <span class="n">因此该文章不单出现在主页如</span> <span class="n">www</span><span class="o">.</span><span class="n">xxx</span><span class="o">.</span><span class="n">com</span> <span class="n">中</span><span class="err">，</span><span class="n">也会出现在</span>
+<span class="n">www</span><span class="o">.</span><span class="n">xxx</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">categories</span><span class="o">/</span><span class="n">test</span><span class="o">.</span><span class="n">html</span> <span class="n">中</span><span class="p">,</span> <span class="n">一篇文章可以属于多个类别</span><span class="p">,</span> <span class="n">因此这是一个列表</span><span class="o">.</span>
+
+<span class="n">以下</span> <span class="n">elisp</span> <span class="n">块是当前文章发布时调用</span> <span class="n">ox</span><span class="o">-</span><span class="n">export</span> <span class="n">的导出选项</span><span class="p">,</span>
+<span class="n">如果有和全局选项相同的设置</span><span class="err">，</span><span class="n">那么这里的优先级更高</span>
+<span class="n">比如这篇文章发布时会默认对每个</span> <span class="n">section</span> <span class="n">加上数字编号</span><span class="err">，</span><span class="n">覆盖了全局的设置</span>
+
+<span class="c1">#+begin_src emacs-lisp :results none :eval no</span>
+<span class="p">(</span><span class="n">setq</span> <span class="n">org</span><span class="o">-</span><span class="n">export</span><span class="o">-</span><span class="k">with</span><span class="o">-</span><span class="n">section</span><span class="o">-</span><span class="n">numbers</span> <span class="n">t</span><span class="p">)</span>
+<span class="c1">#+end_src</span>
+
+<span class="o">**</span> <span class="p">[[</span><span class="o">~/</span><span class="n">org</span><span class="o">/</span><span class="n">post</span><span class="o">/</span><span class="n">my_second_blog</span><span class="o">.</span><span class="n">org</span><span class="p">][</span><span class="n">第一篇文章</span><span class="p">]]</span> <span class="p">:</span><span class="n">draft</span><span class="p">:</span>
+<span class="n">如果对文章链接设置了</span> <span class="n">draft</span> <span class="n">标签</span><span class="p">,</span> <span class="n">那么文章会被导出但是它不会被索引</span><span class="err">，</span><span class="n">这包括</span><span class="err">：</span>
+<span class="o">-</span> <span class="n">不会被写到网站主页</span> <span class="n">index</span><span class="o">.</span><span class="n">html</span> <span class="n">中</span>
+<span class="o">-</span> <span class="n">不会被前一篇文章</span><span class="err">（</span><span class="n">my_first_blog</span><span class="o">.</span><span class="n">html</span><span class="err">）</span><span class="n">里</span> <span class="s2">"下一篇"</span> <span class="n">链接</span>
+
+<span class="n">因此可以直接输入完整的域名访问它或者在本地进行预览</span>
+<span class="n">另外这些导出草稿的</span> <span class="n">html</span> <span class="n">路径会被记录在</span> <span class="o">=~/</span><span class="n">mysite</span><span class="o">/.</span><span class="n">orgchange</span><span class="o">.</span><span class="n">draft</span><span class="o">=</span> <span class="n">文件里</span><span class="err">，</span>
+<span class="n">将本地网页推送到远程服务器上时可以设置</span> <span class="n">ignore</span> <span class="n">或者</span> <span class="n">exclude</span> <span class="n">来过滤该文件里的</span> <span class="n">html</span> <span class="n">路径</span>
+<span class="n">这样完全可以只作为本地预览</span><span class="err">，</span><span class="n">当整篇文章完成后删除</span> <span class="n">draft</span> <span class="n">标签再正式发布</span>
+
+<span class="o">**</span> <span class="p">[[</span><span class="o">~/</span><span class="n">org</span><span class="o">/</span><span class="n">post</span><span class="o">/</span><span class="n">my_test_blog</span><span class="o">.</span><span class="n">org</span><span class="p">][</span><span class="n">第一篇文章</span><span class="p">]]</span> <span class="p">:</span><span class="n">noexport</span><span class="p">:</span>
+
+<span class="n">如果对文章链接设置了</span> <span class="n">noexport</span> <span class="n">标签</span><span class="p">,</span> <span class="n">那么文章会被导出但是它</span> <span class="o">=</span><span class="n">不会</span><span class="o">=</span> <span class="n">被导出</span>
+
+<span class="n">注意</span><span class="p">,</span><span class="n">除了</span> <span class="n">python</span> <span class="n">和</span> <span class="n">elisp</span> <span class="n">块中的内容</span><span class="err">，</span><span class="n">其他形式的文字都不会影响导出</span><span class="err">，</span>
+<span class="n">因此可以在这里书写任何关于这篇文章的注释信息</span><span class="err">，</span><span class="n">比如是否要需要修改</span><span class="err">，</span><span class="n">和另外一篇本地的笔记的关系等</span>
+</pre></div>
+
+</div>
+<p>
+执行以下命令：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="bash"><span></span>python<span class="w"> </span>orgchange/publish.py<span class="w"> </span>--index<span class="w"> </span>~/org/mysite.org<span class="w"> </span>--verbose<span class="w"> </span>--all
+</pre></div>
+
+</div>
+<p>
+orgchange 会根据 <code>~/org/mysite.org</code> 文件里设置的 <code>org_prefixes</code> 和 <code>publish_folder</code> 变量名， 将 <code>~/org/post/my_first_blog.org</code> 发布到 <code>~/org/mysite/post/my_first_blog.html</code> ，使用默认的 darkfloat 主题
+</p>
+<details id="org000000a">
+<summary id="org0000009">
+<p>
+路径计算的规则：
+</p>
+</summary>
+<ul class="org-ul">
+<li>原始 org 文件路径为： <code>~/org/post/my_first_blog.org</code></li>
+<li>由于 org_prefixes 中有一个 "~/org/" 前缀能够与 org 路径前缀匹配，所以截取掉该前缀后得到 <code>post/my_first_blog.org</code></li>
+<li>根据 publish_folder 的值 "~/mysite" 最终把 html 发布在 <code>~/mysite/post/my_first_blog.html</code></li>
+</ul>
+</details>
+<p>
+进入 <code>~/mysite</code> 执行以下命令，打开 <code>http://localhost:7777/</code> 预览网页
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="bash"><span></span>python<span class="w"> </span>-m<span class="w"> </span>http.server<span class="w"> </span><span class="m">7777</span>
+</pre></div>
+
+</div>
+<p>
+将 ~/mysite 推送到远程部署服务器上，比如：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="bash"><span></span>rsync<span class="w"> </span>-avz<span class="w"> </span>--no-perms<span class="w"> </span>--no-owner<span class="w"> </span>--no-group<span class="w"> </span>--exclude<span class="o">=</span><span class="s1">'orgchange/example/*'</span><span class="w">  </span>--exclude<span class="o">=</span><span class="s2">"venv/"</span><span class="w"> </span>--exclude<span class="o">=</span><span class="s2">"venv/"</span><span class="w"> </span>--exclude<span class="o">=</span><span class="s2">"__pycache__/"</span><span class="w"> </span>--exclude<span class="o">=</span><span class="s2">"*.json"</span><span class="w"> </span>--cvs-exclude<span class="w">  </span>--exclude<span class="o">=</span><span class="s1">'.*'</span><span class="w"> </span>--delete<span class="w"> </span><span class="nv">$HOME</span>/mysite/<span class="w"> </span>root@webserver:/var/www/html
+</pre></div>
+
+</div>
+</div>
+</section>
+<section class="outline-2" id="outline-container-org000000e">
+<h2 id="org000000e"><a href="#org000000e">导出选项</a></h2>
+<div class="outline-text-2" id="text-org000000e">
+<p>
+对于一般的使用者， orgchange 导出网页的设置都是在 index_org 文件中，正如上节介绍所说，它分成
+elisp 和 python 两类选项，这是因为 orgchange 先调用 emacs org-export 导出命令生成 html, 然后用根据 python 选项用 bs4 等 python 内的 web 相关工具去读取对应信息、修剪 html 、根据 jinja2 模板渲染出最终的 html 文件，除此之外，还可以额外渲染出其他辅助页面，例如 index, categories, about 等等。
+</p>
+<p>
+接下来对这两类选项进行详细说明。
+</p>
+</div>
+<div class="outline-3" id="outline-container-org0000011">
+<h3 id="org0000011"><a href="#org0000011">emacs lisp 设置选项</a></h3>
+<div class="outline-text-3" id="text-org0000011">
+<p>
+任何 org-export* 或 org-html* 变量都可以在 emacs-lisp org-block 里设置，例如：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="k">setq</span><span class="w"> </span><span class="nv">org-export-with-section-numbers</span><span class="w"> </span><span class="no">t</span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+它们会在 emacs 执行 org-html-export-to-html 函数前被设置，这些选项可以放在全局 block 中也可以放在特定文章的 block 中，后者会在全局 block 代码执行完之后再执行，因此优先级更高。
+</p>
+<p>
+以下列出可选参数的一部分以及它对应的 <code>#+OPTIONS</code> 缩写，更多请参考 emacs org mode 文档。
+</p>
+<table>
+<colgroup>
+<col class="org-left"/>
+<col class="org-left"/>
+<col class="org-left"/>
+</colgroup>
+<thead>
+<tr>
+<th class="org-left" scope="col">variable</th>
+<th class="org-left" scope="col">org option</th>
+<th class="org-left" scope="col"> </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><code>org-export-with-toc</code></td>
+<td class="org-left"><code>#+OPTIONS: toc:5</code></td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-html-doctype</code></td>
+<td class="org-left"><code>#+HTML_DOCTYPE: html5</code></td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-html-html5-fancy</code></td>
+<td class="org-left"><code>#+OPTIONS: html5-fancy:t</code></td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-with-smart-quotes</code></td>
+<td class="org-left">,:t</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-with-emphasize</code></td>
+<td class="org-left">*:t</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-with-special-strings</code></td>
+<td class="org-left">-:t</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-with-fixed-width</code></td>
+<td class="org-left">::t</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-with-timestamps</code></td>
+<td class="org-left">&lt;:t</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-preserve-breaks</code></td>
+<td class="org-left">\n:nil</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-with-sub-superscripts</code></td>
+<td class="org-left">^:nil</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-with-archived-trees</code></td>
+<td class="org-left">arch:nil</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-with-author</code></td>
+<td class="org-left">arch:nil</td>
+<td class="org-left"> </td>
+</tr>
+<tr>
+<td class="org-left"><code>org-export-with-section-numbers</code></td>
+<td class="org-left">num:nil</td>
+<td class="org-left"> </td>
+</tr>
+</tbody>
+</table>
+<p>
+除此之外，由于 index org 里 emacs-lisp block 的代码都会被 emacs 执行，因此理论上可以在其中编写更复杂的代码，比如通过设置 org-export-before-parsing-hook 对 org 文件进行预处理、覆盖 <code>org-html-template</code> 函数结构等，这使得用户能为每篇文章都进行最精细的导出定制。
+</p>
+<p>
+不过这类函数级别的修改更推荐写在每个主题的特定 elisp 文件中，并且留出控制的变量接口，这样在 index_org 中仍然只需要设定变量值来进行定制。
+</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000015">
+<h3 id="org0000015"><a href="#org0000015">python 设置选项</a></h3>
+<div class="outline-text-3" id="text-org0000015">
+<p>
+网站级别的选项涉及几大类：
+前文说到 orgchange 先调用 emacs org-export 导出命令生成 html, 然后用 python 读取 html 并渲染出最终 的 html, 但这不是故事的全貌。由于 emacs 命令也是通过 python 调用的，因此 python 选项还能够决定一些更高层的设置，例如如果系统有多个 emacs 程序，可以指定特定版本的 emacs 来执行第一阶段导出
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">emacs</span> <span class="o">=</span> <span class="s2">"~/codes/emacs-29.2/src/emacs"</span> <span class="c1"># 默认是 emacs, 自动寻找</span>
+</pre></div>
+
+</div>
+<p>
+这个设置不单可以是全局的，也可以针对特定文章，这样可以对比不同 emacs org 版本下的一些区别差别（尽管一般不会用到）
+</p>
+<p>
+还包括前文提到的发布的目标文件夹，以及过滤前缀：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">publish_folder</span> <span class="o">=</span> <span class="s2">"~/codes/hugchangelife"</span>
+<span class="n">org_prefixes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"~/org/logical"</span><span class="p">,</span> <span class="s2">"~/org/design/web"</span><span class="p">,</span> <span class="s2">"~/org/design/web/writing"</span><span class="p">]</span>
+</pre></div>
+
+</div>
+<p>
+另外网站主页 index.html 也是通过 jinja2 模板生成，因此许多展示在主页的信息也可以通过 python 变量来设置
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="c1"># 可以指定不同 index 模版</span>
+<span class="n">index_template</span> <span class="o">=</span> <span class="s2">"~/codes/hugchangelife/orgchange/themes/darkfloat/index.html"</span>
+
+<span class="n">beian</span> <span class="o">=</span> <span class="s2">"粤ICP备2020003021"</span>
+<span class="n">github_url</span> <span class="o">=</span> <span class="s2">"https://github.com/metaescape"</span>
+<span class="n">github_name</span> <span class="o">=</span> <span class="s2">"oo"</span>
+<span class="n">site_repo</span> <span class="o">=</span> <span class="s2">"https://github.com/metaescape/hugchange.life/"</span>
+<span class="n">user_name</span> <span class="o">=</span> <span class="s2">"someone"</span>
+<span class="n">site_name</span> <span class="o">=</span> <span class="s2">"Hugchange.life..."</span>
+<span class="n">site_email</span> <span class="o">=</span> <span class="s2">"metaescape at foxmail dot com"</span>
+<span class="n">created_timestamp</span><span class="o">=</span><span class="s2">"2024-06-13 Thu 18:20"</span> 
+<span class="n">last_modify_timestamp</span><span class="o">=</span><span class="s2">"2024-06-13 Thu 18:20"</span> 
+<span class="n">html_lang</span> <span class="o">=</span> <span class="s2">"zh"</span> <span class="c1"># "en"</span>
+</pre></div>
+
+</div>
+<p>
+注意这些信息不单单会显示在主页，一般各个页面共享的 footer 或者 header 部分也可能继承（不同主题有不同基础样式，因主题而定），因此可以对每篇文章单独定制一些想要展示的信息。
+</p>
+<p>
+以上提到的基本是全局设置，而由于 python 阶段会对 html 进行一些更精细的调整，因此这些文章级别的选项也由 python 来设置，例如：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">link_replace</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"~/miniconda3/envs/torch2/lib/python3.11/site-packages/transformers"</span><span class="p">:</span>
+                <span class="s2">"https://github.com/huggingface/transformers/tree/main/src/transformers"</span><span class="p">}</span>
+</pre></div>
+
+</div>
+<p>
+这是一个字典，可以有多个值，每个元素的 key 是本地文件链接的前缀，value 是本地链接解析后 html 文件中希望展示的链接的前缀。它主要解决这样一类问题：在 org 中插入了一个本地的代码文件链接，这样可以通过 org 快速跳转并打开查看代码，但转换成 html 后本地文件地址对用户来说是无效链接，但如果该文件又是属于某个公开项目一部分，orgchange 就会根据 link_replace 里的规则对 html 里的路径进行替换，以展示公开的 url 链接。
+</p>
+<p>
+另外，快速开始一节样例里提到的 categories 设置，这使得特定文章可以分别在 org 和 emacs 分类中找到。
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"org"</span><span class="p">,</span> <span class="s2">"emacs"</span><span class="p">]</span>
+</pre></div>
+
+</div>
+<p>
+再考虑这样的场景，你想写一系列算法和数据结构的文章，然后你希望在每篇在该系列中的文章的目录里，都可以看到同系列下其他文章的一级标题链接（类似 readthedocs 的全局目录），这样读者阅读完一篇之后，
+可以从目录里看到该系列下的其他文章，那么只需要在 index_org 中对特定文章的 python 选项添加以下变量即可
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">anthology</span> <span class="o">=</span> <span class="s2">"算法系列"</span> <span class="c1"># 相同合集的 org 文章会共享同一个目录</span>
+</pre></div>
+
+</div>
+<p>
+注意这与 categories 不一样，每篇文章只能属于一个系列（否则目录信息共享就会混乱了）。
+</p>
+<p>
+考虑另外一个场景：你在 <code>my_pyton_book.org</code> 中记录了自己学习 python 的笔记，其中有多个章节，包括简介、语法基础、函数、面向对象四个一级标题，现在你想把它发布成一个多文件的 html, 那么可以给该文章添加 multipage_index 选项为 default, 如下图：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="org"><span></span><span class="o">*</span> <span class="n">my</span> <span class="n">website</span> <span class="p">:</span><span class="n">post</span><span class="p">:</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">my_python_book</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">python</span> <span class="n">简易教程</span><span class="p">]]</span>
+<span class="c1">#+begin_src python</span>
+ <span class="n">multipage_index</span> <span class="o">=</span> <span class="s2">"default"</span>  
+<span class="c1">#+end_src</span>
+</pre></div>
+
+</div>
+<p>
+此时 my_python_book.org 每个一级标题下内容会被导出一个单独的 html 文件， 统一放在 my_python_book 目录下：
+</p>
+<pre class="example" id="org0000014">
+mysite/my_python_book/
+   - index.html # title 是简介
+   - my_python_book_1.html # title 是语法基础
+   - my_python_book_2.html # title 函数
+   - my_python_book_3.html # title 是面向对象
+</pre>
+<p>
+这样，访问 mysite/my_python_book/ 目录会自动访打开 index.html, 也就是对应 org 文件中第一个标题下的内容，而这些 html 被默认看作是同一个 antholgy （合辑），每个 html 的目录中不单单只包括本文的章节索引，还会包括其他文章的标题索引。
+</p>
+<p>
+其他选项说明及其说明如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="c1">#如果本文中有用 org-cite 或 org-ref 插入的文献，那么需要对本文指定 bib_info 才会将参考文献导出</span>
+<span class="n">bib_info</span> <span class="o">=</span> <span class="s2">"~/org/lib/zotero.bib"</span> 
+
+<span class="c1"># target_dir 是相对发布目录 publish_folder 的，相当于对特定文章继续指定一个子目录, 比如如果是 sysconfig, 那么文章会发布到 ~/codes/hugchangelife/sysconfig 下</span>
+<span class="n">target_dir</span> <span class="o">=</span> <span class="s2">"sysconfig"</span> 
+
+<span class="c1"># rainbow 是为了控制文章里导出的 lisp 系代码块里是否有彩虹高亮, 默认为 true</span>
+<span class="c1"># 如果觉得眼花缭乱，可以改为 False, 也可以在全局设置</span>
+<span class="n">rainbow</span> <span class="o">=</span> <span class="kc">False</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+</section>
+<section class="outline-2" id="outline-container-org000001c">
+<h2 id="org000001c"><a href="#org000001c">常见问题</a></h2>
+<div class="outline-text-2" id="text-org000001c">
+<div class="dialogue" id="org0000018">
+<p>
+问：在 index_org 中修改了某篇文章的局部导出选项，例如修改了其 categories，要重新导出文章应该如何处理
+</p>
+</div>
+<div class="reply" id="org0000019">
+<p>
+答：如果标题中第一个字符是 "-", 例如 <code>[[./my_first_blog.org][-第一篇 blog]]</code>,
+</p>
+<p>
+重新执行 python orgchange/publish.py –index /path/to/index.org 后这篇 blog 会强制重新导出，之后再删除 "-" 即可。
+</p>
+</div>
+<div class="dialogue" id="org000001a">
+<p>
+问：在 index_org 中修改了某些全局导出选项，例如 footer 里的邮件地址，那么所有文章都要重新修改，应该如何处理？
+</p>
+</div>
+<div class="reply" id="org000001b">
+<p>
+答：由于 orgchange 没有缓存 emacs 原始导出的 html 文件，而第二步的 jinja2 渲染必须读取原始 html 文件，因此这要求所有文章都被重新导出一遍，通过以下命令强制更新：
+</p>
+<p>
+python orgchange/publish.py –index /path/to/index.org –all
+</p>
+<p>
+如果文章较多速度可能会较慢，后续考虑对原始 html 或者 soup 对象进行缓存，这样很多情况下只需要重新执行第二阶段的渲染步骤而不需要重新从 org 开始导出。
+</p>
+</div>
+</div>
+</section>
+<section class="outline-2" id="outline-container-org0000020">
+<h2 id="org0000020"><a href="#org0000020">导出流程</a></h2>
+<div class="outline-text-2" id="text-org0000020">
+<figure id="org000001f">
+<img align="center" alt="orgchange_flow.svg" class="org-svg" src="imgs/orgchange_flow.svg" width="750"/>
+</figure>
+<p>
+执行命令 <code>publish.py --index index.org</code> ，在处理完命令行选项后调用的核心函数是：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">publish_via_index</span><span class="p">(</span><span class="n">index_org</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">verbose</span><span class="p">,</span> <span class="n">republish_all</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">all</span><span class="p">)</span>
+</pre></div>
+
+</div>
+<p>
+它主要分成以下几部分：
+</p>
+<ul class="org-ul">
+<li><code>extract_site_info_from_index_org</code> 读取 index_org 文件里网站的全局配置和各个 post 的局部配置，返回一个 <code>site_info</code> 字典对象，其中 <code>site_info["posts"]</code> 是一个列表，每一个元素都是一篇文章的发布信息。</li>
+<li><code>site_info["posts"]</code> 中的每一篇文章通过 <code>publish_single_file</code> 函数调用 emacs 命令行将 org 导出成原始的 html 文件。</li>
+<li>调用 <code>single_page_postprocessing</code> 函数，读取各 html 文件，用 beautiful soup 从中提取出网页的各个模块，如 header, content, footer 等，然后将这些模块连同用户对 post 的信息一起交给 jinja2 模板生成工具，渲染出最终的 html.</li>
+<li>生成 index/category/about 等页面。</li>
+</ul>
+<p>
+之后的章节都是对以上几个步骤的详细说明
+</p>
+</div>
+<div class="outline-3" id="outline-container-org0000024">
+<h3 id="org0000024"><a href="#org0000024">1. index org 读取</a></h3>
+<div class="outline-text-3" id="text-org0000024">
+<p>
+本阶段从 index.org 中读取出所有需要发布的 blog 的信息，包括核心的 title 和路径等。
+</p>
+<p>
+主函数是：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">extract_site_info_from_index_org</span><span class="p">(</span><span class="n">index_org</span><span class="p">)</span>
+</pre></div>
+
+</div>
+<p>
+该函数找到 index_org 中第一个带有 "post" 的标题
+</p>
+<ol class="org-ol">
+<li><p>
+调用以下函数读取网页全局配置
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="k">if</span> <span class="s2">"post"</span> <span class="ow">in</span> <span class="n">node</span><span class="o">.</span><span class="n">tags</span> <span class="ow">and</span> <span class="n">node</span><span class="o">.</span><span class="n">level</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">site_info</span> <span class="o">=</span> <span class="n">update_site_info</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">site_info</span><span class="p">)</span>
+</pre></div>
+
+</div>
+<p>
+<code>update_site_info</code> 会对带 "post" tag 的一级标题下的内容进行解析，首先提取出其中的代码块，当前主要是支持 elisp 和 python 块
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">src_blocks</span> <span class="o">=</span> <span class="n">extract_code_blocks</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">get_body</span><span class="p">())</span>
+<span class="k">for</span> <span class="n">language</span><span class="p">,</span> <span class="n">content</span> <span class="ow">in</span> <span class="n">src_blocks</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">"python"</span><span class="p">:</span>
+        <span class="n">variable_setting</span> <span class="o">=</span> <span class="n">get_bindings_from_text</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="s2">"body"</span><span class="p">])</span>
+        <span class="n">site_info</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">variable_setting</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">language</span> <span class="o">==</span> <span class="s2">"emacs-lisp"</span><span class="p">:</span>
+        <span class="n">site_info</span><span class="p">[</span><span class="s2">"user_elisp"</span><span class="p">]</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="s2">"body"</span><span class="p">]</span>
+</pre></div>
+
+</div>
+<p>
+对于 python 块的内容，直接调用 <code>get_bindings_from_text</code>  把其中的赋值转成字典
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="k">def</span> <span class="nf">get_bindings_from_text</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">exec</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">locals</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">"args"</span><span class="p">}</span>
+</pre></div>
+
+</div>
+<p>
+因此，如果配置中有一个 python 模块如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">github_url</span> <span class="o">=</span> <span class="s2">"https://github.com/metaescape"</span>
+<span class="n">github_name</span> <span class="o">=</span> <span class="s2">"mE"</span>
+<span class="n">site_repo</span> <span class="o">=</span> <span class="s2">"https://github.com/metaescape/hugchange.life/"</span>
+</pre></div>
+
+</div>
+<p>
+那么 <code>site_info</code> 当前就会变成：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="p">{</span>
+<span class="s2">"github_url"</span> <span class="p">:</span> <span class="s2">"https://github.com/metaescape"</span>
+<span class="s2">"github_name"</span> <span class="p">:</span> <span class="s2">"mE"</span>
+<span class="s2">"site_repo"</span> <span class="p">:</span> <span class="s2">"https://github.com/metaescape/hugchange.life/"</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<p>
+对于其中的 elisp 代码块，则直接以字符串的形式保存到 <code>site_info["user_elisp"]</code> 中，这些字符串会直接拼接到 emacs 导出命令行里。比如假设有以下 elisp 代码
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="k">setq</span><span class="w"> </span><span class="nv">org-export-with-section-numbers</span><span class="w"> </span><span class="no">t</span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+那么 post_info 又继续更新成：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="p">{</span>
+<span class="s2">"github_url"</span> <span class="p">:</span> <span class="s2">"https://github.com/metaescape"</span>
+<span class="s2">"github_name"</span> <span class="p">:</span> <span class="s2">"mE"</span>
+<span class="s2">"site_repo"</span> <span class="p">:</span> <span class="s2">"https://github.com/metaescape/hugchange.life/"</span>
+<span class="s2">"user_elisp"</span> <span class="p">:</span> <span class="s2">"(setq org-export-with-section-numbers t)"</span>
+<span class="p">}</span>
+</pre></div>
+
+</div></li>
+<li><p>
+对 index org 中带 "post" tag 的一级标题下的每一个二级标题，执行  <code>index_node_process</code> 解析出每篇文章的发布信息。
+</p>
+<p>
+对于这些二级标题，如果带有 <code>noexport</code> 标签，那么整个子树不会被读取，如果带有 <code>draft</code> 标签，那么它会被认为是草稿， <code>post_info["draft"]</code> 为 True, 后文会根据该标签对其做特殊处理，一般来说 draft 不会显示在 index.html 的文章类表里（但这是可选的）。
+</p>
+<p>
+对于需要考虑发布的节点，解析该二级标题的过程和解析一级标题类似，比如都要去读取该标题下的 python 和 elisp 代码块，除此之外，还调用 <code>post_title_path_prepare</code> 去解析围绕该 org 文件的各种不同的路径：
+</p>
+<ul class="org-ul">
+<li><code>org_path_abs2sys</code>: org 文件在本机的绝对路径，这是发布的源路径，比如 "~/org/myblog.org"</li>
+<li><code>html_path_abs2sys</code> html 文件在本机的绝对路径，这是发布的目标，比如 "~/mywebsite/posts/myblog.org"</li>
+<li><code>html_path_theoritical</code>:  html 文件所在的目录在本机的绝对路径，比如 "~/mywebsite/posts/"</li>
+<li><code>html_path_rel2publish</code>: html 相对于发布目录的相对路径，比如 "posts/myblog.org"</li>
+<li><code>html_path_abs2www</code>: 假设发布目录是根目录，那么 html 相对该目录的路径, 用于在 html 之间跳转， 比如 "/posts/myblog.org"</li>
+</ul>
+<p>
+这些路径在不同场合有不同的用处，比如该函数还会根据路径为 <code>org_path_abs2sys</code> 的 org 源文件是否比 路径为 <code>html_path_abs2sys</code> 的 html 目标文件的时间戳更晚，以决定是否要重新发布，如果要重新发布 <code>post_info["need_update"]</code> 会设为 True。为了能够实现如果 org 文件没有被修改，那么就不会重复导出的 cache 功能。
+</p>
+<p>
+对于二级标题，有一些常用的 python 选项如下：
+</p>
+<pre class="example" id="org0000023">
+* my website :post:
+** [[./my_first_blog.org][第一篇 blog]]
+#+begin_src python
+ categories = ["emacs-org"] # 如果文中有 org-cite 或 org-ref 引用,需要指定 bib 文件
+ bib_info = "~/org/lib/zotero.bib" # 添加标签
+#+end_src
+</pre></li>
+<li><p>
+<code>need_update_propagate</code>:
+单篇文章是否要更新的策略：
+</p>
+<ul class="org-ul">
+<li>如果在 post tag 下的标题中第一个字符是 "-", 例如 <code>[[./my_first_blog.org][-第一篇 blog]]</code>, 那么这篇 blog 会被强制更新，这通常是用来调试代码或者只是修改了 index_org 里文章选项但没有修改文章后使用。</li>
+<li>如果该 org 文件，如 my_first_blog.org 的最新修改时间比它对应的 html 文件如 my_first_blog.html 更新，那么需要更新。</li>
+</ul>
+<p>
+该文章周边文章更新策略：
+</p>
+<ul class="org-ul">
+<li>如果 2 号 blog 的修改了，但它是 draft, 那么不需要扩散，因为 draft 不会被其他文章的 prev 或 next 引用，因此不更新。
+一种顾虑是与该 draft 在同一个 Anthology 的其他文章可能需要同步目录信息，但目前不考虑这种情况，因为如果该 draft 和其他非 draft 在同一个 anthology, 那么默认该文章是要尽快发布的。只有那些独占一个 anthology 的 draft 文章是作为一种存档形式长期以 draft 形式存在，这种文章也没有必要触发 propagate</li>
+<li>如果 2 不是 draft，那么在它前后的 blog 1 和 blog 3 的 prev/next 也可能需要更新，因此更新属性是会传染的。orgchange 缓存下了各个文件的 prev 和 next 文章标题和路径, 只有 prev 和 next 中 title 和 link 与上一次不同时才要真正进行更新。（这里默认在 index.org 中，两个非 draft 文章之间不会有 draft 文章，如果有请移动到 post section 的开头或者结尾）</li>
+<li>但如果 blog 1 或 2 是 draft, 默认 draft 不需要 prev/next, 因此不需要更新。</li>
+</ul></li>
+</ol>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000027">
+<h3 id="org0000027"><a href="#org0000027">2. 调用 emacs 命令将 org 导出成 html</a></h3>
+<div class="outline-text-3" id="text-org0000027">
+<p>
+本环节核心代码如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="k">for</span> <span class="n">post_info</span> <span class="ow">in</span> <span class="n">site_info</span><span class="p">[</span><span class="s2">"posts"</span><span class="p">]:</span>
+    <span class="k">for</span> <span class="n">category</span> <span class="ow">in</span> <span class="n">post_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"categories"</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">""</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># distinguish with categories in post_info</span>
+        <span class="n">site_info</span><span class="p">[</span><span class="s2">"categories_map"</span><span class="p">][</span><span class="n">category</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">post_info</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">post_info</span><span class="p">[</span><span class="s2">"need_update"</span><span class="p">]:</span>
+        <span class="n">publish_single_file</span><span class="p">(</span><span class="n">post_info</span><span class="p">,</span> <span class="n">verbose</span><span class="p">)</span>
+        <span class="n">post_info</span><span class="p">[</span><span class="s2">"soup"</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_soups</span><span class="p">([</span><span class="n">post_info</span><span class="p">[</span><span class="s2">"html_path_abs2sys"</span><span class="p">]])[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+
+</div>
+<p>
+首先搜集各个文章的标签，然后对于需要更新发布的文件，调用 <code>publish_single_file</code> ，它调用 emacs 命令行，通过 python 字符串的 placeholder 功能把发布的文章地址、用户指定的 elisp 选项都注入到该命令行中，如下所示：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span>
+     <span class="s2">"emacs"</span><span class="p">,</span>
+     <span class="s2">"--batch"</span><span class="p">,</span>
+     <span class="sa">f</span><span class="s2">"--chdir=</span><span class="si">{</span><span class="n">theme_path</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+     <span class="s2">"--load"</span><span class="p">,</span>
+     <span class="s2">"../general.el"</span><span class="p">,</span>
+     <span class="n">orgfile</span><span class="p">,</span>
+     <span class="s2">"--eval"</span><span class="p">,</span>
+     <span class="n">elisp_code</span><span class="p">,</span>
+     <span class="s2">"--kill"</span><span class="p">,</span>
+ <span class="p">]</span>
+ <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span>
+     <span class="n">cmd</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span>
+ <span class="p">)</span>
+</pre></div>
+
+</div>
+<p>
+注： <code>../general.el</code> 是 <code>orgchange/theme/general.el</code> 文件，其中定制了一些 html 默认发布选项，比如使用 html5 标准等等，使得发布出来的 html 文件更加符合现代标准。
+</p>
+<p>
+执行完该函数后会在 <code>html_path_abs2sys</code> 路径上生成一个 html 文件，该文件没有 css/js 支持，只是应用 emacs org 的默认 parser 和 export 工具把 org 文件内容导出成了 html, 下一个阶段就是读取 html 的各个部分并且填充到 jinja2 模版中。
+</p>
+<p>
+如果导出的是 multipage 页面，也就是一个 org 导出成多个 html 文件的情况，那么导出后会额外调用 <code>multipages_prepare</code> 函数，实现前文介绍过的单 org 文件对应多 html 的功能。该函数还会把该 org 对应的所有子 post 的信息添加到 "multipages" 入口中：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">post_info</span><span class="p">[</span><span class="s2">"multipages"</span><span class="p">]</span> <span class="o">=</span> <span class="n">posts</span>
+</pre></div>
+
+</div>
+</div>
+<div class="outline-4" id="outline-container-org000002a">
+<h4 id="org000002a"><a href="#org000002a">general.el 的说明</a></h4>
+<div class="outline-text-4" id="text-org000002a">
+<p>
+<code>'my/org-modify-cite-links</code> 对导出 cite 进行统一，org-ref 使用双括号的方式，而 org-citar export 则使用单括号（并且用 &amp; 而不是 @），所以这部分就是把 &amp; 和双括号改成 @ 和单括号
+</p>
+<p>
+<code>org-export-each-headline-to-html</code> 会对文件拆分成多个
+</p>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org000002d">
+<h3 id="org000002d"><a href="#org000002d">3. jinja2 渲染阶段</a></h3>
+<div class="outline-text-3" id="text-org000002d">
+<p>
+由 <code>single_page_postprocessing(site_info)</code> 来承载，该函数分成以下几个小环节：
+</p>
+</div>
+<div class="outline-4" id="outline-container-org0000030">
+<h4 id="org0000030"><a href="#org0000030">区分 draft 和正式发布文章</a></h4>
+<div class="outline-text-4" id="text-org0000030">
+<p>
+<code>separate_draft_posts</code> 根据每个 post_info 的 draft 属性，把需要发布的 post 分成两组：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">site_info</span><span class="p">[</span><span class="s2">"all_draft_posts"</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_draft_posts</span>
+<span class="n">site_info</span><span class="p">[</span><span class="s2">"all_visible_posts"</span><span class="p">]</span> <span class="o">=</span> <span class="n">all_visible_posts</span>
+</pre></div>
+
+</div>
+<p>
+注意 "all_draft_posts" ， "all_visible_posts" 和 "posts" 的区别在于，前两个是包括 multipage 里的多个 子页面的 post_info 的，而 "posts" 中只包括 mutlipage 中 index.html 的 info 。
+</p>
+<p>
+draft 文章会被发布，但是：
+</p>
+<ul class="org-ul">
+<li>它不会显示在 visible post 列表中，因此 index.html 默认不会显示</li>
+<li>它不会参与到 footer 的合并中</li>
+<li>但它会参与全局目录的合并，也就是说，如果 A,B 两篇文章属于同一个合集，其中 A 是正式的，B 是 draft, 那么从 A 的 global 目录中还是能看到 B 。</li>
+</ul>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org0000033">
+<h4 id="org0000033"><a href="#org0000033">提取各文章 meta 信息</a></h4>
+<div class="outline-text-4" id="text-org0000033">
+<p>
+对于所有的博客文章（post），执行以下操作：
+</p>
+<ol class="org-ol">
+<li><code>提取发布时间</code> ：从每个 org 文件中的 <code>#+DATE:</code> 选项中获取用户填写的发布时间。</li>
+<li><code>提取修改时间</code> ：获取 org 文件的最后修改时间作为修改时间。</li>
+<li><code>提取Emacs版本信息</code> ：从 <code>general.el</code> 文件中的预设 postamble 中获取 Emacs 和 org 版本信息。</li>
+</ol>
+<p>
+这些信息被保存在一个缓存字典中。缓存的目的在于优化性能和效率，具体原因如下：
+</p>
+<ul class="org-ul">
+<li>多处显示： 这些信息不仅显示在各个文章中，还显示在文章列表页，例如`index.html`和`category.html`。</li>
+<li>避免不必要的重新读取：如果文章（例如 <code>a.org</code> ）没有修改，则不需要重新发布，也不需要重新读取 HTML 文件来提取这些元信息。</li>
+<li>更新时间戳： 如果另一篇文章（例如 <code>b.org</code> ）被修改并重新发布，则 `index.html`中的 <code>b.html</code> 时间戳需要更新。这意味着整个`index.html`需要重新渲染。在这种情况下，系统需要其他所有 org 文件的时间戳，包括`a.org`, 但不能为了一个时间戳去重新读取所有 html 文件，因此缓存下来。</li>
+<li>缓存优化： 通过在每次导出文件后缓存这些文件的元信息，系统避免了为了获取少量元信息而重新读取 HTML 文件的需要。</li>
+</ul>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org0000036">
+<h4 id="org0000036"><a href="#org0000036">对需要更新的文章进行 soup 修剪</a></h4>
+<div class="outline-text-4" id="text-org0000036">
+<p>
+对所有需要更新的文件调用 <code>soup_decorate_per_html</code>, 主要包括：
+</p>
+<ol class="org-ol">
+<li><p>
+提取出 html body 中所有 <code>&lt;img&gt;</code> 标签，把其中的图片从 org 文件所在目录同步到 html 文件所在目录
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">img_urls</span> <span class="o">=</span> <span class="p">[</span><span class="n">img</span><span class="p">[</span><span class="s2">"src"</span><span class="p">]</span> <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">img_tags</span> <span class="k">if</span> <span class="s2">"src"</span> <span class="ow">in</span> <span class="n">img</span><span class="o">.</span><span class="n">attrs</span><span class="p">]</span>
+</pre></div>
+
+</div></li>
+<li>遍历 soup 中所有 <code>&lt;p&gt;</code> tag, 在其中找到 &lt;a&gt; 元素里的 href 属性：
+<ul class="org-ul">
+<li>如果属性内容是以 <code>file://</code> 开头，说明这是一个本地存在的文件的引用，但用户在网页上是访问不到的，这个链接一般会显示成绝对路径形式，把本地机器的文件路径完整暴露出来，因此要进行一些替换处理。
+
+<ul class="org-ul">
+<li><p>
+首先标准化：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="bash"><span></span><span class="o">(</span>Pdb<span class="o">)</span><span class="w"> </span>os.path.normpath<span class="o">(</span><span class="s1">'file:///home/user/org/lib/mE.drawio'</span><span class="o">)</span>
+<span class="err">'</span>file:/home/user/org/lib/mE.drawio
+</pre></div>
+
+</div></li>
+<li><p>
+其次，用户可以用字典来指定替换规则，如下例子，某篇文章里用 <code>[[file:/path]]</code> 的形式引用了某个 python 的库文件，而这个库是有官方 github 的，因此只需要把该路径的前缀替换成 github 链接，在网页发布后就可以跳转到对应的 https 链接了
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">link_replace</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"~/miniconda3/envs/torch2/lib/python3.11/site-packages/transformers"</span><span class="p">:</span>
+                <span class="s2">"https://github.com/huggingface/transformers/tree/main/src/transformers"</span><span class="p">}</span>
+</pre></div>
+
+</div></li>
+<li><p>
+如果没有找到替换规则，那么对于相对路径，比如 <code>../xyz.org</code> 直接删除相对符号变成 "/xyz.org" 后再替换 "~"，如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">href</span> <span class="o">=</span> <span class="n">href</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">".."</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"./"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">"~"</span><span class="p">),</span> <span class="s2">"local"</span><span class="p">)</span>
+</pre></div>
+
+</div>
+<p>
+这样可以隐去本地的路径信息。
+</p></li>
+</ul></li>
+<li>替换 org-id: 由于每个 org 文件都是独立调用 emacs 命令发布的，因此如果 a.org 中通过 org-id 引用了 proj2/b.org 文件，那么被引用文件会被解析成 html 类型的绝对路径，因此要转换成网站路径。</li>
+</ul></li>
+<li>调用 self_apply 执行 org block 中处理自身的代码。</li>
+<li>调用 <code>pygment_and_paren_match_all</code> ，找到 dom 里的 &lt;pre&gt; 块用 pygment 对代码块进行高亮，对于 lisp 系和 #+name 为 jupyter-python 的代码块，会生成彩虹括号样式。</li>
+<li>调用 <code>mermaid_process</code> ： 如果 org 中有 mermaid 代码块，那么需要在 html 中加入额外的 mermaid.js 支持</li>
+</ol>
+<p>
+可以看到，这部分是比较"脏"的活，细粒度地对各个 soup 内元素进行操作，包括替换或清理各种无效链接，修饰代码高亮等
+</p>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org0000039">
+<h4 id="org0000039"><a href="#org0000039">生成全局目录</a></h4>
+<div class="outline-text-4" id="text-org0000039">
+<p>
+<code>merge_anthology_toc(site_info)</code> 函数会对每篇文章生成全局目录信息，全局目录是按照合订主题（anthology）整合的，也就是说，多篇拥有相同 anthology 的文章会共享一个全局目录。
+</p>
+<p>
+假设在同一个 emacs 主题下的系列文章包括 <code>a1.org</code>, <code>a2.org</code>, <code>a3.org</code>, 你希望在每篇文章中都有一个全局目录，从该全局目录里能够跳转到同系列的其他文章（类似 readtheorgs 的目录），那么 org index 里的写法应该如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="org"><span></span><span class="o">*</span> <span class="n">my</span> <span class="n">website</span> <span class="p">:</span><span class="n">post</span><span class="p">:</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">a1</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">emacs</span> <span class="n">系列第一篇</span> <span class="p">]]</span>
+<span class="c1">#+begin_src python</span>
+ <span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"emacs-org"</span><span class="p">]</span> <span class="c1"># 添加标签</span>
+ <span class="n">anthology</span> <span class="o">=</span> <span class="s2">"emacs"</span>
+<span class="c1">#+end_src</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">a2</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">emacs</span> <span class="n">系列第二篇</span> <span class="p">]]</span>
+<span class="c1">#+begin_src python</span>
+ <span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"emacs-org"</span><span class="p">]</span> <span class="c1"># 添加标签</span>
+ <span class="n">anthology</span> <span class="o">=</span> <span class="s2">"emacs"</span>
+<span class="c1">#+end_src</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">a3</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">emacs</span> <span class="n">系列第三篇</span> <span class="p">]]</span>
+<span class="c1">#+begin_src python</span>
+ <span class="n">categories</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"emacs-org"</span><span class="p">]</span> <span class="c1"># 添加标签</span>
+ <span class="n">anthology</span> <span class="o">=</span> <span class="s2">"emacs"</span>
+<span class="c1">#+end_src</span>
+</pre></div>
+
+</div>
+<p>
+以上三篇文章的 anthology 都属于 emacs 系列, 因此 <code>merge_anthology_toc</code> 函数会对同系列的三篇文章的目录进行合并，将最终目录保存在 <code>post_info["global_toc"]</code> 变量里
+</p>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org000003c">
+<h4 id="org000003c"><a href="#org000003c">搜集相邻文章信息并用 jinja2 渲染</a></h4>
+<div class="outline-text-4" id="text-org000003c">
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">collect_prev_next_and_generate</span><span class="p">(</span><span class="n">site_info</span><span class="p">[</span><span class="s2">"all_draft_posts"</span><span class="p">],</span> <span class="n">global_cache</span><span class="p">)</span>
+<span class="n">collect_prev_next_and_generate</span><span class="p">(</span><span class="n">site_info</span><span class="p">[</span><span class="s2">"all_visible_posts"</span><span class="p">],</span> <span class="n">global_cache</span><span class="p">)</span>
+</pre></div>
+
+</div>
+<p>
+假设 index org 如下，有五篇文章，其中 a1 到 a3 是需要正式发布的，而 b1 和 b2 还没有写完，因此打上了 draft 标签。
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="org"><span></span><span class="o">*</span> <span class="n">my</span> <span class="n">website</span> <span class="p">:</span><span class="n">post</span><span class="p">:</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">a1</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">emacs</span> <span class="n">系列第一篇</span> <span class="p">]]</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">a2</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">emacs</span> <span class="n">系列第二篇</span> <span class="p">]]</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">a3</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">emacs</span> <span class="n">系列第三篇</span> <span class="p">]]</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">b1</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">org</span> <span class="n">系列第一篇</span> <span class="p">]]</span> <span class="p">:</span><span class="n">draft</span><span class="p">:</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">b2</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">org</span> <span class="n">系列第二篇</span> <span class="p">]]</span> <span class="p">:</span><span class="n">draft</span><span class="p">:</span>
+</pre></div>
+
+</div>
+<p>
+orgchange 中，prev 表示的是更新的的文章（尽管一般来说 previous 语义表示是更旧的）
+这个时候：
+</p>
+<ul class="org-ul">
+<li>a1 的 prev 是空，next 则是 a2;</li>
+<li>a2 的 prev 是 a1, next 是 a2;</li>
+<li>a3 的 prev 是 a2, next 为空（与 b1 隔离了）。</li>
+<li>b1 的 next 是 b2, prev 是空；</li>
+<li>b2 的 prev 是 b1, next 为空。</li>
+</ul>
+<p>
+注意 collect_prev_next_and_generate 函数会对文章提取 prev/next 信息。因为如果某篇文章被修改了，可以查看其 prev 和 next, 然后检查 prev.next 和 next.prev 中保存的 title 和 link 和当前修改文章的 tilte 和 link 是否一致，如果一致，prev 和 next 文章就不需要重新渲染。因此要在这里给 need_update_propagate 搜集 cache 信息，即 next/prev 里的标题和链接。
+</p>
+<p>
+渲染完成后，缓存会被保存成 pickle 文件
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">CACHE_PATH</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">global_cache</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</pre></div>
+
+</div>
+<p>
+cache 形式如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">cache</span><span class="p">[</span><span class="n">html_path_abs2sys</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+     <span class="s2">"created"</span><span class="p">:</span> <span class="n">post_info</span><span class="p">[</span><span class="s2">"created"</span><span class="p">],</span>
+     <span class="s2">"last_modify"</span><span class="p">:</span> <span class="n">post_info</span><span class="p">[</span><span class="s2">"last_modify"</span><span class="p">],</span>
+     <span class="s2">"created_timestamp"</span><span class="p">:</span> <span class="n">post_info</span><span class="p">[</span><span class="s2">"created_timestamp"</span><span class="p">],</span>
+     <span class="s2">"last_modify_timestamp"</span><span class="p">:</span> <span class="n">post_info</span><span class="p">[</span><span class="s2">"last_modify_timestamp"</span><span class="p">],</span>
+     <span class="s2">"emacs_org_version"</span><span class="p">:</span> <span class="n">post_info</span><span class="p">[</span><span class="s2">"emacs_org_version"</span><span class="p">],</span>
+ <span class="p">}</span>
+</pre></div>
+
+</div>
+<p>
+在渲染完网页后会调用 <code>save_draft_html_path_to_file</code> 函数在 blog 主目录下保存一个名为 .orgchange.draft 的文件记录所有 draft post 的路径（相对发布目录路径），在 push 到远程服务器时，如果不想上传草稿，可以读取这个文件作为黑名单。
+</p>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org000003f">
+<h3 id="org000003f"><a href="#org000003f">4. 生成 index/category 等页面</a></h3>
+<div class="outline-text-3" id="text-org000003f">
+<p>
+最后一步，从主题目录下找到 index.html 和 category.html, categories.html 的 jinja2 模板，把 site_info 发送给它进行渲染。
+</p>
+</div>
+<div class="outline-4" id="outline-container-org0000042">
+<h4 id="org0000042"><a href="#org0000042">给 jinja2 模板提供的变量</a></h4>
+<div class="outline-text-4" id="text-org0000042">
+<p>
+在 python block 中设置的所有变量名都会在渲染时传给  jinja2 模版引擎。
+</p>
+<p>
+全局变量：
+</p>
+<ul class="org-ul">
+<li><code>publish_folder_abs2www</code>: 导出的主目录路径（相对网站根目录）</li>
+<li><code>site_repo</code>, <code>beian</code>, <code>github_name</code>: python block 中用户设置</li>
+<li><code>year</code>: 自动计算</li>
+</ul>
+<p>
+渲染每篇 blog 的变量：
+</p>
+<ul class="org-ul">
+<li><code>header_titles</code>: html 中包含 title 的 header 块</li>
+<li><code>created_timestamp</code>: 文章发布时间</li>
+<li><code>last_modify_timestamp</code></li>
+<li><code>org_main</code>: html 中内容主体， &lt;body&gt; &lt;div class=container&gt; &lt;main&gt;</li>
+<li><code>categories</code>: 这是一个字典，key 表示文章类别，value 是该类别下所有文章的 post_info</li>
+<li><code>prev</code>: 上一篇文章的链接和标题，tuple</li>
+<li><code>next</code>: 下一篇文章的链接和标题，tuple</li>
+<li><code>mermaid_script</code>:</li>
+</ul>
+<p>
+渲染 index.html, category.html 和 about.html 等全局页面的变量：
+</p>
+<ul class="org-ul">
+<li><code>visible_posts</code>: 所有非 draft blog 的 post_info</li>
+</ul>
+<p>
+渲染 categories.html 页面的变量：
+</p>
+<ul class="org-ul">
+<li><code>publish_offset</code>: 和 publish_folder_abs2www 似乎没区别？</li>
+<li><code>categories_len</code>: 类别以及该类别中数量</li>
+</ul>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org0000045">
+<h4 id="org0000045"><a href="#org0000045">about/meta 页面</a></h4>
+<div class="outline-text-4" id="text-org0000045">
+<p>
+只要在 index.org 中设置一个一级标题，并且打上 "about" tag, 其中的每个二级标题就会作为 categories/index.html 中的一个 subsection ，该二级标题下的所有内容会原原本本地写入到该 subsection, 因此如果要分段落，需要手动用 &lt;p&gt; 标签，如果要编写链接，则手动写 &lt;a&gt; 标签。
+</p>
+</div>
+</div>
+</div>
+</section>
+<section class="outline-2" id="outline-container-org0000078">
+<h2 id="org0000078"><a href="#org0000078">部分功能实现原理</a></h2>
+<div class="outline-text-2" id="text-org0000078">
+</div>
+<div class="outline-3" id="outline-container-org0000048">
+<h3 id="org0000048"><a href="#org0000048">黑白主题切换的实现</a></h3>
+<div class="outline-text-3" id="text-org0000048">
+<ul class="org-ul">
+<li><p>
+首先在网页 header 部分（右上角）定义一个 html tag 如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="html"><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"toggle-button"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">"checkbox"</span> <span class="na">id</span><span class="o">=</span><span class="s">"theme-toggle"</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">label</span> <span class="na">for</span><span class="o">=</span><span class="s">"theme-toggle"</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">label</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+
+</div>
+<p>
+这是一个 checkbox 类型的元素，因为它能够维持 1 bit 的状态用于区分是深色还是浅色模式
+</p></li>
+<li>在 styles.css 中把该 &lt;label&gt; 元素调整成点击后左右滑动的样式（网络上很多现成实现，可以拷贝下来自己做小的修改）
+这里要说明的是，在点击的视觉效果的实现上，css 都可以胜任，只是点击触发的逻辑需要以下的 js 代码来实现</li>
+<li><p>
+在 /orgchange/themes/static/main.js 中，有 themeBtnHandler 如下
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="js"><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">themeBtnHandler</span><span class="p">(</span><span class="nx">targetTheme</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">toggleBtn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"theme-toggle"</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">toggleBtn</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"change"</span><span class="p">,</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">toggleBtn</span><span class="p">.</span><span class="nx">checked</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">setTheme</span><span class="p">(</span><span class="s2">"light"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">setTheme</span><span class="p">(</span><span class="s2">"dark"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="w">  </span><span class="nx">toggleBtn</span><span class="p">.</span><span class="nx">checked</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">targetTheme</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"light"</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<p>
+该函数会在 main.js 中另外一处对 DOMContentLoaded 事件的触发逻辑中被调用，调用代码如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="js"><span></span><span class="nx">themeBtnHandler</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="s2">"theme"</span><span class="p">));</span>
+</pre></div>
+
+</div>
+<p>
+这里从浏览器持久存储存储空间读取变量 theme, 当第一次打开网页时，该变量不存在，会默认读取到 null 值, 执行 themeBtnHandler 之后，对 theme-toggle 按钮的监听启动的，并且以下语句会导致 toggleBtn.checked 被赋予 False, 即 theme-toggle 按钮没有被勾选，也就不会触发按钮 change 事件，从而维持默认的主题(当前默认是 dark)
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="js"><span></span><span class="nx">toggleBtn</span><span class="p">.</span><span class="nx">checked</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">targetTheme</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"light"</span><span class="p">;</span>
+</pre></div>
+
+</div></li>
+<li>当点击 checkbox 后，toggleBtn.addEventListener 监听到了 "change" 事件，这时候 toggleBtn.checked 已经变化了，因此触发 setTheme("light")</li>
+<li><p>
+在 /orgchange/themes/static/main.js 对函数 setTheme 的定义如下
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="js"><span></span><span class="kd">function</span><span class="w"> </span><span class="nx">setTheme</span><span class="p">(</span><span class="nx">targetTheme</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">oppsiteTheme</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">targetTheme</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"light"</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s2">"dark"</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s2">"light"</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">codeThemeCss</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"code-theme-css"</span><span class="p">);</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">targetTheme</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"dark"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">codeThemeCss</span><span class="p">.</span><span class="nx">href</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/orgchange/themes/static/dark.css"</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">codeThemeCss</span><span class="p">.</span><span class="nx">href</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"/orgchange/themes/static/light.css"</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">html</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">;</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">targetTheme</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">"dark"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">html</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s2">"light"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">html</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">"light"</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span><span class="s2">"theme"</span><span class="p">,</span><span class="w"> </span><span class="nx">targetTheme</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">rootStyle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">getComputedStyle</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">);</span>
+
+<span class="w">  </span><span class="nx">parenBackground</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">rootStyle</span><span class="p">.</span><span class="nx">getPropertyValue</span><span class="p">(</span><span class="s2">"--paren-background1"</span><span class="p">).</span><span class="nx">trim</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<p>
+该函数内容被空行分成了三个部分：
+</p>
+<ol class="org-ol">
+<li>选中 head 中 &lt;link id="code-theme-css"&gt; 元素，根据当前主题设置对应的 css 文件</li>
+<li><p>
+如果是 light 主题，在 &lt;html&gt; tag 里加入 class="light", 在主风格文件 style.css 里有如下内容：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="css"><span></span><span class="p">:</span><span class="nd">root</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nv">--heading-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#e8e8e8</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--toggle-width</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="kt">rem</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--toggle-height</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="kt">rem</span><span class="p">;</span>
+<span class="w">  </span><span class="nv">--change-decorate</span><span class="p">:</span><span class="w"> </span><span class="nb">rgb</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">86</span><span class="p">,</span><span class="w"> </span><span class="mi">143</span><span class="p">);</span>
+<span class="w">  </span><span class="err">...</span>
+<span class="w"> </span><span class="p">}</span>
+
+<span class="w"> </span><span class="p">:</span><span class="nd">root</span><span class="p">.</span><span class="nc">light</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="nv">--heading-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#0c0c0c</span><span class="p">;</span>
+<span class="w">   </span><span class="c">/* --main-background: #c7b28a; */</span>
+<span class="w">   </span><span class="nv">--main-background</span><span class="p">:</span><span class="w"> </span><span class="mh">#b7a176</span><span class="mi">84</span><span class="w"> </span><span class="nb">url</span><span class="p">(</span><span class="sx">paperTexture.webp</span><span class="p">);</span>
+<span class="w">   </span><span class="nv">--header-background</span><span class="p">:</span><span class="w"> </span><span class="mh">#b9a278</span><span class="p">;</span>
+<span class="w">  </span><span class="err">...</span>
+<span class="w"> </span><span class="p">}</span>
+</pre></div>
+
+</div>
+<p>
+这里 :root 对应的就是 &lt;html&gt;, 对 :root.light 的样式设置就是对 &lt;html class="light"&gt; 对象的修饰，而该元素包含了整个文档。因此整个文档里的 –heading-color 等变量被重新设置
+</p></li>
+<li>从 root 里提取出 –paren-background1 变量赋值给一个全局的 parenBackground 变量，这用于修改修改 light 模式下彩虹括号背景色。</li>
+</ol>
+<p>
+以上三点基本覆盖了黑白主题之间涉及的所有变化。
+</p></li>
+</ul>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org000004c">
+<h3 id="org000004c"><a href="#org000004c">整个背景里纹理效果</a></h3>
+<div class="outline-text-3" id="text-org000004c">
+<p>
+这部分主要是参考 <a href="https://garden.bradwoods.io/notes/css/reset">CSS Reset</a> 网页，该 blog 的总体背景中，带有一点磨砂一样的纹理，作者是通过以下方式实现的：
+</p>
+<ul class="org-ul">
+<li><p>
+先对容器设置背景
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="css"><span></span><span class="nt">background</span><span class="o">:</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--_1xn0dsy1q</span><span class="o">);</span>
+</pre></div>
+
+</div></li>
+<li><p>
+变量定义如下
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="css"><span></span><span class="nt">--_1xn0dsy1q</span><span class="o">:</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--_1xn0dsy1t</span><span class="o">);</span>
+
+<span class="nt">--_1xn0dsy1t</span><span class="o">:</span><span class="w"> </span><span class="nt">var</span><span class="o">(</span><span class="nt">--_1xn0dsy8</span><span class="o">),</span><span class="nt">linear-gradient</span><span class="o">(</span><span class="nt">135deg</span><span class="o">,</span><span class="nt">rgba</span><span class="o">(</span><span class="nt">0</span><span class="o">,</span><span class="nt">0</span><span class="o">,</span><span class="nt">0</span><span class="o">,</span><span class="p">.</span><span class="nc">6</span><span class="o">)</span><span class="w"> </span><span class="nt">0</span><span class="o">%,</span><span class="nt">transparent</span><span class="w"> </span><span class="nt">60px</span><span class="o">),</span><span class="nt">linear-gradient</span><span class="o">(</span><span class="nt">to</span><span class="w"> </span><span class="nt">bottom</span><span class="o">,</span><span class="nt">rgba</span><span class="o">(</span><span class="nt">0</span><span class="o">,</span><span class="nt">0</span><span class="o">,</span><span class="nt">0</span><span class="o">,</span><span class="p">.</span><span class="nc">6</span><span class="o">)</span><span class="w"> </span><span class="nt">0</span><span class="o">%,</span><span class="nt">transparent</span><span class="w"> </span><span class="nt">80px</span><span class="o">),</span><span class="nt">linear-gradient</span><span class="o">(</span><span class="nt">to</span><span class="w"> </span><span class="nt">right</span><span class="o">,</span><span class="nt">rgba</span><span class="o">(</span><span class="nt">0</span><span class="o">,</span><span class="nt">0</span><span class="o">,</span><span class="nt">0</span><span class="o">,</span><span class="p">.</span><span class="nc">5</span><span class="o">)</span><span class="w"> </span><span class="nt">0</span><span class="o">%,</span><span class="nt">transparent</span><span class="w"> </span><span class="nt">20</span><span class="o">%),</span><span class="nt">linear-gradient</span><span class="o">(</span><span class="nt">to</span><span class="w"> </span><span class="nt">top</span><span class="o">,</span><span class="p">#</span><span class="nn">000</span><span class="w"> </span><span class="nt">0</span><span class="o">%,</span><span class="nt">transparent</span><span class="w"> </span><span class="nt">340px</span><span class="o">);</span>
+
+<span class="nt">--_1xn0dsy8</span><span class="o">:</span><span class="w"> </span><span class="nt">url</span><span class="o">(/</span><span class="nt">images</span><span class="o">/</span><span class="nt">noise</span><span class="p">.</span><span class="nc">webp</span><span class="o">);</span>
+</pre></div>
+
+</div></li>
+</ul>
+<p>
+/images/noise.webp 是一个带噪点的透明背景图片，其尺寸是 100x100px, 大小是 2.7kb, 其中的渐变设置如下：
+</p>
+<div class="gpt" id="org000004b">
+<p>
+这段CSS代码定义了一个复合的背景图像，使用了多个`linear-gradient`来创建不同的效果：
+</p>
+<ol class="org-ol">
+<li>linear-gradient(135deg, rgba(0,0,0,.6) 0%, transparent 60px): 这创建了一个以135度角倾斜的线性渐变，从黑色（60%不透明度）渐变到透明，变化开始于60像素处。</li>
+<li>linear-gradient(to bottom, rgba(0,0,0,.6) 0%, transparent 80px): 这是一个从上到下的线性渐变，从黑色（60%不透明度）到透明，渐变在80像素处开始。</li>
+<li>linear-gradient(to right, rgba(0,0,0,.5) 0%, transparent 20%): 这是一个从左到右的线性渐变，从黑色（50%不透明度）到透明，变化开始于20%处。</li>
+<li>linear-gradient(to top, #000 0%, transparent 340px): 这是一个从下到上的线性渐变，从纯黑色到透明，渐变在340像素处开始。</li>
+</ol>
+<p>
+这些渐变层叠在一起，创建了一个复杂的背景效果，可能用于创建阴影效果或者为背景图片添加暗色遮罩层。
+</p>
+</div>
+<p>
+因此可以从 <a href="https://cdpn.io/KatieK2/fullpage/xbwQMb?anon=true&amp;view=">CodePen - Transparent Textures</a>  或者 <a href="https://www.transparenttextures.com/">Transparent Textures</a> 选择自己喜欢的透明纹理进行替换即可，以上网站下载下来的一般是 png, 如果想用 webp 可以在通过 <a href="https://cloudconvert.com/png-to-webp">PNG to WEBP | CloudConvert</a> 进行转换。
+</p>
+<p>
+另外，这种方式只能设置纹理，如果直接在纹理上写文字视觉效果会比较差，因此应该用以下两层 div 来包裹正文，最外面是 texture, 内层则设置纯颜色背景（带一点点透明使得纹理能够显现出来）
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="html"><span></span><span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"texture-background"</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">class</span><span class="o">=</span><span class="s">"pure-color-background"</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>title<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
+      <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span> something <span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000050">
+<h3 id="org0000050"><a href="#org0000050">mathjax 的处理</a></h3>
+<div class="outline-text-3" id="text-org0000050">
+<p>
+个人使用的是 emacs28.2 ，对应 org 版本是9.5.5，其 mathjax 的设置选项如下
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="html"><span></span><span class="p">&lt;</span><span class="nt">script</span> <span class="na">type</span><span class="o">=</span><span class="s">"text/x-mathjax-config"</span><span class="p">&gt;</span>
+<span class="w">    </span><span class="nx">MathJax</span><span class="p">.</span><span class="nx">Hub</span><span class="p">.</span><span class="nx">Config</span><span class="p">({</span>
+<span class="w">        </span><span class="nx">displayAlign</span><span class="o">:</span><span class="w"> </span><span class="s2">"center"</span><span class="p">,</span>
+<span class="w">        </span><span class="nx">displayIndent</span><span class="o">:</span><span class="w"> </span><span class="s2">"0em"</span><span class="p">,</span>
+
+<span class="w">        </span><span class="s2">"HTML-CSS"</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span>
+<span class="w">                        </span><span class="nx">linebreaks</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">automatic</span><span class="o">:</span><span class="w"> </span><span class="s2">"false"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">                        </span><span class="nx">webFont</span><span class="o">:</span><span class="w"> </span><span class="s2">"TeX"</span>
+<span class="w">                       </span><span class="p">},</span>
+<span class="w">        </span><span class="nx">SVG</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">,</span>
+<span class="w">              </span><span class="nx">linebreaks</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">automatic</span><span class="o">:</span><span class="w"> </span><span class="s2">"false"</span><span class="w"> </span><span class="p">},</span>
+<span class="w">              </span><span class="nx">font</span><span class="o">:</span><span class="w"> </span><span class="s2">"TeX"</span><span class="p">},</span>
+<span class="w">        </span><span class="nx">NativeMML</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">scale</span><span class="o">:</span><span class="w"> </span><span class="mf">100</span><span class="p">},</span>
+<span class="w">        </span><span class="nx">TeX</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">equationNumbers</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="nx">autoNumber</span><span class="o">:</span><span class="w"> </span><span class="s2">"AMS"</span><span class="p">},</span>
+<span class="w">               </span><span class="nx">MultLineWidth</span><span class="o">:</span><span class="w"> </span><span class="s2">"85%"</span><span class="p">,</span>
+<span class="w">               </span><span class="nx">TagSide</span><span class="o">:</span><span class="w"> </span><span class="s2">"right"</span><span class="p">,</span>
+<span class="w">               </span><span class="nx">TagIndent</span><span class="o">:</span><span class="w"> </span><span class="s2">".8em"</span>
+<span class="w">             </span><span class="p">}</span>
+<span class="p">});</span>
+<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</pre></div>
+
+</div>
+<p>
+主要问题是，该版本比较旧， 并且 cdnjs.cloudflare.com 几乎无法加载到，因此手动改成更新的版本，处理方法是，先在 general.el 里覆盖 org-html–build-mathjax-config 函数，如果检测到了有 latex 片段，不是插入 MathJax.js 引用，而是在 html 头里加一个 "need-mathjax" 的 placeholder 标签，如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="nb">defun</span><span class="w"> </span><span class="nv">org-html--build-mathjax-config</span><span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="nv">info</span><span class="p">)</span></span>
+<span class="w">  </span><span class="s">"Insert the user setup into the mathjax template.</span>
+<span class="s">INFO is a plist used as a communication channel."</span>
+<span class="w">  </span><span class="paren plevel-2"><span class="p">(</span><span class="nb">when</span><span class="w"> </span><span class="paren plevel-3"><span class="p">(</span><span class="k">and</span><span class="w"> </span><span class="paren plevel-4"><span class="p">(</span><span class="nf">memq</span><span class="w"> </span><span class="paren plevel-5"><span class="p">(</span><span class="nf">plist-get</span><span class="w"> </span><span class="nv">info</span><span class="w"> </span><span class="nb">:with-latex</span><span class="p">)</span></span><span class="w"> </span><span class="o">'</span><span class="paren plevel-5"><span class="p">(</span><span class="nv">mathjax</span><span class="w"> </span><span class="no">t</span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">	     </span><span class="paren plevel-4"><span class="p">(</span><span class="nv">org-element-map</span><span class="w"> </span><span class="paren plevel-5"><span class="p">(</span><span class="nf">plist-get</span><span class="w"> </span><span class="nv">info</span><span class="w"> </span><span class="nb">:parse-tree</span><span class="p">)</span></span>
+<span class="w">		 </span><span class="o">'</span><span class="paren plevel-5"><span class="p">(</span><span class="nv">latex-fragment</span><span class="w"> </span><span class="nv">latex-environment</span><span class="p">)</span></span><span class="w"> </span><span class="nf">#'identity</span><span class="w"> </span><span class="nv">info</span><span class="w"> </span><span class="no">t</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="no">t</span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">    </span><span class="s">"&lt;script id=\"need-mathjax\"&gt;&lt;/script&gt;"</span><span class="p">)</span></span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+接着在 main.js 里加上检测该 id 对应的元素是否存在的代码，如果存在则加入 mathjax cdn 地址（如 bootcdn）和对应配置，具体参数见 /orgchange/themes/static/main.js。
+这样做的好处是，单一篇文章已经发表很久了，此时想要更新 mathjax 的 cdn 地址，只需要修改 main.js 来更新, 完全不需要重新导出 blog 。
+</p>
+<p>
+从 <a href="https://www.bootcdn.cn/mathjax/">Mathjax | BootCDN</a> 选择 js，其中提供了很多 Mathjax 的选项，AI 给出的选择标准是：
+</p>
+<div class="gpt" id="org000004f">
+<p>
+选择哪个MathJax JavaScript文件取决于你的特定需求：
+</p>
+<ol class="org-ol">
+<li>`tex-chtml-full-speech.js` 或 `tex-chtml-full-speech.min.js`: 如果你需要完整的TeX支持（包括所有TeX扩展）和屏幕朗读器的语音支持，请选择这个。`.min.js` 版本是压缩过的，文件更小，加载更快。</li>
+<li>`tex-chtml-full.js` 或 `tex-chtml-full.min.js`: 如果你需要完整的TeX支持但不需要语音功能，请选择这个。同样，`.min.js` 版本是压缩版。</li>
+<li>`tex-chtml.js` 或 `tex-chtml.min.js`: 如果你只需要基本的TeX支持（没有额外的TeX扩展），请选择这个。`.min.js` 版本是压缩版。</li>
+</ol>
+<p>
+一般情况下，如果你不确定需要哪些功能，选择 `tex-chtml-full.min.js` 是个不错的起点，因为它提供了完整的TeX支持且文件体积较小。如果加载速度是一个考虑因素，优先选择任何带有 `.min.js` 后缀的版本。
+</p>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000053">
+<h3 id="org0000053"><a href="#org0000053">文章内自定义 script 处理</a></h3>
+<div class="outline-text-3" id="text-org0000053">
+<p>
+用户可以在 org 正文里通过 <code>#+BEGIN_EXPORT html</code>  块直接添加 script 或者 link 。
+</p>
+<p>
+而对于添加在 head 中的 &lt;script&gt; 会通过以下方式从 soup 中提取出来：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">emacs_scripts</span> <span class="o">=</span> <span class="n">post_info</span><span class="p">[</span><span class="s2">"soup"</span><span class="p">]</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">"head"</span><span class="p">)</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s2">"script"</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">emacs_scripts</span><span class="p">:</span>
+    <span class="n">post_info</span><span class="p">[</span><span class="s2">"emacs_scripts"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">script</span><span class="p">)</span> <span class="k">for</span> <span class="n">script</span> <span class="ow">in</span> <span class="n">emacs_scripts</span><span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+
+</div>
+<p>
+然后通过 jinja2 模板重新插入到 &lt;head&gt;, 这包括 mathjax 标签。
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="html"><span></span><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">"utf-8"</span> <span class="p">/&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">"X-UA-Compatible"</span> <span class="na">content</span><span class="o">=</span><span class="s">"IE=edge"</span> <span class="p">/&gt;</span>
+  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">"viewport"</span> <span class="na">content</span><span class="o">=</span><span class="s">"width=device-width, initial-scale=1"</span> <span class="p">/&gt;</span>
+  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>{{ title }}<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+  {% include 'head.html' %} {{ emacs_scripts }}
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</pre></div>
+
+</div>
+<p>
+但这同时意味着如果在 org 里用 ‘HTML_HEAD’ 或 ‘HTML_HEAD_EXTRA’ 添加的自定义的非 &lt;script&gt; 标签，如 &lt;link&gt; ，不会最终被添加到 jinja 模板中。
+</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000056">
+<h3 id="org0000056"><a href="#org0000056">org src block 的语法高亮</a></h3>
+<div class="outline-text-3" id="text-org0000056">
+<p>
+orgchange 使用 pygments 进行代码高亮，其原生就支持大量的主流编程语言，比如 python, css, bash 等
+</p>
+<p>
+对于如下类型的 org src block 默认是没有语法高亮的，orgchange 将其看作 python 代码对待，因为其中的 *, #+ 等符号也是 python 里的特定语法对象，从而得到高亮。
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="org"><span></span><span class="o">*</span> <span class="n">my</span> <span class="n">website</span> <span class="p">:</span><span class="n">post</span><span class="p">:</span>
+<span class="c1">#+begin_src org</span>
+<span class="o">**</span> <span class="p">[[</span><span class="o">./</span><span class="n">a1</span><span class="o">.</span><span class="n">org</span><span class="p">][</span> <span class="n">emacs</span> <span class="n">系列第一篇</span> <span class="p">]]</span>
+<span class="c1">#+end_src</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000059">
+<h3 id="org0000059"><a href="#org0000059">代码块拷贝按钮</a></h3>
+<div class="outline-text-3" id="text-org0000059">
+<p>
+源代码 block 的拷贝按钮是 js 动态生成的，点击后拷贝也是 js 实现
+</p>
+<p>
+如下，页面加载之后，调用 addCopyCodeButtons 航速，它会扫描 html 所有 class 名为 ".org-src-container" 的元素（这是  org export to html 默认的代码块名称），然后像其中添加一个类名为 copy-code 的 button 元素，元素里内容是一个粘贴的 unicode 符号加上代码块语言名称（语言直接写在 &lt;pre&gt; 的类名中，dom.py 的 pygment_and_paren_match_all 函数对此有部分修改，比如把 jupyter-python 块的名称改为 python），
+并监听对该元素的 click 事件，如果点击则调用 copyCode 函数。
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="js"><span></span><span class="kd">const</span><span class="w"> </span><span class="nx">copyLabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"⎘ "</span><span class="p">;</span>
+
+<span class="kd">function</span><span class="w"> </span><span class="nx">addCopyCodeButtons</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">clipboard</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">blocks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s2">".org-src-container"</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">blocks</span><span class="p">.</span><span class="nx">forEach</span><span class="p">((</span><span class="nx">block</span><span class="p">)</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">button</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">"button"</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">pre</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">block</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">"pre"</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">pre</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">button</span><span class="p">.</span><span class="nx">innerText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">copyLabel</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">" "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">pre</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nx">button</span><span class="p">.</span><span class="nx">innerText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">copyLabel</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nx">button</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">"copy-code"</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">block</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">button</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"click"</span><span class="p">,</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">await</span><span class="w"> </span><span class="nx">copyCode</span><span class="p">(</span><span class="nx">block</span><span class="p">,</span><span class="w"> </span><span class="nx">button</span><span class="p">);</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="w">    </span><span class="nx">block</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">"tabindex"</span><span class="p">,</span><span class="w"> </span><span class="mf">0</span><span class="p">);</span>
+<span class="w">  </span><span class="p">});</span>
+<span class="p">}</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"DOMContentLoaded"</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">event</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nx">addCopyCodeButtons</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+
+</div>
+<p>
+copyCode 函数实现如下，这里主要就是调用浏览器提供的 navigator.clipboard.writeText(text); 提取 html 元素中的的文本到粘贴板，然后将 copy 按钮的内容临时改成 copied, 持续 0.5s 后还是回到语言名称来展示。
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="js"><span></span><span class="k">async</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="nx">copyCode</span><span class="p">(</span><span class="nx">block</span><span class="p">,</span><span class="w"> </span><span class="nx">button</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">pre</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">block</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">"pre"</span><span class="p">);</span>
+<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">pre</span><span class="p">.</span><span class="nx">innerText</span><span class="p">;</span>
+<span class="w">  </span><span class="k">await</span><span class="w"> </span><span class="nx">navigator</span><span class="p">.</span><span class="nx">clipboard</span><span class="p">.</span><span class="nx">writeText</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+<span class="w">  </span><span class="nx">button</span><span class="p">.</span><span class="nx">innerText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"copied"</span><span class="p">;</span>
+<span class="w">  </span><span class="nx">setTimeout</span><span class="p">(()</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">button</span><span class="p">.</span><span class="nx">innerText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">copyLabel</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s2">" "</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nx">pre</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
+<span class="w">  </span><span class="p">},</span><span class="w"> </span><span class="mf">500</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+<p>
+在 styles.css 中则用 display: none; 使得 .copy-code 按钮内容默认不显示，只有鼠标放在代码框内才显示：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="css"><span></span><span class="p">.</span><span class="nc">org-src-container</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">relative</span><span class="p">;</span>
+<span class="w">  </span><span class="k">margin</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">copy-code</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+<span class="w">  </span><span class="k">position</span><span class="p">:</span><span class="w"> </span><span class="kc">absolute</span><span class="p">;</span>
+<span class="w">  </span><span class="k">top</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+<span class="w">  </span><span class="k">right</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="kt">rem</span><span class="p">;</span>
+<span class="w">  </span><span class="k">background-color</span><span class="p">:</span><span class="w"> </span><span class="mh">#0000</span><span class="p">;</span>
+<span class="w">  </span><span class="k">border</span><span class="p">:</span><span class="w"> </span><span class="kc">none</span><span class="p">;</span>
+<span class="w">  </span><span class="k">border-radius</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="kt">px</span><span class="p">;</span>
+<span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--heading-color</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="p">.</span><span class="nc">org-src-container</span><span class="p">:</span><span class="nd">hover</span><span class="w"> </span><span class="nt">button</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">display</span><span class="p">:</span><span class="w"> </span><span class="kc">block</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org000005e">
+<h3 id="org000005e"><a href="#org000005e">如何把 org 代码块中的 #+name 显示出来？</a></h3>
+<div class="outline-text-3" id="text-org000005e">
+<p>
+如果有一个代码块是带 #+name 属性的，例如：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="org"><span></span><span class="c1">#+name: print_code</span>
+<span class="c1">#+begin_src python</span>
+<span class="nb">print</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#+end_src</span>
+</pre></div>
+
+</div>
+<p>
+org 在默认导出的时候是会删除这个属性的，但文章中有时会展示 noweb 形式的代码块引用且在 tangle 时不希望执行这些 noweb 引用，只希望是按类似如下的格式显示出来：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="org"><span></span><span class="o">&lt;&lt;</span><span class="n">print_code</span><span class="o">&gt;&gt;</span>
+</pre></div>
+
+</div>
+<p>
+因此把 name 也在 html 中显示出来会比较方便
+</p>
+<p>
+首先 org 有一个专门解析代码块的函数 org-html-src-block 函数，它的前几行内容如下：
+</p>
+<div class="org-src-container">
+<div class="pre-name">#+name: myname </div><div class="highlight"><pre class="emacs-lisp"><span></span><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="nv">org-export-read-attribute</span><span class="w"> </span><span class="nb">:attr_html</span><span class="w"> </span><span class="nv">src-block</span><span class="w"> </span><span class="nb">:textarea</span><span class="p">)</span></span>
+<span class="w">    </span><span class="paren plevel-2"><span class="p">(</span><span class="nv">org-html--textarea-block</span><span class="w"> </span><span class="nv">src-block</span><span class="p">)</span></span>
+<span class="w">  </span><span class="p">(</span><span class="k">let*</span><span class="w"> </span><span class="p">(</span><span class="paren plevel-4"><span class="p">(</span><span class="nv">lang</span><span class="w"> </span><span class="paren plevel-5"><span class="p">(</span><span class="nv">org-element-property</span><span class="w"> </span><span class="nb">:language</span><span class="w"> </span><span class="nv">src-block</span><span class="p">)</span></span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+这里调用了一个 org-export-read-attribute 函数，它可以读取 attr, name 属性和 attr 很相似
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="org"><span></span><span class="c1">#+ATTR_HTML: :width 800 :align center</span>
+<span class="c1">#+NAME:</span>
+</pre></div>
+
+</div>
+<p>
+因此先尝试 (org-export-read-attribute :name src-block) 来读取 name, 但发现这里返回的是 plist, 之后查看
+org-export-read-attribute 的实现，发现其中有用 org-element-property 函数继续去获取属性，而以上代码中也有用该函数读取 :language 属性，因此用以下方式：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="nv">name</span><span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="nv">org-element-property</span><span class="w"> </span><span class="nb">:name</span><span class="w"> </span><span class="nv">src-block</span><span class="p">)</span></span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+发现可以正常读取到 #+NAME 属性，于是把 name 加入到最终 &lt;pre&gt; 元素的构建中：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="nf">format</span><span class="w"> </span><span class="s">"%s&lt;pre&gt;&lt;code class=\"%s\"%s&gt;%s&lt;/code&gt;&lt;/pre&gt;"</span>
+<span class="w">        </span><span class="paren plevel-2"><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">format</span><span class="w"> </span><span class="s">"&lt;div class=\"pre-name\"&gt;name: %s &lt;/div&gt;"</span><span class="w"> </span><span class="nv">name</span><span class="p">)</span></span><span class="w"> </span><span class="s">""</span><span class="p">)</span></span>
+<span class="w">        </span><span class="nv">lang</span><span class="w"> </span><span class="nv">label</span><span class="w"> </span><span class="nv">code</span><span class="w"> </span>
+<span class="w">        </span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+最后加入 css 修饰：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="css"><span></span><span class="p">.</span><span class="nc">pre-name</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">color</span><span class="p">:</span><span class="w"> </span><span class="nf">var</span><span class="p">(</span><span class="nv">--secondary-text-color</span><span class="p">);</span>
+<span class="w">  </span><span class="k">font-size</span><span class="p">:</span><span class="w"> </span><span class="mf">1.2</span><span class="kt">rem</span><span class="p">;</span>
+<span class="w">  </span><span class="k">transform</span><span class="p">:</span><span class="w"> </span><span class="nb">translate</span><span class="p">(</span><span class="mi">1</span><span class="kt">rem</span><span class="p">,</span><span class="w"> </span><span class="mf">0.8</span><span class="kt">rem</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000062">
+<h3 id="org0000062"><a href="#org0000062">如何导出 org-ref 和 org-cite 文献列表？</a></h3>
+<div class="outline-text-3" id="text-org0000062">
+<p>
+在用户设置层面，如果要对文章进行导出，应在其 heading 下加入 bib_info 变量，这是一个元组，第一个是声明 bib 文件路径，第二个是文献导出的形式：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">bib_info</span> <span class="o">=</span> <span class="s2">"~/org/lib/zotero.bib"</span><span class="p">,</span> <span class="s2">"ieee"</span>
+<span class="c1"># bib_info = "~/org/lib/zotero.bib", "acl"</span>
+</pre></div>
+
+</div>
+<p>
+目前可用 acl 和 ieee 两种格式，分别是如下样式
+</p>
+<pre class="example" id="org0000061">
+acl 的引用格式
+BERT 模型(Devlin et al., 2019)
+
+acl 参考文献格式：
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2019. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. In Proceedings of the 2019 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies, Volume 1 (Long and Short Papers), pages 4171–4186, Minneapolis, Minnesota. Association for Computational Linguistics.
+
+ieee 的引用格式
+以 ChatGPT 为例[2],...
+
+ieee 的参考文献格式：
+[2] L. Ouyang et al., “Training language models to follow instructions with human feedback,” Advances in neural information processing systems, vol. 35, pp. 27730–27744, Dec. 2022, Accessed: Jan. 03, 2024. [Online]. Available: https://proceedings.neurips.cc/paper_files/paper/2022/hash/b1efde53be364a73914f58805a001731-Abstract-Conference.html
+</pre>
+<p>
+对于写 blog 已经足够了。
+</p>
+<p>
+publish.py/bib_hook_parse 函数会读取 bib_info 变量，将其转换成以下字符串，这是 elisp 代码
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="sa">f</span><span class="s2">"""</span>
+<span class="s2">(add-hook 'org-export-before-parsing-hook</span>
+<span class="s2">(change/org-make-add-bibliography "</span><span class="si">{</span><span class="n">bib_file</span><span class="si">}</span><span class="s2">" "</span><span class="si">{</span><span class="n">csl_file</span><span class="si">}</span><span class="s2">" "</span><span class="si">{</span><span class="n">cite_style</span><span class="si">}</span><span class="s2">"))</span>
+<span class="s2">"""</span>
+</pre></div>
+
+</div>
+<p>
+publish.py/publish_single_file 函数中直接把以上命令插入到最终要执行的 emacs 命令中：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">elisp_code</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"""</span>
+<span class="s2">(progn </span>
+<span class="s2">    (setq default-directory "</span><span class="si">{</span><span class="n">html_folder</span><span class="si">}</span><span class="s2">") </span>
+<span class="s2">    </span><span class="si">{</span><span class="n">post_info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">'user_elisp'</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">    </span><span class="si">{</span><span class="n">bib_hook_parse</span><span class="p">(</span><span class="n">post_info</span><span class="p">)</span><span class="si">}</span>
+<span class="s2">    </span><span class="si">{</span><span class="n">final_export_elisp</span><span class="si">}</span><span class="s2">)</span>
+<span class="s2">"""</span>
+</pre></div>
+
+</div>
+<p>
+该命令执行时会调用定义在 general.el 中的以下 elisp 函数，把 #+cite_export:  、 #+bibliography: 和 #+print_bibliography 插入到 org 后再执行 export 
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="nb">defun</span><span class="w"> </span><span class="nv">change/org-make-add-bibliography</span><span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="nv">bib-file</span><span class="w"> </span><span class="nv">csl-file-path</span><span class="w"> </span><span class="nv">csl-style-option</span><span class="p">)</span></span>
+<span class="w">  </span><span class="paren plevel-2"><span class="p">(</span><span class="nb">lambda</span><span class="w"> </span><span class="paren plevel-3"><span class="p">(</span><span class="nv">backend</span><span class="p">)</span></span>
+<span class="w">    </span><span class="paren plevel-3"><span class="p">(</span><span class="k">save-excursion</span>
+<span class="w">      </span><span class="paren plevel-4"><span class="p">(</span><span class="nf">goto-char</span><span class="w"> </span><span class="paren plevel-5"><span class="p">(</span><span class="nf">point-min</span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">      </span><span class="paren plevel-4"><span class="p">(</span><span class="nf">re-search-forward</span><span class="w"> </span><span class="s">"^#\\+title:"</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="no">t</span><span class="p">)</span></span>
+<span class="w">      </span><span class="paren plevel-4"><span class="p">(</span><span class="nf">forward-line</span><span class="p">)</span></span>
+<span class="w">      </span><span class="paren plevel-4"><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="paren plevel-5"><span class="p">(</span><span class="paren plevel-6"><span class="p">(</span><span class="nv">current-point</span><span class="w"> </span><span class="paren plevel-7"><span class="p">(</span><span class="nf">point</span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">        </span><span class="paren plevel-5"><span class="p">(</span><span class="nf">goto-char</span><span class="w"> </span><span class="paren plevel-6"><span class="p">(</span><span class="nf">point-min</span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">        </span><span class="paren plevel-5"><span class="p">(</span><span class="nb">unless</span><span class="w"> </span><span class="paren plevel-6"><span class="p">(</span><span class="nf">re-search-forward</span><span class="w"> </span><span class="s">"^#\\+bibliography:"</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="no">t</span><span class="p">)</span></span>
+<span class="w">          </span><span class="paren plevel-6"><span class="p">(</span><span class="nf">goto-char</span><span class="w"> </span><span class="nv">current-point</span><span class="p">)</span></span>
+<span class="w">          </span><span class="paren plevel-6"><span class="p">(</span><span class="nf">insert</span><span class="w"> </span><span class="paren plevel-7"><span class="p">(</span><span class="nf">concat</span><span class="w"> </span><span class="s">"#+bibliography: "</span><span class="w"> </span><span class="nv">bib-file</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">          </span><span class="paren plevel-6"><span class="p">(</span><span class="nf">insert</span><span class="w"> </span><span class="paren plevel-7"><span class="p">(</span><span class="nf">concat</span><span class="w"> </span><span class="s">"#+cite_export: csl "</span><span class="w"> </span><span class="nv">csl-file-path</span><span class="w"> </span><span class="s">" "</span><span class="w"> </span><span class="nv">csl-style-option</span><span class="w"> </span><span class="s">"\n"</span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">        </span><span class="paren plevel-5"><span class="p">(</span><span class="nb">unless</span><span class="w"> </span><span class="paren plevel-6"><span class="p">(</span><span class="nf">re-search-forward</span><span class="w"> </span><span class="s">"^#\\+print_bibliography:"</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="no">t</span><span class="p">)</span></span>
+<span class="w">          </span><span class="paren plevel-6"><span class="p">(</span><span class="nf">goto-char</span><span class="w"> </span><span class="paren plevel-7"><span class="p">(</span><span class="nf">point-max</span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">          </span><span class="paren plevel-6"><span class="p">(</span><span class="nf">insert</span><span class="w"> </span><span class="s">"\n* 参考文献\n#+print_bibliography:"</span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">          </span><span class="p">)</span></span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+由于 org-ref 插入的 citekey 和 org-cite 的不一样，但导出时用的是 org 自带的 org-cite 中的导出模块，因此要在 export 前先把 org-ref 格式转成 org-cite 形式，以下函数加入到导出前的 hook 中来解决这个问题。
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="nb">defun</span><span class="w"> </span><span class="nv">change/org-modify-cite-links</span><span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="nv">backend</span><span class="p">)</span></span>
+<span class="w">  </span><span class="s">"Modify cite links in the current buffer for export."</span>
+<span class="w">  </span><span class="paren plevel-2"><span class="p">(</span><span class="nf">goto-char</span><span class="w"> </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">point-min</span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">  </span><span class="paren plevel-2"><span class="p">(</span><span class="k">while</span><span class="w"> </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">re-search-forward</span><span class="w"> </span><span class="s">"\\[\\[cite:&amp;\\(.*?\\)\\]\\]"</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="no">t</span><span class="p">)</span></span>
+<span class="w">    </span><span class="paren plevel-3"><span class="p">(</span><span class="nb">unless</span><span class="w"> </span><span class="paren plevel-4"><span class="p">(</span><span class="nv">org-between-regexps-p</span><span class="w"> </span><span class="s">"^#\\+begin_"</span><span class="w"> </span><span class="s">"^#\\+end_"</span><span class="p">)</span></span>
+<span class="w">      </span><span class="paren plevel-4"><span class="p">(</span><span class="nf">replace-match</span><span class="w"> </span><span class="s">"[cite:@\\1]"</span><span class="w"> </span><span class="no">nil</span><span class="w"> </span><span class="no">nil</span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span>
+
+<span class="paren plevel-1"><span class="p">(</span><span class="nv">add-hook</span><span class="w"> </span><span class="ss">'org-export-before-parsing-hook</span><span class="w"> </span><span class="ss">'change/org-modify-cite-links</span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000065">
+<h3 id="org0000065"><a href="#org0000065">multipage 各个页面的 title 是怎么生成的？</a></h3>
+<div class="outline-text-3" id="text-org0000065">
+<p>
+对于 multipage, 我希望的是：
+</p>
+<ul class="org-ul">
+<li>第一个 heading 会转换成 index.html, title 为 heading 内容， subtitle 为 #+tiltle/0</li>
+<li>第二个 heading 会转换成 folder_name_1.html, title 为 heading 内容， subtitle 为 #+tiltle/1</li>
+<li>以此类推</li>
+</ul>
+</div>
+<div class="outline-4" id="outline-container-org0000068">
+<h4 id="org0000068"><a href="#org0000068">对 html 文件名的修改</a></h4>
+<div class="outline-text-4" id="text-org0000068">
+<p>
+在 general.el 的 <code>org-export-each-headline-to-html</code> 函数中，会对 org 的每个 heading 都进行拆分，调用的是 <code>org-map-entries</code> 函数，它类似一个 for 循环，在该文件设置一个全局的 <code>multi-page-index</code> 变量，简称 cnt，每次自加：
+</p>
+<ul class="org-ul">
+<li>当 cnt 为 0 时，设置其中的 filename 为 index.html</li>
+<li>当 cnt 非 0 的 i 时，设置其中的 filename 为 dir_{i}.html</li>
+</ul>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="nv">dirname</span><span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="nf">file-name-nondirectory</span>
+<span class="w">            </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">directory-file-name</span><span class="w"> </span><span class="nv">dir</span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="paren plevel-1"><span class="p">(</span><span class="nv">filename</span><span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">=</span><span class="w"> </span><span class="nv">multi-page-index</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span></span>
+<span class="w">                </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">concat</span><span class="w"> </span><span class="nv">dir</span><span class="w"> </span><span class="s">"/index.html"</span><span class="p">)</span></span>
+<span class="w">                </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">concat</span><span class="w"> </span><span class="nv">dir</span><span class="w"> </span><span class="s">"/"</span><span class="w"> </span><span class="paren plevel-4"><span class="p">(</span><span class="nf">format</span><span class="w"> </span><span class="s">"%s_%s.html"</span><span class="w"> </span><span class="nv">dirname</span><span class="w"> </span><span class="nv">multi-page-index</span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org000006b">
+<h4 id="org000006b"><a href="#org000006b">对各个文件的 title 的修改</a></h4>
+<div class="outline-text-4" id="text-org000006b">
+<p>
+在 general.el 的 <code>org-export-each-headline-to-html</code> 函数中，会对 org 的每个 heading 都进行拆分，但全局的 #+ 选项在各个 heading 导出时都是有作用的，也就是说，#+title 会广播到每一个 heading 生成的页面中。
+为此在 general.el 中定义了全局的 <code>user-settings-blog-title</code> 变量，在 org 文件的拆分阶段，每次把这个值设置为 heading 的内容，同时修改了 <code>export.el</code> 中对 <code>org-html-template</code> 里对 title 的判断，将原始的
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="nf">plist-get</span><span class="w"> </span><span class="nv">info</span><span class="w"> </span><span class="nb">:title</span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+改成了
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="k">or</span><span class="w"> </span><span class="nv">user-settings-blog-title</span><span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="nf">plist-get</span><span class="w"> </span><span class="nv">info</span><span class="w"> </span><span class="nb">:title</span><span class="p">)</span></span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+这样，只要优先设置了 <code>user-settings-blog-title</code> 变量，就会把每个 html 的 title 设置成 heading 的内容
+</p>
+</div>
+</div>
+<div class="outline-4" id="outline-container-org000006e">
+<h4 id="org000006e"><a href="#org000006e">对各个文件的 subtitle 的修改</a></h4>
+<div class="outline-text-4" id="text-org000006e">
+<p>
+在 export.el 中读取 <code>multi-page-index</code> 变量，如果是 nil 那么就用 buffer 设置的 subtitle, 如果不是
+则设置为 title/index
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="nv">subtitle</span>
+<span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="k">if</span><span class="w"> </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">null</span><span class="w"> </span><span class="nv">multi-page-index</span><span class="p">)</span></span>
+<span class="w">     </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">plist-get</span><span class="w"> </span><span class="nv">info</span><span class="w"> </span><span class="nb">:subtitle</span><span class="p">)</span></span>
+<span class="w">   </span><span class="paren plevel-3"><span class="p">(</span><span class="nf">format</span><span class="w"> </span><span class="s">"%s :: %s"</span><span class="w"> </span><span class="paren plevel-4"><span class="p">(</span><span class="nf">plist-get</span><span class="w"> </span><span class="nv">info</span><span class="w"> </span><span class="nb">:title</span><span class="p">)</span></span><span class="w"> </span><span class="nv">multi-page-index</span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+</div>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000072">
+<h3 id="org0000072"><a href="#org0000072">如何使得每个标题的 id 是确定且是可点击的</a></h3>
+<div class="outline-text-3" id="text-org0000072">
+<pre class="example" id="org0000071">
+** CSS 中接近通用编程语言的部分
+</pre>
+<p>
+以上是 org 文件中一个二级标题，导出成 html 后是一个三级标题，如下：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="html"><span></span><span class="p">&lt;</span><span class="nt">h3</span> <span class="na">id</span><span class="o">=</span><span class="s">"org9273cf1"</span><span class="p">&gt;</span>CSS 中接近通用编程语言的部分<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+</pre></div>
+
+</div>
+<p>
+但这有两个不足：
+</p>
+<ul class="org-ul">
+<li><p>
+html 标题无法点击，需要转成以下形式：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="html"><span></span><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">"#org9273cf1"</span><span class="p">&gt;</span>
+  <span class="p">&lt;</span><span class="nt">h3</span> <span class="na">id</span><span class="o">=</span><span class="s">"org9273cf1"</span><span class="p">&gt;</span>CSS 中接近通用编程语言的部分<span class="p">&lt;/</span><span class="nt">h3</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</pre></div>
+
+</div>
+<p>
+这通过设置 org-html-self-link-headlines 为 t 实现，该值默认是 nil
+</p></li>
+<li><p>
+id 是随机生成的，一次再小的修改都会导致所有 id 变化，不利于 git 对比差异，也不利于链接分享。
+</p>
+<p>
+导出时添加以下方式实现：
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="emacs-lisp"><span></span><span class="paren plevel-1"><span class="p">(</span><span class="nb">defun</span><span class="w"> </span><span class="nv">org-export-deterministic-reference</span><span class="w"> </span><span class="paren plevel-2"><span class="p">(</span><span class="nv">references</span><span class="p">)</span></span>
+<span class="w">    </span><span class="paren plevel-2"><span class="p">(</span><span class="k">let</span><span class="w"> </span><span class="paren plevel-3"><span class="p">(</span><span class="paren plevel-4"><span class="p">(</span><span class="nv">new</span><span class="w"> </span><span class="paren plevel-5"><span class="p">(</span><span class="nf">length</span><span class="w"> </span><span class="nv">references</span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="w">       </span><span class="paren plevel-3"><span class="p">(</span><span class="k">while</span><span class="w"> </span><span class="paren plevel-4"><span class="p">(</span><span class="nf">rassq</span><span class="w"> </span><span class="nv">new</span><span class="w"> </span><span class="nv">references</span><span class="p">)</span></span><span class="w"> </span><span class="paren plevel-4"><span class="p">(</span><span class="k">setq</span><span class="w"> </span><span class="nv">new</span><span class="w"> </span><span class="paren plevel-5"><span class="p">(</span><span class="nf">+</span><span class="w"> </span><span class="nv">new</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span></span><span class="p">)</span></span><span class="p">)</span></span><span class="w"> </span>
+<span class="w">       </span><span class="nv">new</span><span class="p">)</span></span><span class="p">)</span></span>
+<span class="paren plevel-1"><span class="p">(</span><span class="nv">advice-add</span><span class="w"> </span><span class="nf">#'</span><span class="nv">org-export-new-reference</span><span class="w"> </span><span class="nb">:override</span><span class="w"> </span><span class="nf">#'</span><span class="nv">org-export-deterministic-reference</span><span class="p">)</span></span>
+</pre></div>
+
+</div>
+<p>
+参考： <a href="https://www.reddit.com/r/orgmode/comments/aagmfh/export_to_html_with_useful_nonrandom_ids_and/">Export to HTML with useful, non-random IDs and anchors : r/orgmode</a>
+</p></li>
+</ul>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000075">
+<h3 id="org0000075"><a href="#org0000075">如何实现彩虹括号</a></h3>
+<div class="outline-text-3" id="text-org0000075">
+<p>
+如果当前代码块是以下之一，同时页面变量 rainbow 为 True （默认为 True） 那么会调用 paren_match 算法来提取出括号，并且按括号的深度层级打上标签，这基本是一个基于栈的解析算法。
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">lisp_family</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"scheme"</span><span class="p">,</span>
+    <span class="s2">"lisp"</span><span class="p">,</span>
+    <span class="s2">"racket"</span><span class="p">,</span>
+    <span class="s2">"elisp"</span><span class="p">,</span>
+    <span class="s2">"emacs-lisp"</span><span class="p">,</span>
+    <span class="s2">"elisp"</span><span class="p">,</span>
+    <span class="s2">"jupyter-python"</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+</section>
+<section class="outline-2" id="outline-container-org0000084">
+<h2 id="org0000084"><a href="#org0000084">其他说明</a></h2>
+<div class="outline-text-2" id="text-org0000084">
+</div>
+<div class="outline-3" id="outline-container-org000007b">
+<h3 id="org000007b"><a href="#org000007b">关于 org 导出 html 的参考资料</a></h3>
+<div class="outline-text-3" id="text-org000007b">
+<p>
+org 原生导出成 html 的原理可以参考 <a href="https://egh0bww1.com/">include-yy</a> 博客里的 <a href="https://egh0bww1.com/posts/2023-01-22-25-org-manual-13-9-illustrate/">The Org Manual 13.9 全解</a>  和 <a href="https://egh0bww1.com/posts/2023-01-30-27-semantic-element-and-org-html5-export/">语义元素与 org 的 html5 导出</a> 等几篇与 org 导出有关的（非常细致）的文章。对 org-export 流程有了一个总体了解之后就可以带着具体的问题（比如如何能导出 org 代码的 #+name 标签）在 emacs 中直接查看相关函数的源码并针对自己想要修改或添加的功能做一些尝试。
+</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org000007e">
+<h3 id="org000007e"><a href="#org000007e">关于 jinja2 模板的理解</a></h3>
+<div class="outline-text-3" id="text-org000007e">
+<p>
+对我来说，最初对 jinja2 的理解困难更多是概念上带来的，因为以前从来没接触过一种混在某种结构文本里的编程语言，甚至不知道这到底是用来做什么的，似乎没有什么必要。但用 python fstring 来作为类比可以很快越过概念理解的障碍。 jinja2 的模版可以看成是 python fstring 的扩充版本，当你需要打印某个字符串，但其中部分字符串是来自变量值或表达式结果时，就会用到 fstring
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">b</span><span class="o">=</span> <span class="mi">2</span>
+<span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">a</span><span class="si">}</span><span class="s2"> + </span><span class="si">{</span><span class="n">b</span><span class="si">}</span><span class="s2"> = </span><span class="si">{</span><span class="n">a</span><span class="o">+</span><span class="n">b</span><span class="si">}</span><span class="s2">"</span>
+</pre></div>
+
+</div>
+<pre class="example">
+1 + 2 = 3
+</pre>
+<p>
+然而对于个人 blog 网页来说， html 里大部分其实是文章内容，而 html 只是一个框架。比如，每篇 blog 都有一个一级标题，而标题就在各个 org 或者 markdown 文件中，因此当从 org/md 里读取到了标题之后，就可以通过以下方式来生成 html:
+</p>
+<div class="org-src-container">
+<div class="highlight"><pre class="python"><span></span><span class="k">def</span> <span class="nf">render_blog</span><span class="p">(</span><span class="n">title</span><span class="p">):</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"""&lt;h1&gt;</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">&lt;/h1&gt;"""</span>
+    <span class="k">return</span> <span class="n">html</span>
+    
+<span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"第一篇文章"</span><span class="p">,</span> <span class="s2">"2022 总结"</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">render_blog</span><span class="p">(</span><span class="n">title</span><span class="p">))</span>
+</pre></div>
+
+</div>
+<pre class="example">
+&lt;h1&gt;第一篇文章&lt;/h1&gt;
+&lt;h1&gt;2022 总结&lt;/h1&gt;
+</pre>
+<p>
+当然实际中每篇文章不止有标题，但其他内容也是这样被填充到 fstring 模版里的， jinja2 把这些模版提取出来，封装成更方便且功能更丰富的接口（比如模版之间的继承、在模版里写 for 循环等）。
+</p>
+<p>
+有了这层类比之后，对于 jinja2 的具体细节就可以查看文档或者 flask 教程里关于 jinja2 的部分。
+</p>
+</div>
+</div>
+<div class="outline-3" id="outline-container-org0000081">
+<h3 id="org0000081"><a href="#org0000081">关于 Pelican 和未来开发</a></h3>
+<div class="outline-text-3" id="text-org0000081">
+<p>
+在开发完这个包的基本功能之后，我发现了同样基于 python 的静态网页生成器 <a href="https://github.com/getpelican/pelican">pelican</a>, 它主要适用于对 Markdown
+和 reStructuredText 的解析，它提到的几个功能和 orgchange 都很相似，比如：
+</p>
+<ul class="org-ul">
+<li>Site themes (created using Jinja2 templates)</li>
+<li>Code syntax highlighting via Pygments</li>
+</ul>
+<p>
+因为 pelican 是个多人参与并相对成熟的项目，其中有大量的额外的插件，后续可以考虑使得 orgchange 能够支持其生态中的部分插件，比如 rss 生成，全站搜索等等。
+</p>
+</div>
+</div>
+</section>
+</div>
+    <div id="radioLinkPopups">radioLinkPopups</div>
+    <hr />
+    <div class="categories">
+      
+      <a
+        href="/categories/sys-emacs.html"
+        target="_blank"
+      >
+        #sys-emacs
+      </a>
+      
+    </div>
+
+    <nav class="paginav">
+      <a class="prev" href="/posts/202309_dl_experiment.html">
+        <span>« </span>
+
+        <span>AI 实验中的 python 工程实践</span>
+      </a>
+      <a class="next" href="/posts/202308_huggingface_transformers.html">
+        <span>理解 huggingface transformers 中 GPT2 模型</span>
+
+        <span>»</span>
+      </a>
+    </nav>
+    <div class="comment">
+      如对本文有任何疑问，欢迎通过
+      <a
+        href="https://github.com/metaescape/hugchange.life//issues/new"
+        target="_blank"
+        rel="noopener noreferrer me"
+        title="Github"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+          ></path>
+        </svg>
+        github issue
+      </a>
+      或<span class="tooltip"
+        >邮件 <span class="tooltiptext">metaescape at foxmail dot com</span> </span
+      >进行反馈
+    </div>
+  </div>
+</main>
+
+
+      <footer id="postamble" class="status">
+        <span> © 2024 </span
+        ><a href="https://github.com/metaescape" target="_blank"> mE </a> |
+        <span
+          >Powered by
+          <span id="emacs-org-version">Emacs 29.2 (Org mode 9.6.15)</span> &
+          <a href="https://github.com/metaescape/orgchange" target="_blank"
+            >OrgChange</a
+          ></span
+        >
+         
+      </footer>
+    </div>
+    
+    <!-- TODO maybe use theme variable -->
+    <script src="/orgchange/themes/darkfloat/beforeBodyEnd.js"></script>
+  </body>
+</html>
