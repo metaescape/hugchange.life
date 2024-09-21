@@ -4,3 +4,7 @@ img/
 *.png
 .orgchange.draft
 .vscode/*
+.orgchange_cache
+8over8/*
+.gitignore
+mathjax/
